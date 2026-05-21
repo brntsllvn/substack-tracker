@@ -56,9 +56,8 @@ async function fetchTop100(listKey) {
   return items.slice(0, 100).map((item, i) => {
     const pub = item.publication || {};
     const user = item.user || {};
-    const lb = ((user.status || {}).leaderboard) || {};
     return {
-      rank: lb.rank || i + 1,
+      rank: i + 1,
       name: pub.name || "",
       subdomain: pub.subdomain || "",
       url: pub.base_url || "",
