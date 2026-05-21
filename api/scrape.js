@@ -10,6 +10,7 @@ async function blobPut(pathname, body, token) {
       "x-content-type": "application/json",
       "x-add-random-suffix": "0",
       "x-cache-control-max-age": "0",
+      "x-access": "private",
     },
     body,
   });
@@ -65,6 +66,11 @@ async function fetchTop100(listKey) {
 }
 
 module.exports = async function handler(req, res) {
+  try { return await run(req, res); }
+  catch (e) { return res.status(500).json({ error: e.message, stack: e.stack }); }
+};
+
+async function run(req, res) {
   const cronSecret = process.env.CRON_SECRET;
   if (cronSecret && req.headers.authorization !== `Bearer ${cronSecret}`) {
     return res.status(401).json({ error: "Unauthorized" });
