@@ -17,7 +17,6 @@ async function blobPut(pathname, body, token) {
     headers: {
       Authorization: `Bearer ${token}`,
       "x-content-type": "application/json",
-      "x-access": "private",
     },
     body,
   });
