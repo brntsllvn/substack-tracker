@@ -9,36 +9,55 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, -apple-system, sans-serif; background: #141414; color: #e5e0d8; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-  .topbar { display: flex; align-items: center; gap: 14px; padding: 10px 22px; background: #1c1c1c; border-bottom: 1px solid #2a2a2a; flex-shrink: 0; }
-  .topbar h1 { font-size: 0.92rem; font-weight: 600; color: #e5e0d8; white-space: nowrap; letter-spacing: -0.01em; }
-  .sep { color: #444; font-size: 0.8rem; }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 8px 20px; background: #1c1c1c; border-bottom: 1px solid #2a2a2a; flex-shrink: 0; }
+  .topbar h1 { font-size: 0.9rem; font-weight: 600; color: #e5e0d8; white-space: nowrap; letter-spacing: -0.01em; }
+  .sep { color: #3a3a3a; }
   .category-toggle { display: flex; border: 1px solid #333; border-radius: 5px; overflow: hidden; flex-shrink: 0; }
-  .category-toggle button { padding: 4px 14px; border: none; background: transparent; cursor: pointer; font-size: 0.8rem; color: #888; transition: background 0.12s, color 0.12s; }
+  .category-toggle button { padding: 4px 12px; border: none; background: transparent; cursor: pointer; font-size: 0.78rem; color: #777; transition: background 0.12s, color 0.12s; }
   .category-toggle button.active { background: #ff6719; color: #fff; }
-  .topbar-right { margin-left: auto; font-size: 0.75rem; color: #555; }
+
+  .search-wrap { position: relative; flex: 1; max-width: 280px; }
+  .search-wrap input { width: 100%; padding: 4px 10px; background: #252525; border: 1px solid #333; border-radius: 5px; font-size: 0.78rem; color: #e5e0d8; outline: none; }
+  .search-wrap input::placeholder { color: #555; }
+  .search-wrap input:focus { border-color: #555; }
+  .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #1c1c1c; border: 1px solid #333; border-radius: 5px; max-height: 260px; overflow-y: auto; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
+  .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; font-size: 0.78rem; cursor: pointer; color: #ccc; }
+  .dropdown-item:hover { background: #252525; }
+  .dropdown-item img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+  .pin-chip { display: flex; align-items: center; gap: 6px; padding: 3px 8px 3px 6px; background: rgba(255,103,25,0.15); border: 1px solid rgba(255,103,25,0.4); border-radius: 100px; font-size: 0.75rem; color: #ff6719; white-space: nowrap; cursor: pointer; flex-shrink: 0; }
+  .pin-chip img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+  .pin-chip:hover { background: rgba(255,103,25,0.25); }
+
+  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #444; white-space: nowrap; }
 
   #chart-area { flex: 1; min-height: 0; position: relative; }
   svg { width: 100%; height: 100%; }
-  .grid line { stroke: rgba(255,255,255,0.04); }
-  .grid path { display: none; }
+
   .axis path { display: none; }
-  .axis line { stroke: rgba(255,255,255,0.08); }
-  .axis text { font-size: 10px; fill: #555; }
+  .axis line { stroke: rgba(255,255,255,0.06); }
+  .axis text { font-size: 10px; fill: #3a3a3a; }
 
-  .track { fill: none; stroke: rgba(255,103,25,0.13); stroke-width: 1.5; transition: stroke 0.08s; }
+  .slope-line { transition: opacity 0.06s, stroke-width 0.06s; }
+  .col-line { stroke: rgba(255,255,255,0.08); stroke-width: 1; }
+  .col-label { font-size: 11px; fill: #444; text-anchor: middle; }
+  .stub-label { font-size: 9px; fill: #3a3a3a; }
+
+  .track { fill: none; stroke: rgba(255,103,25,0.12); stroke-width: 1.5; }
   .track.hovered { stroke: #ff6719; stroke-width: 2.5; }
+  .track.pinned { stroke: #ff6719; stroke-width: 2.5; }
+  .track.dimmed { stroke: rgba(255,103,25,0.04); }
 
-  .tooltip-box { position: fixed; pointer-events: none; z-index: 200; display: flex; align-items: center; gap: 8px; background: #1c1c1c; border: 1px solid #333; border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: #e5e0d8; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
-  .tooltip-box img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
-  .tooltip-rank { color: #ff6719; font-weight: 600; font-size: 0.85rem; }
-  .tooltip-name { color: #e5e0d8; }
-  .tooltip-date { color: #666; font-size: 0.7rem; }
+  .tooltip-box { position: fixed; pointer-events: none; z-index: 200; display: flex; align-items: center; gap: 8px; background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: #e5e0d8; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
+  .tooltip-box img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .tip-rank { color: #ff6719; font-weight: 700; }
+  .tip-delta { font-size: 0.68rem; margin-left: 3px; }
+  .tip-delta.up { color: #66bb6a; }
+  .tip-delta.down { color: #ef5350; }
+  .tip-name { color: #ccc; }
+  .tip-sub { color: #444; font-size: 0.68rem; margin-top: 1px; }
 
-  .state-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.88rem; }
-
-  /* Hover label at end of highlighted line */
-  .end-label text { font-size: 11px; fill: #e5e0d8; }
-  .end-label image { border-radius: 50%; }
+  .state-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #444; font-size: 0.85rem; }
 </style>
 </head>
 <body>
@@ -50,29 +69,43 @@
     <button id="btn-rising" class="active" onclick="setCategory('rising')">Rising</button>
     <button id="btn-paid" onclick="setCategory('paid')">Paid</button>
   </div>
+  <span class="sep">·</span>
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="Search newsletters..." autocomplete="off">
+    <div class="dropdown" id="dropdown" style="display:none"></div>
+  </div>
+  <div id="pin-chip-wrap"></div>
   <div class="topbar-right" id="subtitle">Top 100 · updated daily</div>
 </div>
 
 <div id="chart-area"><div class="state-msg">Loading...</div></div>
+
 <div class="tooltip-box" id="tooltip" style="display:none">
-  <img id="tip-img" src="" onerror="this.style.display='none'">
+  <img id="tip-img" src="">
   <div>
-    <div><span class="tooltip-rank" id="tip-rank"></span> <span class="tooltip-name" id="tip-name"></span></div>
-    <div class="tooltip-date" id="tip-date"></div>
+    <div><span class="tip-rank" id="tip-rank"></span><span class="tip-delta" id="tip-delta"></span> <span class="tip-name" id="tip-name"></span></div>
+    <div class="tip-sub" id="tip-sub"></div>
   </div>
 </div>
 
 <script>
+const SLOPE_THRESHOLD = 7;
+const ORANGE = "#ff6719";
+const fmt = d3.timeFormat("%b %-d");
+const parseDay = s => new Date(s + "T12:00:00");
+
 let allData = [];
 let category = "rising";
-let hoveredKey = null;
+const pinned = new Map(); // key → { name, logo, color }
+const PIN_COLORS = ["#ff6719","#38bdf8","#a78bfa","#34d399","#f472b6","#fbbf24","#f87171","#818cf8"];
+
+// ── Data loading ─────────────────────────────────────────────────────────────
 
 async function loadData() {
   let idx;
   try { idx = await fetch("data/index.json").then(r => r.json()); }
   catch { showMsg("No data yet. Scraper runs at 06:00 UTC."); return; }
-  if (!idx.dates?.length) { showMsg("No data yet. Scraper runs at 06:00 UTC."); return; }
-
+  if (!idx.dates?.length) { showMsg("No data yet."); return; }
   const days = await Promise.all(
     idx.dates.map(d => fetch(`data/${d}.json`).then(r => r.json()).catch(() => null))
   );
@@ -88,24 +121,20 @@ function showMsg(m) {
 
 function key(e) { return e.subdomain || e.url || e.name; }
 
-function buildSeries() {
-  // Collect all unique newsletters in current category across all days
-  const keys = new Map(); // k -> {name, logo}
+function allNewsletters() {
+  const map = new Map();
   for (const day of allData) {
-    for (const e of day[category] || []) {
+    for (const e of (day[category] || [])) {
       const k = key(e);
-      if (!keys.has(k)) keys.set(k, { name: e.name, logo: e.logo_url });
+      if (!map.has(k)) map.set(k, { name: e.name, logo: e.logo_url });
     }
   }
-
-  return Array.from(keys.entries()).map(([k, meta]) => {
-    const points = allData.map(day => {
-      const e = (day[category] || []).find(e2 => key(e2) === k);
-      return e ? { date: new Date(day.date), rank: e.rank } : null;
-    }).filter(Boolean);
-    return { k, name: meta.name, logo: meta.logo, points };
-  }).filter(s => s.points.length > 0);
+  return Array.from(map.entries())
+    .map(([k, v]) => ({ k, ...v }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
+
+// ── Controls ─────────────────────────────────────────────────────────────────
 
 function setCategory(c) {
   category = c;
@@ -114,135 +143,370 @@ function setCategory(c) {
   render();
 }
 
-function render() {
-  const area = document.getElementById("chart-area");
-  if (!allData.length) return;
+function pin(k, name, logo) {
+  if (pinned.has(k)) return;
+  const color = PIN_COLORS[pinned.size % PIN_COLORS.length];
+  pinned.set(k, { name, logo, color });
+  renderChips();
+  render();
+}
 
-  const series = buildSeries();
-  if (!series.length) { showMsg("No data."); return; }
+function unpin(k) {
+  pinned.delete(k);
+  renderChips();
+  render();
+}
+
+function renderChips() {
+  const wrap = document.getElementById("pin-chip-wrap");
+  wrap.innerHTML = "";
+  for (const [k, { name, logo, color }] of pinned) {
+    const chip = document.createElement("div");
+    chip.className = "pin-chip";
+    chip.style.borderColor = color + "66";
+    chip.style.background = color + "22";
+    chip.style.color = color;
+    chip.innerHTML = `<img src="${logo||""}" onerror="this.style.display='none'"><span>${name}</span><span style="opacity:.5;margin-left:2px">×</span>`;
+    chip.onclick = () => unpin(k);
+    wrap.appendChild(chip);
+  }
+}
+
+// ── Search ────────────────────────────────────────────────────────────────────
+
+const searchInput = document.getElementById("search");
+const dropdown = document.getElementById("dropdown");
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.toLowerCase().trim();
+  if (!q || !allData.length) { dropdown.style.display = "none"; return; }
+  const matches = allNewsletters().filter(({ name }) => name.toLowerCase().includes(q)).slice(0, 20);
+  if (!matches.length) { dropdown.style.display = "none"; return; }
+  dropdown.innerHTML = "";
+  for (const { k, name, logo } of matches) {
+    const div = document.createElement("div");
+    div.className = "dropdown-item";
+    div.innerHTML = `<img src="${logo || ""}" onerror="this.style.display='none'"><span>${name}</span>`;
+    div.onclick = () => {
+      pin(k, name, logo);
+      searchInput.value = "";
+      dropdown.style.display = "none";
+    };
+    dropdown.appendChild(div);
+  }
+  dropdown.style.display = "block";
+});
+
+document.addEventListener("click", e => {
+  if (!e.target.closest(".search-wrap")) dropdown.style.display = "none";
+});
+
+// ── Render dispatch ──────────────────────────────────────────────────────────
+
+function render() {
+  if (!allData.length) return;
+  if (allData.length < SLOPE_THRESHOLD) renderSlopeGraph();
+  else renderStepChart();
+}
+
+// ── Tooltip helpers ───────────────────────────────────────────────────────────
+
+function showTooltip(event, { name, logo, rank, delta, sub }) {
+  const tip = document.getElementById("tooltip");
+  const img = document.getElementById("tip-img");
+  img.src = logo || ""; img.style.display = logo ? "" : "none";
+  document.getElementById("tip-rank").textContent = rank != null ? `#${rank}` : "";
+  document.getElementById("tip-name").textContent = name;
+  document.getElementById("tip-sub").textContent = sub || "";
+  const deltaEl = document.getElementById("tip-delta");
+  if (delta == null) { deltaEl.textContent = ""; deltaEl.className = "tip-delta"; }
+  else if (delta < 0) { deltaEl.textContent = ` ▲${Math.abs(delta)}`; deltaEl.className = "tip-delta up"; }
+  else if (delta > 0) { deltaEl.textContent = ` ▼${delta}`; deltaEl.className = "tip-delta down"; }
+  else { deltaEl.textContent = " —"; deltaEl.className = "tip-delta"; }
+  tip.style.display = "flex";
+  tip.style.left = (event.clientX + 14) + "px";
+  tip.style.top = (event.clientY - 42) + "px";
+}
+
+function hideTooltip() { document.getElementById("tooltip").style.display = "none"; }
+
+// ── Avatar helper ─────────────────────────────────────────────────────────────
+
+function drawAvatar(container, defs, { cx, cy, r, logo, stroke, clipId }) {
+  defs.select(`#${clipId}`).remove();
+  defs.append("clipPath").attr("id", clipId)
+    .append("circle").attr("cx", cx).attr("cy", cy).attr("r", r);
+  if (logo) {
+    container.append("image").attr("href", logo)
+      .attr("x", cx - r).attr("y", cy - r).attr("width", r*2).attr("height", r*2)
+      .attr("clip-path", `url(#${clipId})`).attr("preserveAspectRatio", "xMidYMid slice");
+  }
+  container.append("circle").attr("cx", cx).attr("cy", cy).attr("r", r)
+    .attr("fill", "none").attr("stroke", stroke || ORANGE).attr("stroke-width", 1.5);
+}
+
+// ── Slope graph ───────────────────────────────────────────────────────────────
+
+function renderSlopeGraph() {
+  const area = document.getElementById("chart-area");
+  const day1 = allData[0];
+  const dayN = allData[allData.length - 1];
+
+  const margin = { top: 44, right: 20, bottom: 16, left: 20 };
+  const W = area.clientWidth - margin.left - margin.right;
+  const H = area.clientHeight - margin.top - margin.bottom;
+  const COL = Math.min(W * 0.14, 120);
+  const x1 = COL, x2 = W - COL;
+  const yScale = d3.scaleLinear().domain([1, 100]).range([0, H]);
+
+  const map1 = new Map((day1[category] || []).map(e => [key(e), e]));
+  const mapN = new Map((dayN[category] || []).map(e => [key(e), e]));
+  const allKeys = new Set([...map1.keys(), ...mapN.keys()]);
+
+  const items = Array.from(allKeys).map(k => {
+    const e1 = map1.get(k) ?? null;
+    const eN = mapN.get(k) ?? null;
+    const src = e1 ?? eN;
+    return { k, e1, eN, name: src.name, logo: src.logo_url };
+  });
+
+  area.innerHTML = "";
+  const svg = d3.select(area).append("svg");
+  const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  const defs = svg.append("defs");
+
+  // Horizontal rank grid lines
+  [10,20,30,40,50,60,70,80,90,100].forEach(t => {
+    g.append("line")
+      .attr("x1", x1).attr("y1", yScale(t)).attr("x2", x2).attr("y2", yScale(t))
+      .attr("stroke", "rgba(255,255,255,0.04)").attr("stroke-width", 1);
+    g.append("text").attr("class","stub-label")
+      .attr("x", x1 - 6).attr("y", yScale(t) + 3.5).attr("text-anchor","end").text(`#${t}`);
+    g.append("text").attr("class","stub-label")
+      .attr("x", x2 + 6).attr("y", yScale(t) + 3.5).attr("text-anchor","start").text(`#${t}`);
+  });
+
+  // Column lines + date headers
+  [{ x: x1, date: day1.date, anchor: "middle" }, { x: x2, date: dayN.date, anchor: "middle" }].forEach(({ x, date }) => {
+    g.append("line").attr("class","col-line").attr("x1",x).attr("y1",0).attr("x2",x).attr("y2",H);
+    g.append("text").attr("class","col-label").attr("x",x).attr("y",-24).text(fmt(parseDay(date)));
+  });
+
+  // Stub labels
+  g.append("text").attr("class","stub-label").attr("x", x1 + 13).attr("y", -10).attr("text-anchor","start")
+    .attr("fill","#555").text("← fell out");
+  g.append("text").attr("class","stub-label").attr("x", x2 - 13).attr("y", -10).attr("text-anchor","end")
+    .attr("fill","#555").text("entered →");
+
+  const lineG = g.append("g");
+  const hitG = g.append("g");
+
+  items.forEach(item => {
+    if (item.e1 && item.eN) {
+      const y1 = yScale(item.e1.rank), y2 = yScale(item.eN.rank);
+      const delta = item.eN.rank - item.e1.rank;
+      const isPinned = pinned.has(item.k);
+      const pinColor = isPinned ? pinned.get(item.k).color : ORANGE;
+      const baseOpacity = delta < 0 ? 0.5 : delta > 0 ? 0.12 : 0.07;
+      const opacity = pinned.size ? (isPinned ? 1 : 0.03) : baseOpacity;
+      const strokeW = isPinned ? 2.5 : 1;
+
+      lineG.append("line").attr("class","slope-line").attr("data-key", item.k)
+        .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
+        .attr("stroke", pinColor).attr("stroke-width", strokeW).attr("opacity", opacity);
+
+      hitG.append("line")
+        .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
+        .attr("stroke","transparent").attr("stroke-width", 12).style("cursor","crosshair")
+        .on("mouseenter", (event) => {
+          lineG.selectAll(".slope-line").attr("opacity", function() {
+            const k = this.getAttribute("data-key");
+            return k === item.k ? 1 : 0.03;
+          }).attr("stroke-width", function() {
+            return this.getAttribute("data-key") === item.k ? 2.5 : 1;
+          });
+          // Avatars at both ends
+          svg.select("#slope-hover").remove();
+          const hg = svg.append("g").attr("id","slope-hover");
+          const R = 11;
+          [[x1+margin.left, y1+margin.top, item.e1.rank], [x2+margin.left, y2+margin.top, item.eN.rank]]
+            .forEach(([cx,cy,rank], i) => {
+              drawAvatar(hg, defs, { cx, cy, r: R, logo: item.logo, clipId: `av-s${i}` });
+              hg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
+                .attr("text-anchor", i===0?"end":"start").attr("font-size","11px").attr("fill","#e5e0d8")
+                .attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
+            });
+        })
+        .on("mousemove", (event) => {
+          showTooltip(event, {
+            name: item.name, logo: item.logo,
+            rank: item.eN.rank, delta,
+            sub: `${fmt(parseDay(day1.date))} → ${fmt(parseDay(dayN.date))}`
+          });
+        })
+        .on("mouseleave", () => {
+          lineG.selectAll(".slope-line").each(function() {
+            const k = this.getAttribute("data-key");
+            const it = items.find(i => i.k === k);
+            if (!it || !it.e1 || !it.eN) return;
+            const d = it.eN.rank - it.e1.rank;
+            const bo = d < 0 ? 0.5 : d > 0 ? 0.12 : 0.07;
+            const ip = pinned.has(k);
+            d3.select(this)
+              .attr("stroke", ip ? pinned.get(k).color : ORANGE)
+              .attr("opacity", pinned.size ? (ip ? 1 : 0.03) : bo)
+              .attr("stroke-width", ip ? 2.5 : 1);
+          });
+          svg.select("#slope-hover").remove();
+          hideTooltip();
+        });
+    } else {
+      // Stub: fell out (has e1, no eN) or entered (no e1, has eN)
+      const e = item.e1 ?? item.eN;
+      const isLeft = !!item.e1;
+      const x = isLeft ? x1 : x2;
+      const y = yScale(e.rank);
+      lineG.append("line")
+        .attr("x1", x).attr("y1", y)
+        .attr("x2", isLeft ? x + 14 : x - 14).attr("y2", y)
+        .attr("stroke", ORANGE)
+        .attr("opacity", pinned.has(item.k) ? 1 : (pinned.size ? 0.02 : 0.12))
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray","3,2");
+    }
+  });
+
+  // Draw avatars at both endpoints for each pinned newsletter
+  let pinIdx = 0;
+  for (const [pk, { color }] of pinned) {
+    const it = items.find(i => i.k === pk);
+    if (!it?.e1 || !it?.eN) { pinIdx++; continue; }
+    const R = 12;
+    [[x1+margin.left, yScale(it.e1.rank)+margin.top, it.e1.rank],
+     [x2+margin.left, yScale(it.eN.rank)+margin.top, it.eN.rank]]
+      .forEach(([cx,cy,rank], i) => {
+        drawAvatar(svg, defs, { cx, cy, r: R, logo: it.logo, stroke: color, clipId: `av-pin${pinIdx}-${i}` });
+        svg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
+          .attr("text-anchor", i===0?"end":"start").attr("font-size","12px")
+          .attr("font-weight","600").attr("fill", color)
+          .attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
+      });
+    pinIdx++;
+  }
+}
+
+// ── Step chart (7+ days) ──────────────────────────────────────────────────────
+
+function renderStepChart() {
+  const area = document.getElementById("chart-area");
+  const allSeries = buildStepSeries();
+  if (!allSeries.length) { showMsg("No data."); return; }
 
   const margin = { top: 14, right: 16, bottom: 28, left: 40 };
   const W = area.clientWidth - margin.left - margin.right;
   const H = area.clientHeight - margin.top - margin.bottom;
 
-  const allDates = allData.map(d => new Date(d.date));
-  const xPad = allDates.length > 1 ? (allDates[allDates.length-1] - allDates[0]) * 0.02 : 3600e3 * 12;
+  const allDates = allData.map(d => parseDay(d.date));
+  const xPad = (allDates[allDates.length-1] - allDates[0]) * 0.02 || 3600e3*12;
   const xScale = d3.scaleTime()
-    .domain([new Date(allDates[0] - xPad), new Date(+allDates[allDates.length-1] + xPad)])
+    .domain([new Date(+allDates[0]-xPad), new Date(+allDates[allDates.length-1]+xPad)])
     .range([0, W]);
   const yScale = d3.scaleLinear().domain([1, 100]).range([0, H]);
 
   area.innerHTML = "";
   const svg = d3.select(area).append("svg");
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  const defs = svg.append("defs");
 
-  // Grid
-  g.append("g").attr("class", "grid")
-    .call(d3.axisLeft(yScale).ticks(10).tickSize(-W).tickFormat(""));
-
-  // Axes
-  g.append("g").attr("class", "axis")
-    .attr("transform", `translate(0,${H})`)
-    .call(d3.axisBottom(xScale)
-      .ticks(Math.min(allDates.length, 10))
-      .tickFormat(d3.timeFormat("%-m/%-d")));
-
-  g.append("g").attr("class", "axis")
-    .call(d3.axisLeft(yScale).ticks(10).tickFormat(d => `#${d}`));
+  [10,20,30,40,50,60,70,80,90,100].forEach(t => {
+    g.append("line").attr("x1",0).attr("y1",yScale(t)).attr("x2",W).attr("y2",yScale(t))
+      .attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",1);
+  });
+  g.append("g").attr("class","axis").attr("transform",`translate(0,${H})`)
+    .call(d3.axisBottom(xScale).ticks(Math.min(allData.length,10)).tickFormat(d=>fmt(d)));
+  g.append("g").attr("class","axis")
+    .call(d3.axisLeft(yScale).tickValues([10,20,30,40,50,60,70,80,90,100]).tickFormat(d=>`#${d}`));
 
   const stepLine = d3.line()
-    .x(d => xScale(d.date))
-    .y(d => yScale(d.rank))
-    .curve(d3.curveStepAfter);
+    .x(d => xScale(d.date)).y(d => yScale(d.rank)).curve(d3.curveStepAfter);
+  const rightEdge = xScale.domain()[1];
 
-  // Draw all tracks
-  const paths = g.selectAll(".track")
-    .data(series, d => d.k)
-    .join("path")
-    .attr("class", "track")
-    .attr("d", d => stepLine(d.points))
-    .attr("data-key", d => d.k);
+  const paths = g.selectAll(".track").data(allSeries, d => d.k).join("path")
+    .attr("class", d => {
+      if (pinned.has(d.k)) return "track pinned";
+      if (pinned.size) return "track dimmed";
+      return "track";
+    })
+    .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
+    .attr("d", d => {
+      const pts = [...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }];
+      return stepLine(pts);
+    });
 
-  // Hover end label group (shown on hover)
-  const endLabel = svg.append("g").attr("class", "end-label").style("display", "none");
-  const defs = svg.append("defs");
-  const clipId = "end-avatar";
-  defs.append("clipPath").attr("id", clipId)
-    .append("circle").attr("r", 11);
-  endLabel.append("image").attr("id", "end-img").attr("width", 22).attr("height", 22).attr("clip-path", `url(#${clipId})`).attr("preserveAspectRatio", "xMidYMid slice");
-  endLabel.append("circle").attr("id", "end-circle").attr("r", 11).attr("fill", "none").attr("stroke", "#ff6719").attr("stroke-width", 1.5);
-  endLabel.append("text").attr("id", "end-text").attr("dy", "0.35em").attr("dx", 16);
-
-  const tooltip = document.getElementById("tooltip");
-  const tipImg = document.getElementById("tip-img");
-  const tipRank = document.getElementById("tip-rank");
-  const tipName = document.getElementById("tip-name");
-  const tipDate = document.getElementById("tip-date");
-
-  // Bisect for x position
-  const bisect = d3.bisector(d => d).left;
-
-  function findNearest(mouseX, mouseY) {
-    const dateAtX = xScale.invert(mouseX);
-    const sortedDates = allData.map(d => new Date(d.date));
-    const idx = Math.max(0, bisect(sortedDates, dateAtX) - 1);
-    const day = allData[idx];
-    if (!day) return null;
-
-    const rankAtY = yScale.invert(mouseY);
-    let best = null, bestDist = Infinity;
-    for (const s of series) {
-      const pt = s.points.find(p => +p.date === +new Date(day.date));
-      if (!pt) continue;
-      const dist = Math.abs(pt.rank - rankAtY);
-      if (dist < bestDist) { bestDist = dist; best = { s, pt, day }; }
-    }
-    return bestDist < 8 ? best : null;
+  // Draw avatars at end of each pinned track
+  let pidx = 0;
+  for (const [pk, { color }] of pinned) {
+    const ps = allSeries.find(s => s.k === pk);
+    if (!ps) { pidx++; continue; }
+    const last = ps.points[ps.points.length-1];
+    const cx = xScale(last.date)+margin.left, cy = yScale(last.rank)+margin.top;
+    drawAvatar(svg, defs, { cx, cy, r: 12, logo: ps.logo, stroke: color, clipId: `av-step-pin${pidx}` });
+    svg.append("text").attr("x", cx+18).attr("y", cy+4)
+      .attr("font-size","11px").attr("font-weight","600").attr("fill", color)
+      .attr("font-family","system-ui,-apple-system,sans-serif")
+      .text(ps.name.length>22 ? ps.name.slice(0,20)+"…" : ps.name);
+    pidx++;
   }
+
+  const bisect = d3.bisector(d => +d).left;
 
   svg.on("mousemove", function(event) {
     const [mx, my] = d3.pointer(event, g.node());
-    if (mx < 0 || mx > W || my < 0 || my > H) {
-      clearHover(); return;
+    if (mx<0||mx>W||my<0||my>H) { clearStepHover(); return; }
+    const dateMs = +xScale.invert(mx);
+    const dates = allData.map(d => +parseDay(d.date));
+    const idx = Math.max(0, bisect(dates, dateMs)-1);
+    const day = allData[idx];
+    if (!day) { clearStepHover(); return; }
+    const rankAtY = yScale.invert(my);
+    let best = null, bestDist = Infinity;
+    const pool = pinned.size ? allSeries.filter(s => pinned.has(s.k)) : allSeries;
+    for (const s of pool.length ? pool : allSeries) {
+      const pt = s.points.find(p => +p.date === +parseDay(day.date));
+      if (!pt) continue;
+      const dist = Math.abs(pt.rank - rankAtY);
+      if (dist < bestDist) { bestDist=dist; best={s,pt}; }
     }
-    const hit = findNearest(mx, my);
-    if (!hit) { clearHover(); return; }
+    if (!best||bestDist>8) { clearStepHover(); return; }
+    const {s,pt} = best;
 
-    const { s, pt, day } = hit;
-    if (hoveredKey !== s.k) {
-      hoveredKey = s.k;
-      paths.classed("hovered", d => d.k === s.k);
-
-      // End label: place at last point of hovered series
-      const last = s.points[s.points.length - 1];
-      const ex = xScale(last.date) + margin.left;
-      const ey = yScale(last.rank) + margin.top;
-      endLabel.style("display", null);
-      endLabel.select("#end-img").attr("href", s.logo || "").attr("x", ex - 11).attr("y", ey - 11);
-      endLabel.select("#end-circle").attr("cx", ex).attr("cy", ey);
-      const nameEl = endLabel.select("#end-text").attr("x", ex).attr("y", ey).text(s.name.length > 20 ? s.name.slice(0, 18) + "…" : s.name);
-      endLabel.select(`#${clipId} circle`).attr("cx", ex).attr("cy", ey);
-    }
-
-    // Tooltip
-    tooltip.style.display = "flex";
-    tooltip.style.left = (event.clientX + 14) + "px";
-    tooltip.style.top = (event.clientY - 40) + "px";
-    tipImg.src = s.logo || "";
-    tipImg.style.display = s.logo ? "" : "none";
-    tipRank.textContent = `#${pt.rank}`;
-    tipName.textContent = s.name;
-    tipDate.textContent = d3.timeFormat("%b %-d, %Y")(pt.date);
+    paths.classed("hovered", d => d.k===s.k && !pinnedKey);
+    showTooltip(event, { name:s.name, logo:s.logo, rank:pt.rank, sub:fmt(pt.date) });
   });
 
-  svg.on("mouseleave", clearHover);
+  svg.on("mouseleave", clearStepHover);
 
-  function clearHover() {
-    hoveredKey = null;
+  function clearStepHover() {
     paths.classed("hovered", false);
-    endLabel.style("display", "none");
-    tooltip.style.display = "none";
+    hideTooltip();
   }
+}
+
+function buildStepSeries() {
+  const keys = new Map();
+  for (const day of allData) {
+    for (const e of (day[category]||[])) {
+      const k = key(e);
+      if (!keys.has(k)) keys.set(k, { name:e.name, logo:e.logo_url });
+    }
+  }
+  return Array.from(keys.entries()).map(([k,meta]) => ({
+    k, name:meta.name, logo:meta.logo,
+    points: allData.map(day => {
+      const e = (day[category]||[]).find(e2=>key(e2)===k);
+      return e ? { date:parseDay(day.date), rank:e.rank } : null;
+    }).filter(Boolean)
+  })).filter(s=>s.points.length>0);
 }
 
 window.addEventListener("resize", render);
