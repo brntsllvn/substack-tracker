@@ -1,28 +1,7 @@
+const { put, list } = require("@vercel/blob");
+
 const FINANCE_ID = 153;
 const LIST_TYPES = { rising: "trending", paid: "paid" };
-const BLOB_API = "https://blob.vercel-storage.com";
-
-async function blobList(prefix, token) {
-  const r = await fetch(`${BLOB_API}?prefix=${encodeURIComponent(prefix)}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!r.ok) throw new Error(`Blob list failed: ${r.status} ${await r.text()}`);
-  const { blobs } = await r.json();
-  return blobs || [];
-}
-
-async function blobPut(pathname, body, token) {
-  const res = await fetch(`${BLOB_API}/${pathname}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "x-content-type": "application/json",
-    },
-    body,
-  });
-  if (!res.ok) throw new Error(`Blob PUT failed: ${res.status} ${await res.text()}`);
-  return res.json();
-}
 
 async function fetchPage(apiType, page) {
   const url = `https://substack.com/api/v1/category/leaderboard/${FINANCE_ID}/${apiType}?page=${page}`;
@@ -70,14 +49,11 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const token = process.env.BLOB_READ_WRITE_TOKEN;
-    if (!token) return res.status(500).json({ error: "BLOB_READ_WRITE_TOKEN not set" });
-
     const today = new Date().toISOString().split("T")[0];
+    const prefix = `leaderboard/${today}`;
 
-    // Check if today's data already exists
-    const existing = await blobList(`leaderboard/${today}`, token);
-    if (existing.length > 0) {
+    const { blobs } = await list({ prefix });
+    if (blobs.length > 0) {
       return res.status(200).json({ message: "Already scraped today", date: today });
     }
 
@@ -96,7 +72,10 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: "All fetches failed", errors });
     }
 
-    await blobPut(`leaderboard/${today}.json`, JSON.stringify(data, null, 2), token);
+    await put(`${prefix}.json`, JSON.stringify(data, null, 2), {
+      access: "private",
+      contentType: "application/json",
+    });
 
     return res.status(200).json({
       success: true,
