@@ -2,7 +2,7 @@ name: Verify Daily Scrape
 
 on:
   schedule:
-    - cron: "30 6 * * *"   # 30 min after Vercel cron runs at 6am UTC
+    - cron: "30 6 * * *"   # 30 min after Vercel cron fires at 6am UTC
   workflow_dispatch:
 
 permissions:
@@ -12,15 +12,12 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Check today's data exists in Vercel
+      - name: Check today's data exists in Blob
         id: check
         run: |
           TODAY=$(date -u +%Y-%m-%d)
           echo "date=$TODAY" >> $GITHUB_OUTPUT
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://substack-tracker.vercel.app/api/index")
-          FOUND=$(curl -s "https://substack-tracker.vercel.app/api/index" | grep -c "\"$TODAY\"" || true)
-          echo "found=$FOUND" >> $GITHUB_OUTPUT
+          FOUND=$(curl -s "https://substack-tracker.vercel.app/api/data" | grep -c "\"$TODAY\"" || true)
           if [ "$FOUND" -eq 0 ]; then
             echo "No data found for $TODAY"
             exit 1
@@ -38,5 +35,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `Missing leaderboard data: ${today}`,
-              body: `No data for ${today} found in Vercel Blob. Check the Vercel cron logs.\n\n[Run](${runUrl}) · [Vercel](https://vercel.com/brent-sullivans-projects/substack-tracker)`
+              body: `No data for ${today} in Vercel Blob. The Vercel cron may have failed.\n\n[Run](${runUrl}) · [Vercel](https://vercel.com/brent-sullivans-projects/substack-tracker)`
             });
