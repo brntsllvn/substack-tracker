@@ -61,7 +61,7 @@ async function fetchTop100(listKey) {
       name: pub.name || "",
       subdomain: pub.subdomain || "",
       url: pub.base_url || "",
-      logo_url: pub.logo_url || "",
+      logo_url: pub.logo_url || pub.primary_profile_photo_url || pub.author_photo_url || user.photo_url || "",
       author: user.name || "",
       pub_id: pub.id || null,
     };
