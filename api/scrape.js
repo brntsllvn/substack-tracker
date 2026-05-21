@@ -1,55 +1,59 @@
-const { put, list } = require("@vercel/blob");
-
 const FINANCE_ID = 153;
-const GH_REPO = "brntsllvn/substack-leaderboard";
-
-async function githubCommit(path, content, date) {
-  const pat = process.env.GITHUB_PAT;
-  if (!pat) return; // backup is best-effort
-  const url = `https://api.github.com/repos/${GH_REPO}/contents/${path}`;
-  const headers = {
-    Authorization: `token ${pat}`,
-    Accept: "application/vnd.github.v3+json",
-    "Content-Type": "application/json",
-  };
-  // Check if file already exists (need sha to update)
-  const existing = await fetch(url, { headers }).then(r => r.ok ? r.json() : null);
-  if (existing) return; // already backed up
-  await fetch(url, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify({
-      message: `data: ${date}`,
-      content: Buffer.from(content).toString("base64"),
-    }),
-  });
-}
 const LIST_TYPES = { rising: "trending", paid: "paid" };
+const OWNER = "brntsllvn";
+const REPO = "substack-leaderboard";
+const GH = "https://api.github.com";
+
+async function ghGet(path, pat) {
+  const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${path}`, {
+    headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github.v3+json" },
+  });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(`GitHub GET ${path}: ${r.status}`);
+  return r.json();
+}
+
+async function ghPut(path, content, message, sha, pat) {
+  const body = { message, content: Buffer.from(content).toString("base64") };
+  if (sha) body.sha = sha;
+  const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${path}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${pat}`,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw new Error(`GitHub PUT ${path}: ${r.status} ${await r.text()}`);
+}
 
 async function fetchPage(apiType, page) {
-  const url = `https://substack.com/api/v1/category/leaderboard/${FINANCE_ID}/${apiType}?page=${page}`;
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-      Accept: "application/json",
-      Referer: "https://substack.com/",
-    },
-  });
-  if (!res.ok) throw new Error(`${res.status} from Substack (${apiType} page ${page})`);
-  return res.json();
+  const r = await fetch(
+    `https://substack.com/api/v1/category/leaderboard/${FINANCE_ID}/${apiType}?page=${page}`,
+    {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        Accept: "application/json",
+        Referer: "https://substack.com/",
+      },
+    }
+  );
+  if (!r.ok) throw new Error(`${r.status} from Substack (${apiType} page ${page})`);
+  return r.json();
 }
 
 async function fetchTop100(listKey) {
   const apiType = LIST_TYPES[listKey];
-  const allItems = [];
+  const items = [];
   let page = 0;
-  while (allItems.length < 100) {
-    const { items, more } = await fetchPage(apiType, page);
-    allItems.push(...items);
+  while (items.length < 100) {
+    const { items: batch, more } = await fetchPage(apiType, page);
+    items.push(...batch);
     if (!more) break;
     page++;
   }
-  return allItems.slice(0, 100).map((item, i) => {
+  return items.slice(0, 100).map((item, i) => {
     const pub = item.publication || {};
     const user = item.user || {};
     const lb = ((user.status || {}).leaderboard) || {};
@@ -72,11 +76,14 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const today = new Date().toISOString().split("T")[0];
-    const prefix = `leaderboard/${today}`;
+    const pat = process.env.GITHUB_PAT;
+    if (!pat) return res.status(500).json({ error: "GITHUB_PAT not set" });
 
-    const { blobs } = await list({ prefix });
-    if (blobs.length > 0) {
+    const today = new Date().toISOString().split("T")[0];
+    const dataPath = `data/${today}.json`;
+
+    const existing = await ghGet(dataPath, pat);
+    if (existing) {
       return res.status(200).json({ message: "Already scraped today", date: today });
     }
 
@@ -96,14 +103,17 @@ module.exports = async function handler(req, res) {
     }
 
     const json = JSON.stringify(data, null, 2);
+    await ghPut(dataPath, json, `data: ${today}`, null, pat);
 
-    await put(`${prefix}.json`, json, {
-      access: "public",
-      contentType: "application/json",
-      addRandomSuffix: false,
-    });
-
-    await githubCommit(`data/${today}.json`, json, today);
+    const indexFile = await ghGet("data/index.json", pat);
+    const idx = indexFile
+      ? JSON.parse(Buffer.from(indexFile.content, "base64").toString())
+      : { dates: [] };
+    if (!idx.dates.includes(today)) {
+      idx.dates.push(today);
+      idx.dates.sort();
+    }
+    await ghPut("data/index.json", JSON.stringify(idx, null, 2), `index: ${today}`, indexFile?.sha || null, pat);
 
     return res.status(200).json({
       success: true,
