@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Substack Finance Leaderboard Tracker</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f9f9f7; color: #1a1a1a; }
+  header { padding: 20px 32px; border-bottom: 1px solid #e0e0da; background: #fff; }
+  header h1 { font-size: 1.2rem; font-weight: 600; }
+  header p { font-size: 0.8rem; color: #666; margin-top: 2px; }
+  .controls { padding: 20px 32px; display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; background: #fff; border-bottom: 1px solid #e0e0da; }
+  .category-toggle { display: flex; gap: 0; border: 1px solid #d0d0ca; border-radius: 6px; overflow: hidden; }
+  .category-toggle button { padding: 6px 16px; border: none; background: #fff; cursor: pointer; font-size: 0.85rem; color: #555; transition: background 0.15s; }
+  .category-toggle button.active { background: #1a1a1a; color: #fff; }
+  .search-wrap { position: relative; flex: 1; min-width: 220px; max-width: 400px; }
+  .search-wrap input { width: 100%; padding: 6px 12px; border: 1px solid #d0d0ca; border-radius: 6px; font-size: 0.85rem; outline: none; }
+  .search-wrap input:focus { border-color: #888; }
+  .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff; border: 1px solid #d0d0ca; border-radius: 6px; max-height: 240px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .dropdown div { padding: 7px 12px; font-size: 0.82rem; cursor: pointer; }
+  .dropdown div:hover { background: #f0f0ec; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 32px; background: #fff; border-bottom: 1px solid #e0e0da; min-height: 44px; }
+  .chip { display: flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 100px; font-size: 0.78rem; font-weight: 500; cursor: pointer; user-select: none; }
+  .chip span.x { opacity: 0.6; font-size: 0.9rem; }
+  .chip:hover span.x { opacity: 1; }
+  .chart-area { padding: 24px 32px; }
+  svg { width: 100%; overflow: visible; }
+  .axis path, .axis line { stroke: #d0d0ca; }
+  .axis text { font-size: 11px; fill: #666; }
+  .grid line { stroke: #e8e8e4; stroke-dasharray: 3,3; }
+  .line { fill: none; stroke-width: 2.5; }
+  .dot { stroke: #fff; stroke-width: 2; }
+  .tooltip { position: fixed; background: #fff; border: 1px solid #d0d0ca; border-radius: 6px; padding: 8px 12px; font-size: 0.78rem; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 200; line-height: 1.6; }
+  .empty { text-align: center; color: #999; padding: 60px; font-size: 0.9rem; }
+  .loading { text-align: center; color: #999; padding: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Substack Finance Leaderboard Tracker</h1>
+  <p>Top 100 · Rising and Paid · updated daily</p>
+</header>
+
+<div class="controls">
+  <div class="category-toggle">
+    <button id="btn-rising" class="active" onclick="setCategory('rising')">Rising</button>
+    <button id="btn-paid" onclick="setCategory('paid')">Paid</button>
+  </div>
+  <div class="search-wrap">
+    <input id="search" type="text" placeholder="Search newsletters..." autocomplete="off">
+    <div class="dropdown" id="dropdown" style="display:none"></div>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+<div class="chart-area" id="chart-area"><div class="loading">Loading data...</div></div>
+<div class="tooltip" id="tooltip" style="display:none"></div>
+
+<script>
+const COLORS = d3.schemeTableau10.concat(d3.schemePastel1);
+let allData = [];       // [{date, rising:[{rank,name,url,author,slug}], paid:[...]}]
+let category = "rising";
+let selected = [];      // newsletter slugs or names currently plotted
+let colorMap = {};
+
+async function loadData() {
+  let idx;
+  try {
+    idx = await fetch("data/index.json").then(r => r.json());
+  } catch {
+    document.getElementById("chart-area").innerHTML = '<div class="empty">No data yet. The scraper will run tonight and start collecting leaderboard data.</div>';
+    return;
+  }
+  if (!idx.dates || idx.dates.length === 0) {
+    document.getElementById("chart-area").innerHTML = '<div class="empty">No data yet. The scraper will run tonight.</div>';
+    return;
+  }
+  const files = await Promise.all(
+    idx.dates.map(d => fetch(`data/${d}.json`).then(r => r.json()).catch(() => null))
+  );
+  allData = files.filter(Boolean);
+  render();
+}
+
+function key(entry) {
+  return entry.slug || entry.url || entry.name;
+}
+
+function allNewsletters() {
+  const map = {};
+  for (const day of allData) {
+    for (const e of day[category] || []) {
+      const k = key(e);
+      if (!map[k]) map[k] = e.name || k;
+    }
+  }
+  return Object.entries(map).map(([k, name]) => ({ k, name })).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function seriesFor(k) {
+  return allData
+    .map(day => {
+      const entry = (day[category] || []).find(e => key(e) === k);
+      return entry ? { date: new Date(day.date), rank: entry.rank, name: entry.name } : null;
+    })
+    .filter(Boolean);
+}
+
+function setCategory(c) {
+  category = c;
+  document.getElementById("btn-rising").className = c === "rising" ? "active" : "";
+  document.getElementById("btn-paid").className = c === "paid" ? "active" : "";
+  render();
+}
+
+function addNewsletter(k, name) {
+  if (selected.includes(k)) return;
+  selected.push(k);
+  if (!colorMap[k]) colorMap[k] = COLORS[Object.keys(colorMap).length % COLORS.length];
+  renderChips();
+  render();
+}
+
+function removeNewsletter(k) {
+  selected = selected.filter(s => s !== k);
+  renderChips();
+  render();
+}
+
+function renderChips() {
+  const container = document.getElementById("chips");
+  container.innerHTML = "";
+  for (const k of selected) {
+    const name = allData.flatMap(d => (d.rising || []).concat(d.paid || [])).find(e => key(e) === k)?.name || k;
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.style.background = colorMap[k] + "22";
+    chip.style.color = colorMap[k];
+    chip.style.border = `1px solid ${colorMap[k]}55`;
+    chip.innerHTML = `<span>${name}</span><span class="x">×</span>`;
+    chip.onclick = () => removeNewsletter(k);
+    container.appendChild(chip);
+  }
+}
+
+function render() {
+  const area = document.getElementById("chart-area");
+
+  if (selected.length === 0) {
+    area.innerHTML = '<div class="empty">Search for a newsletter above to start plotting its rank over time.</div>';
+    return;
+  }
+
+  const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+  const W = area.clientWidth - margin.left - margin.right;
+  const H = Math.min(420, Math.max(280, window.innerHeight * 0.45)) - margin.top - margin.bottom;
+
+  const allPoints = selected.flatMap(k => seriesFor(k));
+  if (allPoints.length === 0) {
+    area.innerHTML = '<div class="empty">No data for selected newsletters in this category yet.</div>';
+    return;
+  }
+
+  const xDomain = d3.extent(allPoints, d => d.date);
+  const xScale = d3.scaleTime().domain(xDomain).range([0, W]);
+  const yScale = d3.scaleLinear().domain([1, 100]).range([0, H]);
+
+  area.innerHTML = "";
+  const svg = d3.select(area).append("svg")
+    .attr("height", H + margin.top + margin.bottom);
+
+  const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // Grid
+  g.append("g").attr("class", "grid")
+    .call(d3.axisLeft(yScale).ticks(5).tickSize(-W).tickFormat(""));
+
+  // Axes
+  g.append("g").attr("class", "axis")
+    .attr("transform", `translate(0,${H})`)
+    .call(d3.axisBottom(xScale).ticks(6).tickFormat(d3.timeFormat("%-m/%-d")));
+
+  g.append("g").attr("class", "axis")
+    .call(d3.axisLeft(yScale).ticks(5).tickFormat(d => `#${d}`));
+
+  const line = d3.line().x(d => xScale(d.date)).y(d => yScale(d.rank));
+  const tooltip = document.getElementById("tooltip");
+
+  for (const k of selected) {
+    const series = seriesFor(k);
+    if (!series.length) continue;
+    const color = colorMap[k];
+
+    g.append("path")
+      .datum(series)
+      .attr("class", "line")
+      .attr("stroke", color)
+      .attr("d", line);
+
+    g.selectAll(`.dot-${k.replace(/\W/g, "_")}`)
+      .data(series)
+      .join("circle")
+      .attr("class", "dot")
+      .attr("cx", d => xScale(d.date))
+      .attr("cy", d => yScale(d.rank))
+      .attr("r", 4)
+      .attr("fill", color)
+      .on("mousemove", (event, d) => {
+        tooltip.style.display = "block";
+        tooltip.style.left = (event.clientX + 12) + "px";
+        tooltip.style.top = (event.clientY - 28) + "px";
+        tooltip.innerHTML = `<strong>${d.name}</strong><br>#${d.rank} · ${d3.timeFormat("%b %-d, %Y")(d.date)}`;
+      })
+      .on("mouseleave", () => { tooltip.style.display = "none"; });
+  }
+}
+
+// Search
+const searchInput = document.getElementById("search");
+const dropdown = document.getElementById("dropdown");
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.toLowerCase().trim();
+  if (!q) { dropdown.style.display = "none"; return; }
+  const matches = allNewsletters().filter(({ name }) => name.toLowerCase().includes(q)).slice(0, 20);
+  if (!matches.length) { dropdown.style.display = "none"; return; }
+  dropdown.innerHTML = "";
+  for (const { k, name } of matches) {
+    const div = document.createElement("div");
+    div.textContent = name;
+    div.onclick = () => {
+      addNewsletter(k, name);
+      searchInput.value = "";
+      dropdown.style.display = "none";
+    };
+    dropdown.appendChild(div);
+  }
+  dropdown.style.display = "block";
+});
+
+document.addEventListener("click", e => {
+  if (!e.target.closest(".search-wrap")) dropdown.style.display = "none";
+});
+
+window.addEventListener("resize", render);
+
+loadData();
+</script>
+</body>
+</html>
