@@ -115,6 +115,9 @@ module.exports = async function handler(req, res) {
     }
     await ghPut("data/index.json", JSON.stringify(idx, null, 2), `index: ${today}`, indexFile?.sha || null, pat);
 
+    const deployHook = process.env.VERCEL_DEPLOY_HOOK;
+    if (deployHook) await fetch(deployHook, { method: "POST" }).catch(() => {});
+
     return res.status(200).json({
       success: true,
       date: today,
