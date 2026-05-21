@@ -2,28 +2,27 @@ const FINANCE_ID = 153;
 const LIST_TYPES = { rising: "trending", paid: "paid" };
 const BLOB_API = "https://blob.vercel-storage.com";
 
+async function blobList(prefix, token) {
+  const r = await fetch(`${BLOB_API}?prefix=${encodeURIComponent(prefix)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!r.ok) throw new Error(`Blob list failed: ${r.status} ${await r.text()}`);
+  const { blobs } = await r.json();
+  return blobs || [];
+}
+
 async function blobPut(pathname, body, token) {
   const res = await fetch(`${BLOB_API}/${pathname}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "x-content-type": "application/json",
-      "x-add-random-suffix": "0",
-      "x-cache-control-max-age": "0",
       "x-access": "private",
     },
     body,
   });
   if (!res.ok) throw new Error(`Blob PUT failed: ${res.status} ${await res.text()}`);
   return res.json();
-}
-
-async function blobExists(pathname, token) {
-  const res = await fetch(`${BLOB_API}/${pathname}`, {
-    method: "HEAD",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.ok;
 }
 
 async function fetchPage(apiType, page) {
@@ -66,48 +65,48 @@ async function fetchTop100(listKey) {
 }
 
 module.exports = async function handler(req, res) {
-  try { return await run(req, res); }
-  catch (e) { return res.status(500).json({ error: e.message, stack: e.stack }); }
-};
-
-async function run(req, res) {
-  const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret && req.headers.authorization !== `Bearer ${cronSecret}`) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) return res.status(500).json({ error: "BLOB_READ_WRITE_TOKEN not set" });
-
-  const today = new Date().toISOString().split("T")[0];
-  const pathname = `leaderboard/${today}.json`;
-
-  if (await blobExists(pathname, token)) {
-    return res.status(200).json({ message: "Already scraped today", date: today });
-  }
-
-  const data = { date: today, rising: [], paid: [] };
-  const errors = [];
-
-  for (const listKey of ["rising", "paid"]) {
-    try {
-      data[listKey] = await fetchTop100(listKey);
-    } catch (e) {
-      errors.push(`${listKey}: ${e.message}`);
+  try {
+    const cronSecret = process.env.CRON_SECRET;
+    if (cronSecret && req.headers.authorization !== `Bearer ${cronSecret}`) {
+      return res.status(401).json({ error: "Unauthorized" });
     }
+
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    if (!token) return res.status(500).json({ error: "BLOB_READ_WRITE_TOKEN not set" });
+
+    const today = new Date().toISOString().split("T")[0];
+
+    // Check if today's data already exists
+    const existing = await blobList(`leaderboard/${today}`, token);
+    if (existing.length > 0) {
+      return res.status(200).json({ message: "Already scraped today", date: today });
+    }
+
+    const data = { date: today, rising: [], paid: [] };
+    const errors = [];
+
+    for (const listKey of ["rising", "paid"]) {
+      try {
+        data[listKey] = await fetchTop100(listKey);
+      } catch (e) {
+        errors.push(`${listKey}: ${e.message}`);
+      }
+    }
+
+    if (errors.length === 2) {
+      return res.status(500).json({ error: "All fetches failed", errors });
+    }
+
+    await blobPut(`leaderboard/${today}.json`, JSON.stringify(data, null, 2), token);
+
+    return res.status(200).json({
+      success: true,
+      date: today,
+      rising: data.rising.length,
+      paid: data.paid.length,
+      ...(errors.length && { errors }),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
-
-  if (errors.length === 2) {
-    return res.status(500).json({ error: "All fetches failed", errors });
-  }
-
-  await blobPut(pathname, JSON.stringify(data, null, 2), token);
-
-  return res.status(200).json({
-    success: true,
-    date: today,
-    rising: data.rising.length,
-    paid: data.paid.length,
-    ...(errors.length && { errors }),
-  });
 };
