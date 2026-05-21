@@ -67,19 +67,19 @@ let selected = [];      // newsletter slugs or names currently plotted
 let colorMap = {};
 
 async function loadData() {
-  let idx;
+  let entries;
   try {
-    idx = await fetch("data/index.json").then(r => r.json());
+    entries = await fetch("/api/index").then(r => r.json());
   } catch {
     document.getElementById("chart-area").innerHTML = '<div class="empty">No data yet. The scraper will run tonight and start collecting leaderboard data.</div>';
     return;
   }
-  if (!idx.dates || idx.dates.length === 0) {
+  if (!entries.length) {
     document.getElementById("chart-area").innerHTML = '<div class="empty">No data yet. The scraper will run tonight.</div>';
     return;
   }
   const files = await Promise.all(
-    idx.dates.map(d => fetch(`data/${d}.json`).then(r => r.json()).catch(() => null))
+    entries.map(({ url }) => fetch(url).then(r => r.json()).catch(() => null))
   );
   allData = files.filter(Boolean);
   render();

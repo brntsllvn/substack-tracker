@@ -1,41 +1,42 @@
-name: Daily Leaderboard Scrape
+name: Verify Daily Scrape
 
 on:
   schedule:
-    - cron: "30 6 * * *"   # 30 min after Vercel cron as a backup check
+    - cron: "30 6 * * *"   # 30 min after Vercel cron runs at 6am UTC
   workflow_dispatch:
 
 permissions:
   issues: write
 
 jobs:
-  check:
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify today's data was committed
-        id: verify
+      - name: Check today's data exists in Vercel
+        id: check
         run: |
           TODAY=$(date -u +%Y-%m-%d)
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://raw.githubusercontent.com/${{ github.repository }}/main/data/${TODAY}.json")
-          echo "status=$STATUS" >> $GITHUB_OUTPUT
           echo "date=$TODAY" >> $GITHUB_OUTPUT
-          if [ "$STATUS" != "200" ]; then
-            echo "Data file for $TODAY not found (HTTP $STATUS)"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://substack-tracker.vercel.app/api/index")
+          FOUND=$(curl -s "https://substack-tracker.vercel.app/api/index" | grep -c "\"$TODAY\"" || true)
+          echo "found=$FOUND" >> $GITHUB_OUTPUT
+          if [ "$FOUND" -eq 0 ]; then
+            echo "No data found for $TODAY"
             exit 1
           fi
-          echo "Data for $TODAY confirmed present"
+          echo "Data for $TODAY confirmed"
 
       - name: Notify on failure
         if: failure()
         uses: actions/github-script@v7
         with:
           script: |
-            const today = "${{ steps.verify.outputs.date }}";
+            const today = "${{ steps.check.outputs.date }}";
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `Missing leaderboard data: ${today}`,
-              body: `No data file found for ${today}. The Vercel cron may have failed.\n\n[View run](${runUrl})\n\nCheck the Vercel function logs at https://vercel.com/brent-sullivans-projects/substack-tracker`
+              body: `No data for ${today} found in Vercel Blob. Check the Vercel cron logs.\n\n[Run](${runUrl}) · [Vercel](https://vercel.com/brent-sullivans-projects/substack-tracker)`
             });
