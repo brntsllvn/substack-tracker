@@ -1,6 +1,29 @@
 const { put, list } = require("@vercel/blob");
 
 const FINANCE_ID = 153;
+const GH_REPO = "brntsllvn/substack-leaderboard";
+
+async function githubCommit(path, content, date) {
+  const pat = process.env.GITHUB_PAT;
+  if (!pat) return; // backup is best-effort
+  const url = `https://api.github.com/repos/${GH_REPO}/contents/${path}`;
+  const headers = {
+    Authorization: `token ${pat}`,
+    Accept: "application/vnd.github.v3+json",
+    "Content-Type": "application/json",
+  };
+  // Check if file already exists (need sha to update)
+  const existing = await fetch(url, { headers }).then(r => r.ok ? r.json() : null);
+  if (existing) return; // already backed up
+  await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({
+      message: `data: ${date}`,
+      content: Buffer.from(content).toString("base64"),
+    }),
+  });
+}
 const LIST_TYPES = { rising: "trending", paid: "paid" };
 
 async function fetchPage(apiType, page) {
@@ -72,11 +95,15 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: "All fetches failed", errors });
     }
 
-    await put(`${prefix}.json`, JSON.stringify(data, null, 2), {
+    const json = JSON.stringify(data, null, 2);
+
+    await put(`${prefix}.json`, json, {
       access: "public",
       contentType: "application/json",
       addRandomSuffix: false,
     });
+
+    await githubCommit(`data/${today}.json`, json, today);
 
     return res.status(200).json({
       success: true,
