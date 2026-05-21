@@ -67,18 +67,20 @@ let selected = [];      // newsletter slugs or names currently plotted
 let colorMap = {};
 
 async function loadData() {
-  let days;
+  let entries;
   try {
-    days = await fetch("/api/data").then(r => r.json());
+    entries = await fetch("/api/data").then(r => r.json());
   } catch {
     document.getElementById("chart-area").innerHTML = '<div class="empty">No data yet. The scraper will run tonight and start collecting leaderboard data.</div>';
     return;
   }
-  if (!days.length) {
+  if (!entries.length) {
     document.getElementById("chart-area").innerHTML = '<div class="empty">No data yet. The scraper will run tonight.</div>';
     return;
   }
-  allData = days;
+  // Fetch each day's JSON directly from public Blob CDN URLs
+  const days = await Promise.all(entries.map(({ url }) => fetch(url).then(r => r.json()).catch(() => null)));
+  allData = days.filter(Boolean);
   render();
 }
 

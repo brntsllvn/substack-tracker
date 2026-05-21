@@ -73,8 +73,9 @@ module.exports = async function handler(req, res) {
     }
 
     await put(`${prefix}.json`, JSON.stringify(data, null, 2), {
-      access: "private",
+      access: "public",
       contentType: "application/json",
+      addRandomSuffix: false,
     });
 
     return res.status(200).json({
