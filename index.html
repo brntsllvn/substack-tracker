@@ -29,24 +29,21 @@
   .pin-chip img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
   .pin-chip:hover { background: rgba(255,103,25,0.25); }
 
-  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #444; white-space: nowrap; }
-
-  #chart-area { flex: 1; min-height: 0; position: relative; }
   svg { width: 100%; height: 100%; }
 
   .axis path { display: none; }
-  .axis line { stroke: rgba(255,255,255,0.06); }
-  .axis text { font-size: 10px; fill: #3a3a3a; }
+  .axis line { stroke: rgba(255,255,255,0.12); }
+  .axis text { font-size: 10px; fill: #777; }
 
   .slope-line { transition: opacity 0.06s, stroke-width 0.06s; }
-  .col-line { stroke: rgba(255,255,255,0.08); stroke-width: 1; }
-  .col-label { font-size: 11px; fill: #444; text-anchor: middle; }
-  .stub-label { font-size: 9px; fill: #3a3a3a; }
+  .col-line { stroke: rgba(255,255,255,0.2); stroke-width: 1; }
+  .col-label { font-size: 11px; fill: #888; text-anchor: middle; }
+  .stub-label { font-size: 9px; fill: #555; }
 
-  .track { fill: none; stroke: rgba(255,103,25,0.12); stroke-width: 1.5; }
+  .track { fill: none; stroke: rgba(255,103,25,0.2); stroke-width: 1.5; }
   .track.hovered { stroke: #ff6719; stroke-width: 2.5; }
   .track.pinned { stroke: #ff6719; stroke-width: 2.5; }
-  .track.dimmed { stroke: rgba(255,103,25,0.04); }
+  .track.dimmed { stroke: rgba(255,103,25,0.05); }
 
   .tooltip-box { position: fixed; pointer-events: none; z-index: 200; display: flex; align-items: center; gap: 8px; background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: #e5e0d8; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
   .tooltip-box img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
@@ -55,9 +52,25 @@
   .tip-delta.up { color: #66bb6a; }
   .tip-delta.down { color: #ef5350; }
   .tip-name { color: #ccc; }
-  .tip-sub { color: #444; font-size: 0.68rem; margin-top: 1px; }
+  .tip-sub { color: #666; font-size: 0.68rem; margin-top: 1px; }
 
-  .state-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #444; font-size: 0.85rem; }
+  .sep { color: #555; }
+  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
+
+  /* side panel */
+  .content { display: flex; flex: 1; min-height: 0; }
+  #chart-area { flex: 1; min-height: 0; position: relative; }
+  #side-panel { width: 210px; flex-shrink: 0; border-left: 1px solid #2a2a2a; background: #181818; display: flex; flex-direction: column; overflow: hidden; }
+  #side-panel h2 { font-size: 0.72rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 14px 8px; border-bottom: 1px solid #242424; flex-shrink: 0; }
+  .mover { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #1e1e1e; cursor: default; }
+  .mover:hover { background: #1e1e1e; }
+  .mover img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #2a2a2a; }
+  .mover-name { font-size: 0.72rem; color: #ccc; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mover-delta { font-size: 0.78rem; font-weight: 700; flex-shrink: 0; }
+  .mover-delta.up { color: #66bb6a; }
+  .mover-delta.down { color: #ef5350; }
+
+  .state-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.85rem; }
 </style>
 </head>
 <body>
@@ -78,7 +91,13 @@
   <div class="topbar-right" id="subtitle">Top 100 · updated daily</div>
 </div>
 
-<div id="chart-area"><div class="state-msg">Loading...</div></div>
+<div class="content">
+  <div id="chart-area"><div class="state-msg">Loading...</div></div>
+  <div id="side-panel">
+    <h2>Biggest Movers</h2>
+    <div id="movers-list"></div>
+  </div>
+</div>
 
 <div class="tooltip-box" id="tooltip" style="display:none">
   <img id="tip-img" src="">
@@ -207,6 +226,51 @@ function render() {
   if (!allData.length) return;
   if (allData.length < SLOPE_THRESHOLD) renderSlopeGraph();
   else renderStepChart();
+  renderMovers();
+}
+
+// ── Biggest movers panel ─────────────────────────────────────────────────────
+
+function renderMovers() {
+  const list = document.getElementById("movers-list");
+  if (allData.length < 2) {
+    list.innerHTML = `<div style="padding:12px 14px;font-size:0.72rem;color:#555">Need 2+ days of data.</div>`;
+    return;
+  }
+  const day1 = allData[0];
+  const dayN = allData[allData.length - 1];
+  const map1 = new Map((day1[category] || []).map(e => [key(e), e]));
+  const mapN = new Map((dayN[category] || []).map(e => [key(e), e]));
+
+  const movers = [];
+  for (const [k, eN] of mapN) {
+    const e1 = map1.get(k);
+    if (!e1) continue;
+    const delta = eN.rank - e1.rank; // negative = climbed
+    if (delta === 0) continue;
+    movers.push({ k, name: eN.name, logo: eN.logo_url, delta, rank: eN.rank });
+  }
+  movers.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+
+  list.innerHTML = "";
+  for (const m of movers.slice(0, 10)) {
+    const row = document.createElement("div");
+    row.className = "mover";
+    row.title = `${m.name}: #${m.delta < 0 ? m.rank - m.delta : m.rank + Math.abs(m.delta)} → #${m.rank}`;
+    const climbed = m.delta < 0;
+    const sign = climbed ? `▲${Math.abs(m.delta)}` : `▼${m.delta}`;
+    const cls = climbed ? "up" : "down";
+    row.innerHTML = `
+      <img src="${m.logo || ""}" onerror="this.style.display='none'">
+      <span class="mover-name">${m.name}</span>
+      <span class="mover-delta ${cls}">${sign}</span>`;
+    row.onclick = () => pin(m.k, m.name, m.logo);
+    list.appendChild(row);
+  }
+
+  if (!movers.length) {
+    list.innerHTML = `<div style="padding:12px 14px;font-size:0.72rem;color:#555">No rank changes yet.</div>`;
+  }
 }
 
 // ── Tooltip helpers ───────────────────────────────────────────────────────────
@@ -292,11 +356,6 @@ function renderSlopeGraph() {
     g.append("text").attr("class","col-label").attr("x",x).attr("y",-24).text(fmt(parseDay(date)));
   });
 
-  // Stub labels
-  g.append("text").attr("class","stub-label").attr("x", x1 + 13).attr("y", -10).attr("text-anchor","start")
-    .attr("fill","#555").text("← fell out");
-  g.append("text").attr("class","stub-label").attr("x", x2 - 13).attr("y", -10).attr("text-anchor","end")
-    .attr("fill","#555").text("entered →");
 
   const lineG = g.append("g");
   const hitG = g.append("g");
@@ -307,8 +366,8 @@ function renderSlopeGraph() {
       const delta = item.eN.rank - item.e1.rank;
       const isPinned = pinned.has(item.k);
       const pinColor = isPinned ? pinned.get(item.k).color : ORANGE;
-      const baseOpacity = delta < 0 ? 0.5 : delta > 0 ? 0.12 : 0.07;
-      const opacity = pinned.size ? (isPinned ? 1 : 0.03) : baseOpacity;
+      const baseOpacity = delta < 0 ? 0.75 : delta > 0 ? 0.22 : 0.12;
+      const opacity = pinned.size ? (isPinned ? 1 : 0.04) : baseOpacity;
       const strokeW = isPinned ? 2.5 : 1;
 
       lineG.append("line").attr("class","slope-line").attr("data-key", item.k)
