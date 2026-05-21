@@ -1,7 +1,29 @@
-const { put, head } = require("@vercel/blob");
-
 const FINANCE_ID = 153;
 const LIST_TYPES = { rising: "trending", paid: "paid" };
+const BLOB_API = "https://blob.vercel-storage.com";
+
+async function blobPut(pathname, body, token) {
+  const res = await fetch(`${BLOB_API}/${pathname}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "x-content-type": "application/json",
+      "x-add-random-suffix": "0",
+      "x-cache-control-max-age": "0",
+    },
+    body,
+  });
+  if (!res.ok) throw new Error(`Blob PUT failed: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+async function blobExists(pathname, token) {
+  const res = await fetch(`${BLOB_API}/${pathname}`, {
+    method: "HEAD",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.ok;
+}
 
 async function fetchPage(apiType, page) {
   const url = `https://substack.com/api/v1/category/leaderboard/${FINANCE_ID}/${apiType}?page=${page}`;
@@ -48,14 +70,15 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const today = new Date().toISOString().split("T")[0];
-  const path = `leaderboard/${today}.json`;
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) return res.status(500).json({ error: "BLOB_READ_WRITE_TOKEN not set" });
 
-  // Skip if already scraped today
-  try {
-    await head(path);
+  const today = new Date().toISOString().split("T")[0];
+  const pathname = `leaderboard/${today}.json`;
+
+  if (await blobExists(pathname, token)) {
     return res.status(200).json({ message: "Already scraped today", date: today });
-  } catch {}
+  }
 
   const data = { date: today, rising: [], paid: [] };
   const errors = [];
@@ -72,11 +95,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: "All fetches failed", errors });
   }
 
-  await put(path, JSON.stringify(data, null, 2), {
-    access: "public",
-    addRandomSuffix: false,
-    contentType: "application/json",
-  });
+  await blobPut(pathname, JSON.stringify(data, null, 2), token);
 
   return res.status(200).json({
     success: true,
