@@ -2,10 +2,14 @@
 
 Vercel app that scrapes the Substack Finance leaderboard daily and visualizes rank over time.
 
+## Working with this codebase
+
+"clean commit push" means: pay all technical debt, DRY, clean, performant, smooth-scalable architecture, and readable code with sound abstractions. Then commit and push via git.
+
 ## Architecture
 
 - **Scraper**: Vercel Cron (`api/scrape.js`) runs at 06:00 UTC daily
-- **Storage**: JSON files committed to `brntsllvn/substack-leaderboard` GitHub repo via GitHub Contents API
+- **Storage**: JSON files committed to `brntsllvn/substack-tracker` GitHub repo via GitHub Contents API. Vercel is connected to this repo via git integration and auto-deploys on every push.
 - **Frontend**: `index.html` fetches `data/index.json` then individual `data/YYYY-MM-DD.json` files directly as static assets
 
 No database, no Blob store, no npm dependencies. The only Vercel function is the scraper.
@@ -28,19 +32,19 @@ Finance category ID = 153. "Rising" in the UI maps to `trending` in the API. Ret
 
 ### Storage: GitHub repo as a database
 
-Each day's data is committed as `data/YYYY-MM-DD.json` to `brntsllvn/substack-leaderboard`. An index file at `data/index.json` lists all dates. The scraper checks if today's file already exists before scraping (idempotent).
+Each day's data is committed as `data/YYYY-MM-DD.json` to `brntsllvn/substack-tracker`. An index file at `data/index.json` lists all dates. The scraper checks if today's file already exists before scraping (idempotent).
 
 This gives free, redundant, versioned storage with no infrastructure to manage.
 
 ## Environment variables (set in Vercel dashboard)
 
-- `GITHUB_PAT`: Fine-grained PAT with Contents read+write on `brntsllvn/substack-leaderboard`
+- `GITHUB_PAT`: Fine-grained PAT with Contents read+write on `brntsllvn/substack-tracker`
 - `CRON_SECRET`: Optional bearer token to protect the scrape endpoint from unauthorized triggers
 
 ## Testing the scraper
 
 ```bash
-curl -X POST https://substack-tracker.vercel.app/api/scrape \
+curl -X POST https://substack-tracker-bay.vercel.app/api/scrape \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 
