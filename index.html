@@ -517,15 +517,30 @@ function renderStepChart(data) {
     .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
     .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
 
+  let animIdx = 0;
   paths.each(function(d) {
     if (!pinned.has(d.k)) return;
-    const len = this.getTotalLength();
-    d3.select(this)
+    const path = this;
+    const len = path.getTotalLength();
+    const { color, logo } = pinned.get(d.k);
+
+    d3.select(path)
       .attr("stroke-dasharray", `${len} ${len}`)
       .attr("stroke-dashoffset", len)
-      .transition().duration(900).ease(d3.easeExpOut)
+      .transition().duration(5000).ease(d3.easeExpOut)
       .attr("stroke-dashoffset", 0)
       .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
+
+    const traveler = svg.append("g");
+    drawAvatar(traveler, defs, { cx: 0, cy: 0, r: 12, logo, stroke: color, clipId: `av-travel-${animIdx++}` });
+    const startPt = path.getPointAtLength(0);
+    traveler.attr("transform", `translate(${startPt.x + margin.left},${startPt.y + margin.top})`);
+    traveler.transition().duration(5000).ease(d3.easeExpOut)
+      .attrTween("transform", () => t => {
+        const pt = path.getPointAtLength(t * len);
+        return `translate(${pt.x + margin.left},${pt.y + margin.top})`;
+      })
+      .on("end", function() { d3.select(this).remove(); });
   });
 
   let pidx = 0;
