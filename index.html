@@ -34,6 +34,10 @@
   .date-range input[type=date]:focus { border-color: #555; }
 
   .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
+  #btn-play { padding: 4px 14px; border: 1px solid #ff6719; border-radius: 5px; background: transparent; color: #ff6719; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.12s, color 0.12s; flex-shrink: 0; }
+  #btn-play:hover { background: #ff6719; color: #fff; }
+  #btn-play:disabled { border-color: #333; color: #444; cursor: default; }
+  #btn-play:disabled:hover { background: transparent; color: #444; }
 
   svg { width: 100%; height: 100%; }
   .axis path { display: none; }
@@ -95,6 +99,7 @@
     <span class="sep">·</span>
     <input type="date" id="date-end" title="End date">
   </div>
+  <button id="btn-play" onclick="playAnimation()" disabled>Play</button>
   <div class="topbar-right" id="subtitle">Top 100 · updated daily</div>
 </div>
 
@@ -127,6 +132,7 @@ const el = id => document.getElementById(id);
 
 let allData = [];
 let category = "rising";
+let chartState = null; // set by renderStepChart, used by playAnimation
 const pinned = new Map(); // key -> { name, logo, color }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -192,12 +198,14 @@ function pin(k, name, logo) {
   pinned.set(k, { name, logo, color: PIN_COLORS[pinned.size % PIN_COLORS.length] });
   renderChips();
   render();
+  el("btn-play").disabled = !pinned.size || !chartState;
 }
 
 function unpin(k) {
   pinned.delete(k);
   renderChips();
   render();
+  el("btn-play").disabled = !pinned.size || !chartState;
 }
 
 function renderChips() {
@@ -347,6 +355,8 @@ function drawAvatar(container, defs, { cx, cy, r, logo, stroke, clipId }) {
 // ── Slope graph (< 3 days) ────────────────────────────────────────────────────
 
 function renderSlopeGraph(data) {
+  chartState = null;
+  el("btn-play").disabled = true;
   const area = el("chart-area");
   const day1 = data[0], dayN = data[data.length - 1];
   const map1 = indexDay(day1), mapN = indexDay(dayN);
@@ -517,31 +527,8 @@ function renderStepChart(data) {
     .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
     .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
 
-  let animIdx = 0;
-  paths.each(function(d) {
-    if (!pinned.has(d.k)) return;
-    const path = this;
-    const len = path.getTotalLength();
-    const { color, logo } = pinned.get(d.k);
-
-    d3.select(path)
-      .attr("stroke-dasharray", `${len} ${len}`)
-      .attr("stroke-dashoffset", len)
-      .transition().duration(5000).ease(d3.easeExpOut)
-      .attr("stroke-dashoffset", 0)
-      .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
-
-    const traveler = svg.append("g");
-    drawAvatar(traveler, defs, { cx: 0, cy: 0, r: 12, logo, stroke: color, clipId: `av-travel-${animIdx++}` });
-    const startPt = path.getPointAtLength(0);
-    traveler.attr("transform", `translate(${startPt.x + margin.left},${startPt.y + margin.top})`);
-    traveler.transition().duration(5000).ease(d3.easeExpOut)
-      .attrTween("transform", () => t => {
-        const pt = path.getPointAtLength(t * len);
-        return `translate(${pt.x + margin.left},${pt.y + margin.top})`;
-      })
-      .on("end", function() { d3.select(this).remove(); });
-  });
+  chartState = { svg, g, defs, paths, allSeries, margin };
+  el("btn-play").disabled = !pinned.size;
 
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
@@ -585,6 +572,39 @@ function renderStepChart(data) {
   });
 
   svg.on("mouseleave", clearHover);
+}
+
+function playAnimation() {
+  if (!chartState || !pinned.size) return;
+  const { svg, defs, paths, allSeries, margin } = chartState;
+
+  svg.selectAll(".traveler").remove();
+
+  let animIdx = 0;
+  paths.each(function(d) {
+    if (!pinned.has(d.k)) return;
+    const path = this;
+    const len = path.getTotalLength();
+    const { color, logo } = pinned.get(d.k);
+
+    d3.select(path)
+      .attr("stroke-dasharray", `${len} ${len}`)
+      .attr("stroke-dashoffset", len)
+      .transition().duration(5000).ease(d3.easeExpOut)
+      .attr("stroke-dashoffset", 0)
+      .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
+
+    const traveler = svg.append("g").attr("class", "traveler");
+    drawAvatar(traveler, defs, { cx: 0, cy: 0, r: 12, logo, stroke: color, clipId: `av-travel-${animIdx++}` });
+    const startPt = path.getPointAtLength(0);
+    traveler.attr("transform", `translate(${startPt.x + margin.left},${startPt.y + margin.top})`);
+    traveler.transition().duration(5000).ease(d3.easeExpOut)
+      .attrTween("transform", () => t => {
+        const pt = path.getPointAtLength(t * len);
+        return `translate(${pt.x + margin.left},${pt.y + margin.top})`;
+      })
+      .on("end", function() { d3.select(this).remove(); });
+  });
 }
 
 window.addEventListener("resize", render);
