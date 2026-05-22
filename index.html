@@ -650,28 +650,25 @@ function playAnimation() {
       .attr("stroke-dashoffset", 0)
       .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
 
-    const dateToPoint = new Map(series.points.map(p => [fmt(p.date), p]));
-    data.forEach((day, i) => {
-      if (i === 0) return;
-      const pt = dateToPoint.get(fmt(parseDay(day.date)));
-      if (!pt) return;
-      if (dateToPoint.has(fmt(parseDay(data[i - 1].date)))) return;
-      const ex = xScale(pt.date) + margin.left;
-      const ey = yScale(pt.rank) + margin.top;
-      setTimeout(() => sparkle(svg, ex, ey, color), gapMid(i - 1, i));
-    });
-
+    // Traveler outer group positions; inner group handles scale-pop reveal for mid-entries.
     const sp = path.getPointAtLength(0);
-    const traveler = svg.append("g").attr("class", "traveler").style("opacity", 0);
-    drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
-    traveler.attr("transform", `translate(${sp.x+margin.left},${sp.y+margin.top})`);
+    const traveler = svg.append("g").attr("class", "traveler")
+      .attr("transform", `translate(${sp.x+margin.left},${sp.y+margin.top})`);
+    const travelerInner = traveler.append("g");
+    drawAvatar(travelerInner, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
+
+    if (!isOnFromStart) {
+      // Scale from 0 at entry time — the pop IS the reveal, no separate sparkle ring needed.
+      travelerInner.attr("transform", "scale(0)");
+      travelerInner.transition().delay(startTime).duration(350).ease(d3.easeBackOut)
+        .attr("transform", "scale(1)");
+    }
 
     const ep   = path.getPointAtLength(journeyLen);
     const endX = ep.x + margin.left, endY = ep.y + margin.top;
 
     traveler
-      .transition().delay(startTime).duration(0).style("opacity", 1)
-      .transition().duration(travelDuration).ease(d3.easeLinear)
+      .transition().delay(startTime).duration(travelDuration).ease(d3.easeLinear)
       .attrTween("transform", () => t => {
         const pt = path.getPointAtLength(t * journeyLen);
         return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
