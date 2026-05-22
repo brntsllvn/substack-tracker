@@ -603,7 +603,15 @@ function playAnimation() {
 
   svg.selectAll(".traveler, .sparkle-group, .anim-start").remove();
 
-  const lastDataFmt = fmt(parseDay(data[data.length - 1].date));
+  // Map x-position (g-local coords) to wall-clock ms so the timeline is the master clock.
+  // All travelers that reach the last date will end at exactly DURATION.
+  const x0 = xScale(parseDay(data[0].date));
+  const xN = xScale(parseDay(data[data.length - 1].date));
+  const xRange = xN - x0;
+  const xToTime = x => ((x - x0) / xRange) * DURATION;
+
+  const lastDataFmt  = fmt(parseDay(data[data.length - 1].date));
+  const firstDataFmt = fmt(parseDay(data[0].date));
 
   let animIdx = 0;
   paths.each(function(d) {
@@ -616,50 +624,55 @@ function playAnimation() {
 
     const firstPt = series.points[0];
     const lastPt  = series.points[series.points.length - 1];
-    const isInLastDate = fmt(lastPt.date) === lastDataFmt;
+    const isOnFromStart = fmt(firstPt.date) === firstDataFmt;
+    const isInLastDate  = fmt(lastPt.date)  === lastDataFmt;
 
-    // Clamp journey to last real data point (not the phantom rightEdge extension).
-    // getPointAtLength returns coords in the <g> local space (no margin offset).
-    const journeyLen = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
+    // getPointAtLength is in g-local space (no margin offset).
+    const journeyLen     = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
+    const startTime      = xToTime(xScale(firstPt.date));
+    const endTime        = xToTime(xScale(lastPt.date));
+    const travelDuration = Math.max(endTime - startTime, 1);
 
-    // Ghost avatar at start
-    const startG = svg.append("g").attr("class", "anim-start");
-    drawAvatar(startG, defs, { cx:0, cy:0, r:11, logo, stroke:color+"66", clipId:`av-gs-${animIdx}` });
-    startG.attr("transform",
-      `translate(${xScale(firstPt.date)+margin.left},${yScale(firstPt.rank)+margin.top})`);
+    // Ghost: faint marker at the starting position, shown only for newsletters on board at day 0.
+    if (isOnFromStart) {
+      const startG = svg.append("g").attr("class", "anim-start");
+      drawAvatar(startG, defs, { cx:0, cy:0, r:11, logo, stroke:color+"66", clipId:`av-gs-${animIdx}` });
+      startG.attr("transform",
+        `translate(${xScale(firstPt.date)+margin.left},${yScale(firstPt.rank)+margin.top})`);
+    }
 
-    // Animate the path stroke drawing
+    // Path stroke draws from firstPt to lastPt, delayed and timed to match the x-axis timeline.
     d3.select(path)
       .attr("stroke-dasharray", `${journeyLen} ${totalLen + 1}`)
       .attr("stroke-dashoffset", journeyLen)
-      .transition().duration(DURATION).ease(d3.easeLinear)
+      .transition().delay(startTime).duration(travelDuration).ease(d3.easeLinear)
       .attr("stroke-dashoffset", 0)
       .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
 
-    // Schedule sparkles at entry dates (newsletter absent previous day)
+    // Sparkles when a newsletter enters the board mid-sequence.
     const dateToPoint = new Map(series.points.map(p => [fmt(p.date), p]));
     data.forEach((day, i) => {
       if (i === 0) return;
       const pt = dateToPoint.get(fmt(parseDay(day.date)));
       if (!pt) return;
-      if (dateToPoint.has(fmt(parseDay(data[i-1].date)))) return; // was already on board
+      if (dateToPoint.has(fmt(parseDay(data[i - 1].date)))) return;
       const ex = xScale(pt.date) + margin.left;
       const ey = yScale(pt.rank) + margin.top;
-      const entryLen = findPathLengthAtX(path, xScale(pt.date), totalLen);
-      const delay = (entryLen / journeyLen) * DURATION;
-      setTimeout(() => sparkle(svg, ex, ey, color), delay);
+      setTimeout(() => sparkle(svg, ex, ey, color), xToTime(xScale(pt.date)));
     });
 
-    // Traveler
+    // Traveler: invisible until startTime, then rides the path to lastPt.
     const sp = path.getPointAtLength(0);
-    const traveler = svg.append("g").attr("class", "traveler");
+    const traveler = svg.append("g").attr("class", "traveler").style("opacity", 0);
     drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
     traveler.attr("transform", `translate(${sp.x+margin.left},${sp.y+margin.top})`);
 
-    const ep = path.getPointAtLength(journeyLen);
+    const ep   = path.getPointAtLength(journeyLen);
     const endX = ep.x + margin.left, endY = ep.y + margin.top;
 
-    traveler.transition().duration(DURATION).ease(d3.easeLinear)
+    traveler
+      .transition().delay(startTime).duration(0).style("opacity", 1)
+      .transition().duration(travelDuration).ease(d3.easeLinear)
       .attrTween("transform", () => t => {
         const pt = path.getPointAtLength(t * journeyLen);
         return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
@@ -667,12 +680,12 @@ function playAnimation() {
       .on("end", function() {
         sparkle(svg, endX, endY, color);
         if (!isInLastDate) {
-          d3.select(this).transition().delay(400).duration(700).ease(d3.easeExpIn)
+          d3.select(this).transition().delay(200).duration(600).ease(d3.easeExpIn)
             .attr("transform", `translate(${endX},${H + margin.top + 80})`)
             .style("opacity", 0)
             .on("end", function() { d3.select(this).remove(); });
         }
-        // stays visible at landing spot if still on board at last date
+        // newsletters still on the board at the last date stay visible at their landing spot
       });
   });
 }
