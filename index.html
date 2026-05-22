@@ -46,7 +46,7 @@
   .stub-label { font-size: 9px; fill: #555; }
 
   .track { fill: none; stroke: rgba(255,103,25,0.2); stroke-width: 1.5; }
-  .track.hovered, .track.pinned { stroke-width: 2.5; }
+  .track.hovered, .track.pinned { stroke-width: 3; }
   .track.dimmed { stroke: rgba(255,103,25,0.05); }
 
   .tooltip-box { position: fixed; pointer-events: none; z-index: 200; display: flex; align-items: center; gap: 8px; background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: #e5e0d8; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
@@ -516,6 +516,17 @@ function renderStepChart(data) {
     .attr("class", d => pinned.has(d.k) ? "track pinned" : pinned.size ? "track dimmed" : "track")
     .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
     .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
+
+  paths.each(function(d) {
+    if (!pinned.has(d.k)) return;
+    const len = this.getTotalLength();
+    d3.select(this)
+      .attr("stroke-dasharray", `${len} ${len}`)
+      .attr("stroke-dashoffset", len)
+      .transition().duration(900).ease(d3.easeExpOut)
+      .attr("stroke-dashoffset", 0)
+      .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
+  });
 
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
