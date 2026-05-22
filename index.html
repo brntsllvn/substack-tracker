@@ -56,6 +56,9 @@
 
   .sep { color: #555; }
   .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
+  .date-range { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .date-range input[type=date] { background: #252525; border: 1px solid #333; border-radius: 5px; color: #aaa; font-size: 0.72rem; padding: 3px 6px; outline: none; color-scheme: dark; }
+  .date-range input[type=date]:focus { border-color: #555; }
 
   /* side panel */
   .content { display: flex; flex: 1; min-height: 0; }
@@ -90,6 +93,11 @@
     <div class="dropdown" id="dropdown" style="display:none"></div>
   </div>
   <div id="pin-chip-wrap"></div>
+  <div class="date-range">
+    <input type="date" id="date-start" title="Start date">
+    <span style="color:#444">–</span>
+    <input type="date" id="date-end" title="End date">
+  </div>
   <div class="topbar-right" id="subtitle">Top 100 · updated daily</div>
 </div>
 
@@ -110,7 +118,7 @@
 </div>
 
 <script>
-const SLOPE_THRESHOLD = 7;
+const SLOPE_THRESHOLD = 3;
 const ORANGE = "#ff6719";
 const fmt = d3.timeFormat("%b %-d");
 const parseDay = s => new Date(s + "T12:00:00");
@@ -131,8 +139,16 @@ async function loadData() {
     idx.dates.map(d => fetch(`data/${d}.json`).then(r => r.json()).catch(() => null))
   );
   allData = days.filter(Boolean);
-  document.getElementById("subtitle").textContent =
-    `Top 100 · ${allData.length} day${allData.length !== 1 ? "s" : ""} · updated daily`;
+  if (allData.length) {
+    const dates = allData.map(d => d.date);
+    const startEl = document.getElementById("date-start");
+    const endEl = document.getElementById("date-end");
+    startEl.min = endEl.min = dates[0];
+    startEl.max = endEl.max = dates[dates.length - 1];
+    startEl.value = dates[0];
+    endEl.value = dates[dates.length - 1];
+    startEl.onchange = endEl.onchange = render;
+  }
   render();
 }
 
@@ -224,23 +240,32 @@ document.addEventListener("click", e => {
 
 // ── Render dispatch ──────────────────────────────────────────────────────────
 
+function visibleData() {
+  const start = document.getElementById("date-start")?.value;
+  const end = document.getElementById("date-end")?.value;
+  if (!start || !end) return allData;
+  return allData.filter(d => d.date >= start && d.date <= end);
+}
+
 function render() {
   if (!allData.length) return;
-  if (allData.length < SLOPE_THRESHOLD) renderSlopeGraph();
-  else renderStepChart();
-  renderMovers();
+  const data = visibleData();
+  if (!data.length) return;
+  if (data.length < SLOPE_THRESHOLD) renderSlopeGraph(data);
+  else renderStepChart(data);
+  renderMovers(data);
 }
 
 // ── Biggest movers panel ─────────────────────────────────────────────────────
 
-function renderMovers() {
+function renderMovers(data) {
   const list = document.getElementById("movers-list");
-  if (allData.length < 2) {
+  if (data.length < 2) {
     list.innerHTML = `<div style="padding:12px 14px;font-size:0.72rem;color:#555">Need 2+ days of data.</div>`;
     return;
   }
-  const day1 = allData[0];
-  const dayN = allData[allData.length - 1];
+  const day1 = data[0];
+  const dayN = data[data.length - 1];
   const map1 = new Map((day1[category] || []).map(e => [key(e), e]));
   const mapN = new Map((dayN[category] || []).map(e => [key(e), e]));
 
@@ -341,10 +366,10 @@ function drawAvatar(container, defs, { cx, cy, r, logo, stroke, clipId }) {
 
 // ── Slope graph ───────────────────────────────────────────────────────────────
 
-function renderSlopeGraph() {
+function renderSlopeGraph(data) {
   const area = document.getElementById("chart-area");
-  const day1 = allData[0];
-  const dayN = allData[allData.length - 1];
+  const day1 = data[0];
+  const dayN = data[data.length - 1];
 
   const margin = { top: 44, right: 20, bottom: 16, left: 20 };
   const W = area.clientWidth - margin.left - margin.right;
@@ -486,9 +511,9 @@ function renderSlopeGraph() {
 
 // ── Step chart (7+ days) ──────────────────────────────────────────────────────
 
-function renderStepChart() {
+function renderStepChart(data) {
   const area = document.getElementById("chart-area");
-  const allSeries = buildStepSeries();
+  const allSeries = buildStepSeries(data);
   if (!allSeries.length) { showMsg("No data."); return; }
 
   const margin = { top: 14, right: 16, bottom: 28, left: 40 };
@@ -553,9 +578,9 @@ function renderStepChart() {
     const [mx, my] = d3.pointer(event, g.node());
     if (mx<0||mx>W||my<0||my>H) { clearStepHover(); return; }
     const dateMs = +xScale.invert(mx);
-    const dates = allData.map(d => +parseDay(d.date));
+    const dates = data.map(d => +parseDay(d.date));
     const idx = Math.max(0, bisect(dates, dateMs)-1);
-    const day = allData[idx];
+    const day = data[idx];
     if (!day) { clearStepHover(); return; }
     const rankAtY = yScale.invert(my);
     let best = null, bestDist = Infinity;
@@ -581,9 +606,9 @@ function renderStepChart() {
   }
 }
 
-function buildStepSeries() {
+function buildStepSeries(data) {
   const keys = new Map();
-  for (const day of allData) {
+  for (const day of data) {
     for (const e of (day[category]||[])) {
       const k = key(e);
       if (!keys.has(k)) keys.set(k, { name:e.name, logo:e.logo_url });
@@ -591,7 +616,7 @@ function buildStepSeries() {
   }
   return Array.from(keys.entries()).map(([k,meta]) => ({
     k, name:meta.name, logo:meta.logo,
-    points: allData.map(day => {
+    points: data.map(day => {
       const e = (day[category]||[]).find(e2=>key(e2)===k);
       return e ? { date:parseDay(day.date), rank:e.rank } : null;
     }).filter(Boolean)
