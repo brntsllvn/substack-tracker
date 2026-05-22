@@ -524,10 +524,13 @@ function renderStepChart(data) {
     const last = ps.points[ps.points.length-1];
     const cx = xScale(last.date)+margin.left, cy = yScale(last.rank)+margin.top;
     drawAvatar(svg, defs, { cx, cy, r:12, logo:ps.logo, stroke:color, clipId:`av-step-pin${pidx}` });
-    svg.append("text").attr("x",cx+18).attr("y",cy+4)
+    const label = ps.name.length > 22 ? ps.name.slice(0,20)+"…" : ps.name;
+    const flipLeft = cx + 18 + label.length * 7 > area.clientWidth - 20;
+    svg.append("text").attr("x", flipLeft ? cx-18 : cx+18).attr("y", cy+4)
+      .attr("text-anchor", flipLeft ? "end" : "start")
       .attr("font-size","11px").attr("font-weight","600").attr("fill",color)
       .attr("font-family","system-ui,-apple-system,sans-serif")
-      .text(ps.name.length>22 ? ps.name.slice(0,20)+"…" : ps.name);
+      .text(label);
     pidx++;
   }
 
