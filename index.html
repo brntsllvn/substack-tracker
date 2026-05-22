@@ -603,12 +603,13 @@ function playAnimation() {
 
   svg.selectAll(".traveler, .sparkle-group, .anim-start").remove();
 
-  // Map x-position (g-local coords) to wall-clock ms so the timeline is the master clock.
-  // All travelers that reach the last date will end at exactly DURATION.
+  // Pre-compute wall-clock time for each date column.
   const x0 = xScale(parseDay(data[0].date));
   const xN = xScale(parseDay(data[data.length - 1].date));
-  const xRange = xN - x0;
-  const xToTime = x => ((x - x0) / xRange) * DURATION;
+  const dateTimes = data.map(d => ((xScale(parseDay(d.date)) - x0) / (xN - x0)) * DURATION);
+  // Place transitions at the midpoint of the gap between adjacent dates.
+  // Exit at day j and entry at day j+1 both map to gapMid(j, j+1) — identical timestamps.
+  const gapMid = (i, j) => 0.5 * (dateTimes[i] + dateTimes[j]);
 
   const lastDataFmt  = fmt(parseDay(data[data.length - 1].date));
   const firstDataFmt = fmt(parseDay(data[0].date));
@@ -627,13 +628,14 @@ function playAnimation() {
     const isOnFromStart = fmt(firstPt.date) === firstDataFmt;
     const isInLastDate  = fmt(lastPt.date)  === lastDataFmt;
 
-    // getPointAtLength is in g-local space (no margin offset).
-    const journeyLen     = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
-    const startTime      = xToTime(xScale(firstPt.date));
-    const endTime        = xToTime(xScale(lastPt.date));
-    const travelDuration = Math.max(endTime - startTime, 1);
+    const firstIdx = data.findIndex(e => fmt(parseDay(e.date)) === fmt(firstPt.date));
+    const lastIdx  = data.findIndex(e => fmt(parseDay(e.date)) === fmt(lastPt.date));
 
-    // Ghost: faint marker at the starting position, shown only for newsletters on board at day 0.
+    const startTime      = isOnFromStart ? 0 : gapMid(firstIdx - 1, firstIdx);
+    const exitTime       = isInLastDate  ? DURATION : gapMid(lastIdx, lastIdx + 1);
+    const travelDuration = Math.max(exitTime - startTime, 1);
+    const journeyLen     = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
+
     if (isOnFromStart) {
       const startG = svg.append("g").attr("class", "anim-start");
       drawAvatar(startG, defs, { cx:0, cy:0, r:11, logo, stroke:color+"66", clipId:`av-gs-${animIdx}` });
@@ -641,7 +643,6 @@ function playAnimation() {
         `translate(${xScale(firstPt.date)+margin.left},${yScale(firstPt.rank)+margin.top})`);
     }
 
-    // Path stroke draws from firstPt to lastPt, delayed and timed to match the x-axis timeline.
     d3.select(path)
       .attr("stroke-dasharray", `${journeyLen} ${totalLen + 1}`)
       .attr("stroke-dashoffset", journeyLen)
@@ -649,7 +650,6 @@ function playAnimation() {
       .attr("stroke-dashoffset", 0)
       .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
 
-    // Sparkles when a newsletter enters the board mid-sequence.
     const dateToPoint = new Map(series.points.map(p => [fmt(p.date), p]));
     data.forEach((day, i) => {
       if (i === 0) return;
@@ -658,10 +658,9 @@ function playAnimation() {
       if (dateToPoint.has(fmt(parseDay(data[i - 1].date)))) return;
       const ex = xScale(pt.date) + margin.left;
       const ey = yScale(pt.rank) + margin.top;
-      setTimeout(() => sparkle(svg, ex, ey, color), xToTime(xScale(pt.date)));
+      setTimeout(() => sparkle(svg, ex, ey, color), gapMid(i - 1, i));
     });
 
-    // Traveler: invisible until startTime, then rides the path to lastPt.
     const sp = path.getPointAtLength(0);
     const traveler = svg.append("g").attr("class", "traveler").style("opacity", 0);
     drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
@@ -680,12 +679,11 @@ function playAnimation() {
       .on("end", function() {
         sparkle(svg, endX, endY, color);
         if (!isInLastDate) {
-          d3.select(this).transition().delay(200).duration(600).ease(d3.easeExpIn)
+          d3.select(this).transition().duration(600).ease(d3.easeExpIn)
             .attr("transform", `translate(${endX},${H + margin.top + 80})`)
             .style("opacity", 0)
             .on("end", function() { d3.select(this).remove(); });
         }
-        // newsletters still on the board at the last date stay visible at their landing spot
       });
   });
 }
