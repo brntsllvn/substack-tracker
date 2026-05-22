@@ -11,7 +11,7 @@
 
   .topbar { display: flex; align-items: center; gap: 12px; padding: 8px 20px; background: #1c1c1c; border-bottom: 1px solid #2a2a2a; flex-shrink: 0; }
   .topbar h1 { font-size: 0.9rem; font-weight: 600; color: #e5e0d8; white-space: nowrap; letter-spacing: -0.01em; }
-  .sep { color: #3a3a3a; }
+  .sep { color: #555; }
   .category-toggle { display: flex; border: 1px solid #333; border-radius: 5px; overflow: hidden; flex-shrink: 0; }
   .category-toggle button { padding: 4px 12px; border: none; background: transparent; cursor: pointer; font-size: 0.78rem; color: #777; transition: background 0.12s, color 0.12s; }
   .category-toggle button.active { background: #ff6719; color: #fff; }
@@ -29,8 +29,13 @@
   .pin-chip img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
   .pin-chip:hover { background: rgba(255,103,25,0.25); }
 
-  svg { width: 100%; height: 100%; }
+  .date-range { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .date-range input[type=date] { background: #252525; border: 1px solid #333; border-radius: 5px; color: #aaa; font-size: 0.72rem; padding: 3px 6px; outline: none; color-scheme: dark; }
+  .date-range input[type=date]:focus { border-color: #555; }
 
+  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
+
+  svg { width: 100%; height: 100%; }
   .axis path { display: none; }
   .axis line { stroke: rgba(255,255,255,0.12); }
   .axis text { font-size: 10px; fill: #777; }
@@ -41,8 +46,7 @@
   .stub-label { font-size: 9px; fill: #555; }
 
   .track { fill: none; stroke: rgba(255,103,25,0.2); stroke-width: 1.5; }
-  .track.hovered { stroke: #ff6719; stroke-width: 2.5; }
-  .track.pinned { stroke: #ff6719; stroke-width: 2.5; }
+  .track.hovered, .track.pinned { stroke-width: 2.5; }
   .track.dimmed { stroke: rgba(255,103,25,0.05); }
 
   .tooltip-box { position: fixed; pointer-events: none; z-index: 200; display: flex; align-items: center; gap: 8px; background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: #e5e0d8; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
@@ -54,13 +58,6 @@
   .tip-name { color: #ccc; }
   .tip-sub { color: #666; font-size: 0.68rem; margin-top: 1px; }
 
-  .sep { color: #555; }
-  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
-  .date-range { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-  .date-range input[type=date] { background: #252525; border: 1px solid #333; border-radius: 5px; color: #aaa; font-size: 0.72rem; padding: 3px 6px; outline: none; color-scheme: dark; }
-  .date-range input[type=date]:focus { border-color: #555; }
-
-  /* side panel */
   .content { display: flex; flex: 1; min-height: 0; }
   #chart-area { flex: 1; min-height: 0; position: relative; }
   #side-panel { width: 210px; flex-shrink: 0; border-left: 1px solid #2a2a2a; background: #181818; display: flex; flex-direction: column; overflow: hidden; }
@@ -95,7 +92,7 @@
   <div id="pin-chip-wrap"></div>
   <div class="date-range">
     <input type="date" id="date-start" title="Start date">
-    <span style="color:#444">–</span>
+    <span class="sep">·</span>
     <input type="date" id="date-end" title="End date">
   </div>
   <div class="topbar-right" id="subtitle">Top 100 · updated daily</div>
@@ -119,16 +116,34 @@
 
 <script>
 const SLOPE_THRESHOLD = 3;
+const RANK_OFF = 101; // proxy rank for "not on the board"
 const ORANGE = "#ff6719";
+const SLOPE_OPACITY = { climb: 0.75, drop: 0.22, flat: 0.12 };
+const PIN_COLORS = ["#ff6719","#38bdf8","#a78bfa","#34d399","#f472b6","#fbbf24","#f87171","#818cf8"];
+
 const fmt = d3.timeFormat("%b %-d");
 const parseDay = s => new Date(s + "T12:00:00");
+const el = id => document.getElementById(id);
 
 let allData = [];
 let category = "rising";
-const pinned = new Map(); // key → { name, logo, color }
-const PIN_COLORS = ["#ff6719","#38bdf8","#a78bfa","#34d399","#f472b6","#fbbf24","#f87171","#818cf8"];
+const pinned = new Map(); // key -> { name, logo, color }
 
-// ── Data loading ─────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function key(e) { return e.subdomain || e.url || e.name; }
+
+function indexDay(day) {
+  const m = new Map();
+  for (const e of (day[category] || [])) m.set(key(e), e);
+  return m;
+}
+
+function slopeOpacity(delta) {
+  return delta < 0 ? SLOPE_OPACITY.climb : delta > 0 ? SLOPE_OPACITY.drop : SLOPE_OPACITY.flat;
+}
+
+// ── Data loading ──────────────────────────────────────────────────────────────
 
 async function loadData() {
   let idx;
@@ -141,8 +156,7 @@ async function loadData() {
   allData = days.filter(Boolean);
   if (allData.length) {
     const dates = allData.map(d => d.date);
-    const startEl = document.getElementById("date-start");
-    const endEl = document.getElementById("date-end");
+    const startEl = el("date-start"), endEl = el("date-end");
     startEl.min = endEl.min = dates[0];
     startEl.max = endEl.max = dates[dates.length - 1];
     startEl.value = dates[0];
@@ -153,37 +167,29 @@ async function loadData() {
 }
 
 function showMsg(m) {
-  document.getElementById("chart-area").innerHTML = `<div class="state-msg">${m}</div>`;
+  el("chart-area").innerHTML = `<div class="state-msg">${m}</div>`;
 }
-
-function key(e) { return e.subdomain || e.url || e.name; }
 
 function allNewsletters() {
   const map = new Map();
-  for (const day of allData) {
-    for (const e of (day[category] || [])) {
-      const k = key(e);
-      if (!map.has(k)) map.set(k, { name: e.name, logo: e.logo_url });
-    }
-  }
-  return Array.from(map.entries())
-    .map(([k, v]) => ({ k, ...v }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  for (const day of allData)
+    for (const e of (day[category] || []))
+      if (!map.has(key(e))) map.set(key(e), { name: e.name, logo: e.logo_url });
+  return Array.from(map.entries()).map(([k, v]) => ({ k, ...v })).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// ── Controls ─────────────────────────────────────────────────────────────────
+// ── Controls ──────────────────────────────────────────────────────────────────
 
 function setCategory(c) {
   category = c;
-  document.getElementById("btn-rising").className = c === "rising" ? "active" : "";
-  document.getElementById("btn-paid").className = c === "paid" ? "active" : "";
+  el("btn-rising").className = c === "rising" ? "active" : "";
+  el("btn-paid").className = c === "paid" ? "active" : "";
   render();
 }
 
 function pin(k, name, logo) {
   if (pinned.has(k)) return;
-  const color = PIN_COLORS[pinned.size % PIN_COLORS.length];
-  pinned.set(k, { name, logo, color });
+  pinned.set(k, { name, logo, color: PIN_COLORS[pinned.size % PIN_COLORS.length] });
   renderChips();
   render();
 }
@@ -195,14 +201,12 @@ function unpin(k) {
 }
 
 function renderChips() {
-  const wrap = document.getElementById("pin-chip-wrap");
+  const wrap = el("pin-chip-wrap");
   wrap.innerHTML = "";
   for (const [k, { name, logo, color }] of pinned) {
     const chip = document.createElement("div");
     chip.className = "pin-chip";
-    chip.style.borderColor = color + "66";
-    chip.style.background = color + "22";
-    chip.style.color = color;
+    chip.style.cssText = `border-color:${color}66;background:${color}22;color:${color}`;
     chip.innerHTML = `<img src="${logo||""}" onerror="this.style.display='none'"><span>${name}</span><span style="opacity:.5;margin-left:2px">×</span>`;
     chip.onclick = () => unpin(k);
     wrap.appendChild(chip);
@@ -211,8 +215,8 @@ function renderChips() {
 
 // ── Search ────────────────────────────────────────────────────────────────────
 
-const searchInput = document.getElementById("search");
-const dropdown = document.getElementById("dropdown");
+const searchInput = el("search");
+const dropdown = el("dropdown");
 
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.toLowerCase().trim();
@@ -223,12 +227,8 @@ searchInput.addEventListener("input", () => {
   for (const { k, name, logo } of matches) {
     const div = document.createElement("div");
     div.className = "dropdown-item";
-    div.innerHTML = `<img src="${logo || ""}" onerror="this.style.display='none'"><span>${name}</span>`;
-    div.onclick = () => {
-      pin(k, name, logo);
-      searchInput.value = "";
-      dropdown.style.display = "none";
-    };
+    div.innerHTML = `<img src="${logo||""}" onerror="this.style.display='none'"><span>${name}</span>`;
+    div.onclick = () => { pin(k, name, logo); searchInput.value = ""; dropdown.style.display = "none"; };
     dropdown.appendChild(div);
   }
   dropdown.style.display = "block";
@@ -238,11 +238,10 @@ document.addEventListener("click", e => {
   if (!e.target.closest(".search-wrap")) dropdown.style.display = "none";
 });
 
-// ── Render dispatch ──────────────────────────────────────────────────────────
+// ── Render dispatch ───────────────────────────────────────────────────────────
 
 function visibleData() {
-  const start = document.getElementById("date-start")?.value;
-  const end = document.getElementById("date-end")?.value;
+  const start = el("date-start")?.value, end = el("date-end")?.value;
   if (!start || !end) return allData;
   return allData.filter(d => d.date >= start && d.date <= end);
 }
@@ -256,44 +255,34 @@ function render() {
   renderMovers(data);
 }
 
-// ── Biggest movers panel ─────────────────────────────────────────────────────
+// ── Biggest movers panel ──────────────────────────────────────────────────────
 
 function renderMovers(data) {
-  const list = document.getElementById("movers-list");
+  const list = el("movers-list");
   if (data.length < 2) {
     list.innerHTML = `<div style="padding:12px 14px;font-size:0.72rem;color:#555">Need 2+ days of data.</div>`;
     return;
   }
-  const day1 = data[0];
-  const dayN = data[data.length - 1];
-  const map1 = new Map((day1[category] || []).map(e => [key(e), e]));
-  const mapN = new Map((dayN[category] || []).map(e => [key(e), e]));
-
-  const OFF = 101; // proxy rank for "not on the board"
+  const map1 = indexDay(data[0]), mapN = indexDay(data[data.length - 1]);
   const movers = [];
 
-  // Newsletters present in dayN (includes new entrants)
   for (const [k, eN] of mapN) {
     const e1 = map1.get(k);
-    const rank1 = e1 ? e1.rank : OFF;
-    const delta = eN.rank - rank1; // negative = climbed
-    if (delta === 0) continue;
-    movers.push({ k, name: eN.name, logo: eN.logo_url, delta, rankN: eN.rank, rank1, entered: !e1, exited: false });
+    const delta = eN.rank - (e1 ? e1.rank : RANK_OFF);
+    if (delta !== 0) movers.push({ k, name: eN.name, logo: eN.logo_url, delta, rankN: eN.rank, rank1: e1?.rank ?? RANK_OFF });
   }
-
-  // Newsletters that exited (in day1 but not in dayN)
   for (const [k, e1] of map1) {
-    if (mapN.has(k)) continue;
-    const delta = OFF - e1.rank; // positive = dropped off
-    movers.push({ k, name: e1.name, logo: e1.logo_url, delta, rankN: OFF, rank1: e1.rank, entered: false, exited: true });
+    if (!mapN.has(k)) movers.push({ k, name: e1.name, logo: e1.logo_url, delta: RANK_OFF - e1.rank, rankN: RANK_OFF, rank1: e1.rank });
   }
 
-  // Climbers: delta < 0, sort most negative first (biggest climb first)
   const climbers = movers.filter(m => m.delta < 0).sort((a, b) => a.delta - b.delta).slice(0, 10);
-  // Fallers: delta > 0, sort most positive last (biggest fall last)
-  const fallers = movers.filter(m => m.delta > 0).sort((a, b) => a.delta - b.delta).slice(-10);
+  const fallers  = movers.filter(m => m.delta > 0).sort((a, b) => a.delta - b.delta).slice(-10);
 
   list.innerHTML = "";
+  if (!climbers.length && !fallers.length) {
+    list.innerHTML = `<div style="padding:12px 14px;font-size:0.72rem;color:#555">No rank changes yet.</div>`;
+    return;
+  }
 
   function addSection(label, items) {
     if (!items.length) return;
@@ -305,71 +294,62 @@ function renderMovers(data) {
       const row = document.createElement("div");
       row.className = "mover";
       const climbed = m.delta < 0;
-      const rankFrom = m.rank1 === OFF ? "NR" : `#${m.rank1}`;
-      const rankTo = m.rankN === OFF ? "NR" : `#${m.rankN}`;
-      row.title = `${m.name}: ${rankFrom} → ${rankTo}`;
-      const sign = climbed ? `▲${Math.abs(m.delta)}` : `▼${m.delta}`;
-      const cls = climbed ? "up" : "down";
+      const from = m.rank1 === RANK_OFF ? "NR" : `#${m.rank1}`;
+      const to   = m.rankN === RANK_OFF ? "NR" : `#${m.rankN}`;
+      row.title = `${m.name}: ${from} to ${to}`;
       row.innerHTML = `
-        <img src="${m.logo || ""}" onerror="this.style.display='none'">
+        <img src="${m.logo||""}" onerror="this.style.display='none'">
         <span class="mover-name">${m.name}</span>
-        <span class="mover-delta ${cls}">${sign}</span>`;
+        <span class="mover-delta ${climbed ? "up" : "down"}">${climbed ? "▲" : "▼"}${Math.abs(m.delta)}</span>`;
       row.onclick = () => pin(m.k, m.name, m.logo);
       list.appendChild(row);
     }
-  }
-
-  if (!climbers.length && !fallers.length) {
-    list.innerHTML = `<div style="padding:12px 14px;font-size:0.72rem;color:#555">No rank changes yet.</div>`;
-    return;
   }
 
   addSection("Climbers", climbers);
   addSection("Fallers", fallers);
 }
 
-// ── Tooltip helpers ───────────────────────────────────────────────────────────
+// ── Tooltip ───────────────────────────────────────────────────────────────────
 
 function showTooltip(event, { name, logo, rank, delta, sub }) {
-  const tip = document.getElementById("tooltip");
-  const img = document.getElementById("tip-img");
+  const img = el("tip-img");
   img.src = logo || ""; img.style.display = logo ? "" : "none";
-  document.getElementById("tip-rank").textContent = rank != null ? `#${rank}` : "";
-  document.getElementById("tip-name").textContent = name;
-  document.getElementById("tip-sub").textContent = sub || "";
-  const deltaEl = document.getElementById("tip-delta");
-  if (delta == null) { deltaEl.textContent = ""; deltaEl.className = "tip-delta"; }
+  el("tip-rank").textContent = rank != null ? `#${rank}` : "";
+  el("tip-name").textContent = name;
+  el("tip-sub").textContent = sub || "";
+  const deltaEl = el("tip-delta");
+  if (!delta) { deltaEl.textContent = ""; deltaEl.className = "tip-delta"; }
   else if (delta < 0) { deltaEl.textContent = ` ▲${Math.abs(delta)}`; deltaEl.className = "tip-delta up"; }
-  else if (delta > 0) { deltaEl.textContent = ` ▼${delta}`; deltaEl.className = "tip-delta down"; }
-  else { deltaEl.textContent = " —"; deltaEl.className = "tip-delta"; }
+  else { deltaEl.textContent = ` ▼${delta}`; deltaEl.className = "tip-delta down"; }
+  const tip = el("tooltip");
   tip.style.display = "flex";
   tip.style.left = (event.clientX + 14) + "px";
-  tip.style.top = (event.clientY - 42) + "px";
+  tip.style.top  = (event.clientY - 42) + "px";
 }
 
-function hideTooltip() { document.getElementById("tooltip").style.display = "none"; }
+function hideTooltip() { el("tooltip").style.display = "none"; }
 
 // ── Avatar helper ─────────────────────────────────────────────────────────────
 
 function drawAvatar(container, defs, { cx, cy, r, logo, stroke, clipId }) {
   defs.select(`#${clipId}`).remove();
-  defs.append("clipPath").attr("id", clipId)
-    .append("circle").attr("cx", cx).attr("cy", cy).attr("r", r);
+  defs.append("clipPath").attr("id", clipId).append("circle").attr("cx", cx).attr("cy", cy).attr("r", r);
   if (logo) {
     container.append("image").attr("href", logo)
-      .attr("x", cx - r).attr("y", cy - r).attr("width", r*2).attr("height", r*2)
+      .attr("x", cx-r).attr("y", cy-r).attr("width", r*2).attr("height", r*2)
       .attr("clip-path", `url(#${clipId})`).attr("preserveAspectRatio", "xMidYMid slice");
   }
   container.append("circle").attr("cx", cx).attr("cy", cy).attr("r", r)
     .attr("fill", "none").attr("stroke", stroke || ORANGE).attr("stroke-width", 1.5);
 }
 
-// ── Slope graph ───────────────────────────────────────────────────────────────
+// ── Slope graph (< 3 days) ────────────────────────────────────────────────────
 
 function renderSlopeGraph(data) {
-  const area = document.getElementById("chart-area");
-  const day1 = data[0];
-  const dayN = data[data.length - 1];
+  const area = el("chart-area");
+  const day1 = data[0], dayN = data[data.length - 1];
+  const map1 = indexDay(day1), mapN = indexDay(dayN);
 
   const margin = { top: 44, right: 20, bottom: 16, left: 20 };
   const W = area.clientWidth - margin.left - margin.right;
@@ -378,13 +358,9 @@ function renderSlopeGraph(data) {
   const x1 = COL, x2 = W - COL;
   const yScale = d3.scaleLinear().domain([1, 100]).range([0, H]);
 
-  const map1 = new Map((day1[category] || []).map(e => [key(e), e]));
-  const mapN = new Map((dayN[category] || []).map(e => [key(e), e]));
   const allKeys = new Set([...map1.keys(), ...mapN.keys()]);
-
   const items = Array.from(allKeys).map(k => {
-    const e1 = map1.get(k) ?? null;
-    const eN = mapN.get(k) ?? null;
+    const e1 = map1.get(k) ?? null, eN = mapN.get(k) ?? null;
     const src = e1 ?? eN;
     return { k, e1, eN, name: src.name, logo: src.logo_url };
   });
@@ -394,26 +370,19 @@ function renderSlopeGraph(data) {
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
   const defs = svg.append("defs");
 
-  // Horizontal rank grid lines
   [10,20,30,40,50,60,70,80,90,100].forEach(t => {
-    g.append("line")
-      .attr("x1", x1).attr("y1", yScale(t)).attr("x2", x2).attr("y2", yScale(t))
-      .attr("stroke", "rgba(255,255,255,0.04)").attr("stroke-width", 1);
-    g.append("text").attr("class","stub-label")
-      .attr("x", x1 - 6).attr("y", yScale(t) + 3.5).attr("text-anchor","end").text(`#${t}`);
-    g.append("text").attr("class","stub-label")
-      .attr("x", x2 + 6).attr("y", yScale(t) + 3.5).attr("text-anchor","start").text(`#${t}`);
+    g.append("line").attr("x1",x1).attr("y1",yScale(t)).attr("x2",x2).attr("y2",yScale(t))
+      .attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",1);
+    g.append("text").attr("class","stub-label").attr("x",x1-6).attr("y",yScale(t)+3.5).attr("text-anchor","end").text(`#${t}`);
+    g.append("text").attr("class","stub-label").attr("x",x2+6).attr("y",yScale(t)+3.5).attr("text-anchor","start").text(`#${t}`);
   });
 
-  // Column lines + date headers
-  [{ x: x1, date: day1.date, anchor: "middle" }, { x: x2, date: dayN.date, anchor: "middle" }].forEach(({ x, date }) => {
+  [{ x: x1, date: day1.date }, { x: x2, date: dayN.date }].forEach(({ x, date }) => {
     g.append("line").attr("class","col-line").attr("x1",x).attr("y1",0).attr("x2",x).attr("y2",H);
     g.append("text").attr("class","col-label").attr("x",x).attr("y",-24).text(fmt(parseDay(date)));
   });
 
-
-  const lineG = g.append("g");
-  const hitG = g.append("g");
+  const lineG = g.append("g"), hitG = g.append("g");
 
   items.forEach(item => {
     if (item.e1 && item.eN) {
@@ -421,76 +390,61 @@ function renderSlopeGraph(data) {
       const delta = item.eN.rank - item.e1.rank;
       const isPinned = pinned.has(item.k);
       const pinColor = isPinned ? pinned.get(item.k).color : ORANGE;
-      const baseOpacity = delta < 0 ? 0.75 : delta > 0 ? 0.22 : 0.12;
-      const opacity = pinned.size ? (isPinned ? 1 : 0.04) : baseOpacity;
-      const strokeW = isPinned ? 2.5 : 1;
+      const opacity = pinned.size ? (isPinned ? 1 : 0.04) : slopeOpacity(delta);
 
       lineG.append("line").attr("class","slope-line").attr("data-key", item.k)
         .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
-        .attr("stroke", pinColor).attr("stroke-width", strokeW).attr("opacity", opacity);
+        .attr("stroke", pinColor).attr("stroke-width", isPinned ? 2.5 : 1).attr("opacity", opacity);
 
       hitG.append("line")
         .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
-        .attr("stroke","transparent").attr("stroke-width", 12).style("cursor","crosshair")
-        .on("mouseenter", (event) => {
-          lineG.selectAll(".slope-line").attr("opacity", function() {
-            const k = this.getAttribute("data-key");
-            return k === item.k ? 1 : 0.03;
-          }).attr("stroke-width", function() {
-            return this.getAttribute("data-key") === item.k ? 2.5 : 1;
-          });
-          // Avatars at both ends
+        .attr("stroke","transparent").attr("stroke-width",12).style("cursor","crosshair")
+        .on("mouseenter", () => {
+          lineG.selectAll(".slope-line")
+            .attr("opacity", function() { return this.getAttribute("data-key") === item.k ? 1 : 0.03; })
+            .attr("stroke-width", function() { return this.getAttribute("data-key") === item.k ? 2.5 : 1; });
           svg.select("#slope-hover").remove();
           const hg = svg.append("g").attr("id","slope-hover");
           const R = 11;
           [[x1+margin.left, y1+margin.top, item.e1.rank], [x2+margin.left, y2+margin.top, item.eN.rank]]
             .forEach(([cx,cy,rank], i) => {
-              drawAvatar(hg, defs, { cx, cy, r: R, logo: item.logo, clipId: `av-s${i}` });
+              drawAvatar(hg, defs, { cx, cy, r:R, logo:item.logo, clipId:`av-s${i}` });
               hg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
-                .attr("text-anchor", i===0?"end":"start").attr("font-size","11px").attr("fill","#e5e0d8")
-                .attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
+                .attr("text-anchor", i===0?"end":"start").attr("font-size","11px")
+                .attr("fill","#e5e0d8").attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
             });
         })
-        .on("mousemove", (event) => {
+        .on("mousemove", event => {
           showTooltip(event, {
-            name: item.name, logo: item.logo,
-            rank: item.eN.rank, delta,
-            sub: `${fmt(parseDay(day1.date))} → ${fmt(parseDay(dayN.date))}`
+            name: item.name, logo: item.logo, rank: item.eN.rank, delta,
+            sub: `${fmt(parseDay(day1.date))} to ${fmt(parseDay(dayN.date))}`
           });
         })
         .on("mouseleave", () => {
           lineG.selectAll(".slope-line").each(function() {
             const k = this.getAttribute("data-key");
             const it = items.find(i => i.k === k);
-            if (!it || !it.e1 || !it.eN) return;
-            const d = it.eN.rank - it.e1.rank;
-            const bo = d < 0 ? 0.5 : d > 0 ? 0.12 : 0.07;
-            const ip = pinned.has(k);
+            if (!it?.e1 || !it?.eN) return;
+            const d = it.eN.rank - it.e1.rank, ip = pinned.has(k);
             d3.select(this)
               .attr("stroke", ip ? pinned.get(k).color : ORANGE)
-              .attr("opacity", pinned.size ? (ip ? 1 : 0.03) : bo)
+              .attr("opacity", pinned.size ? (ip ? 1 : 0.03) : slopeOpacity(d))
               .attr("stroke-width", ip ? 2.5 : 1);
           });
           svg.select("#slope-hover").remove();
           hideTooltip();
         });
     } else {
-      // Stub: fell out (has e1, no eN) or entered (no e1, has eN)
-      const e = item.e1 ?? item.eN;
-      const isLeft = !!item.e1;
+      const e = item.e1 ?? item.eN, isLeft = !!item.e1;
       const x = isLeft ? x1 : x2;
-      const y = yScale(e.rank);
       lineG.append("line")
-        .attr("x1", x).attr("y1", y)
-        .attr("x2", isLeft ? x + 14 : x - 14).attr("y2", y)
-        .attr("stroke", ORANGE)
-        .attr("opacity", pinned.has(item.k) ? 1 : (pinned.size ? 0.02 : 0.12))
-        .attr("stroke-width", 1)
-        .attr("stroke-dasharray","3,2");
+        .attr("x1",x).attr("y1",yScale(e.rank))
+        .attr("x2", isLeft ? x+14 : x-14).attr("y2",yScale(e.rank))
+        .attr("stroke",ORANGE).attr("stroke-width",1).attr("stroke-dasharray","3,2")
+        .attr("opacity", pinned.has(item.k) ? 1 : (pinned.size ? 0.02 : 0.12));
     }
   });
 
-  // Draw avatars at both endpoints for each pinned newsletter
   let pinIdx = 0;
   for (const [pk, { color }] of pinned) {
     const it = items.find(i => i.k === pk);
@@ -499,20 +453,34 @@ function renderSlopeGraph(data) {
     [[x1+margin.left, yScale(it.e1.rank)+margin.top, it.e1.rank],
      [x2+margin.left, yScale(it.eN.rank)+margin.top, it.eN.rank]]
       .forEach(([cx,cy,rank], i) => {
-        drawAvatar(svg, defs, { cx, cy, r: R, logo: it.logo, stroke: color, clipId: `av-pin${pinIdx}-${i}` });
+        drawAvatar(svg, defs, { cx, cy, r:R, logo:it.logo, stroke:color, clipId:`av-pin${pinIdx}-${i}` });
         svg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
-          .attr("text-anchor", i===0?"end":"start").attr("font-size","12px")
-          .attr("font-weight","600").attr("fill", color)
-          .attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
+          .attr("text-anchor", i===0?"end":"start").attr("font-size","12px").attr("font-weight","600")
+          .attr("fill",color).attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
       });
     pinIdx++;
   }
 }
 
-// ── Step chart (7+ days) ──────────────────────────────────────────────────────
+// ── Step chart (3+ days) ──────────────────────────────────────────────────────
+
+function buildStepSeries(data) {
+  const dayMaps = data.map(indexDay);
+  const keys = new Map();
+  for (const day of data)
+    for (const e of (day[category]||[]))
+      if (!keys.has(key(e))) keys.set(key(e), { name:e.name, logo:e.logo_url });
+  return Array.from(keys.entries()).map(([k, meta]) => ({
+    k, name: meta.name, logo: meta.logo,
+    points: dayMaps.map((m, i) => {
+      const e = m.get(k);
+      return e ? { date: parseDay(data[i].date), rank: e.rank } : null;
+    }).filter(Boolean)
+  })).filter(s => s.points.length > 0);
+}
 
 function renderStepChart(data) {
-  const area = document.getElementById("chart-area");
+  const area = el("chart-area");
   const allSeries = buildStepSeries(data);
   if (!allSeries.length) { showMsg("No data."); return; }
 
@@ -520,10 +488,10 @@ function renderStepChart(data) {
   const W = area.clientWidth - margin.left - margin.right;
   const H = area.clientHeight - margin.top - margin.bottom;
 
-  const allDates = allData.map(d => parseDay(d.date));
-  const xPad = (allDates[allDates.length-1] - allDates[0]) * 0.02 || 3600e3*12;
+  const dates = data.map(d => parseDay(d.date));
+  const xPad = (dates[dates.length-1] - dates[0]) * 0.02 || 3600e3*12;
   const xScale = d3.scaleTime()
-    .domain([new Date(+allDates[0]-xPad), new Date(+allDates[allDates.length-1]+xPad)])
+    .domain([new Date(+dates[0]-xPad), new Date(+dates[dates.length-1]+xPad)])
     .range([0, W]);
   const yScale = d3.scaleLinear().domain([1, 100]).range([0, H]);
 
@@ -537,90 +505,57 @@ function renderStepChart(data) {
       .attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",1);
   });
   g.append("g").attr("class","axis").attr("transform",`translate(0,${H})`)
-    .call(d3.axisBottom(xScale).ticks(Math.min(allData.length,10)).tickFormat(d=>fmt(d)));
+    .call(d3.axisBottom(xScale).ticks(Math.min(data.length,10)).tickFormat(d=>fmt(d)));
   g.append("g").attr("class","axis")
     .call(d3.axisLeft(yScale).tickValues([10,20,30,40,50,60,70,80,90,100]).tickFormat(d=>`#${d}`));
 
-  const stepLine = d3.line()
-    .x(d => xScale(d.date)).y(d => yScale(d.rank)).curve(d3.curveStepAfter);
+  const stepLine = d3.line().x(d=>xScale(d.date)).y(d=>yScale(d.rank)).curve(d3.curveStepAfter);
   const rightEdge = xScale.domain()[1];
 
-  const paths = g.selectAll(".track").data(allSeries, d => d.k).join("path")
-    .attr("class", d => {
-      if (pinned.has(d.k)) return "track pinned";
-      if (pinned.size) return "track dimmed";
-      return "track";
-    })
+  const paths = g.selectAll(".track").data(allSeries, d=>d.k).join("path")
+    .attr("class", d => pinned.has(d.k) ? "track pinned" : pinned.size ? "track dimmed" : "track")
     .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
-    .attr("d", d => {
-      const pts = [...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }];
-      return stepLine(pts);
-    });
+    .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
 
-  // Draw avatars at end of each pinned track
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
     const ps = allSeries.find(s => s.k === pk);
     if (!ps) { pidx++; continue; }
     const last = ps.points[ps.points.length-1];
     const cx = xScale(last.date)+margin.left, cy = yScale(last.rank)+margin.top;
-    drawAvatar(svg, defs, { cx, cy, r: 12, logo: ps.logo, stroke: color, clipId: `av-step-pin${pidx}` });
-    svg.append("text").attr("x", cx+18).attr("y", cy+4)
-      .attr("font-size","11px").attr("font-weight","600").attr("fill", color)
+    drawAvatar(svg, defs, { cx, cy, r:12, logo:ps.logo, stroke:color, clipId:`av-step-pin${pidx}` });
+    svg.append("text").attr("x",cx+18).attr("y",cy+4)
+      .attr("font-size","11px").attr("font-weight","600").attr("fill",color)
       .attr("font-family","system-ui,-apple-system,sans-serif")
       .text(ps.name.length>22 ? ps.name.slice(0,20)+"…" : ps.name);
     pidx++;
   }
 
-  const bisect = d3.bisector(d => +d).left;
+  const bisect = d3.bisector(d=>+d).left;
+  const dateMsArr = data.map(d => +parseDay(d.date));
+
+  function clearHover() { paths.classed("hovered", false); hideTooltip(); }
 
   svg.on("mousemove", function(event) {
     const [mx, my] = d3.pointer(event, g.node());
-    if (mx<0||mx>W||my<0||my>H) { clearStepHover(); return; }
-    const dateMs = +xScale.invert(mx);
-    const dates = data.map(d => +parseDay(d.date));
-    const idx = Math.max(0, bisect(dates, dateMs)-1);
-    const day = data[idx];
-    if (!day) { clearStepHover(); return; }
-    const rankAtY = yScale.invert(my);
+    if (mx<0||mx>W||my<0||my>H) { clearHover(); return; }
+    const day = data[Math.max(0, bisect(dateMsArr, +xScale.invert(mx))-1)];
+    if (!day) { clearHover(); return; }
+    const dayMs = +parseDay(day.date), rankAtY = yScale.invert(my);
+    const pool = pinned.size ? allSeries.filter(s=>pinned.has(s.k)) : allSeries;
     let best = null, bestDist = Infinity;
-    const pool = pinned.size ? allSeries.filter(s => pinned.has(s.k)) : allSeries;
-    for (const s of pool.length ? pool : allSeries) {
-      const pt = s.points.find(p => +p.date === +parseDay(day.date));
+    for (const s of (pool.length ? pool : allSeries)) {
+      const pt = s.points.find(p => +p.date === dayMs);
       if (!pt) continue;
       const dist = Math.abs(pt.rank - rankAtY);
       if (dist < bestDist) { bestDist=dist; best={s,pt}; }
     }
-    if (!best||bestDist>8) { clearStepHover(); return; }
-    const {s,pt} = best;
-
-    paths.classed("hovered", d => d.k===s.k && !pinnedKey);
-    showTooltip(event, { name:s.name, logo:s.logo, rank:pt.rank, sub:fmt(pt.date) });
+    if (!best||bestDist>8) { clearHover(); return; }
+    paths.classed("hovered", d => d.k===best.s.k && !pinned.size);
+    showTooltip(event, { name:best.s.name, logo:best.s.logo, rank:best.pt.rank, sub:fmt(best.pt.date) });
   });
 
-  svg.on("mouseleave", clearStepHover);
-
-  function clearStepHover() {
-    paths.classed("hovered", false);
-    hideTooltip();
-  }
-}
-
-function buildStepSeries(data) {
-  const keys = new Map();
-  for (const day of data) {
-    for (const e of (day[category]||[])) {
-      const k = key(e);
-      if (!keys.has(k)) keys.set(k, { name:e.name, logo:e.logo_url });
-    }
-  }
-  return Array.from(keys.entries()).map(([k,meta]) => ({
-    k, name:meta.name, logo:meta.logo,
-    points: data.map(day => {
-      const e = (day[category]||[]).find(e2=>key(e2)===k);
-      return e ? { date:parseDay(day.date), rank:e.rank } : null;
-    }).filter(Boolean)
-  })).filter(s=>s.points.length>0);
+  svg.on("mouseleave", clearHover);
 }
 
 window.addEventListener("resize", render);
