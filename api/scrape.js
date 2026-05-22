@@ -1,7 +1,7 @@
 const FINANCE_ID = 153;
 const LIST_TYPES = { rising: "trending", paid: "paid" };
 const OWNER = "brntsllvn";
-const REPO = "substack-leaderboard";
+const REPO = "substack-tracker";
 const GH = "https://api.github.com";
 
 async function ghGet(path, pat) {
