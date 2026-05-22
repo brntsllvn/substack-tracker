@@ -63,7 +63,7 @@
   .tip-name { color: #ccc; }
   .tip-sub { color: #666; font-size: 0.68rem; margin-top: 1px; }
 
-  .content { display: flex; flex: 1; min-height: 0; }
+  .content { display: flex; flex: 1; min-height: 0; width: 80%; margin: 0 auto; }
   #chart-area { flex: 1; min-height: 0; position: relative; }
   #side-panel { width: 210px; flex-shrink: 0; border-left: 1px solid #2a2a2a; background: #181818; display: flex; flex-direction: column; overflow: hidden; }
   #side-panel h2 { font-size: 0.72rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 14px 8px; border-bottom: 1px solid #242424; flex-shrink: 0; }
@@ -528,7 +528,7 @@ function renderStepChart(data) {
     .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
     .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
 
-  chartState = { svg, g, defs, paths, allSeries, margin };
+  chartState = { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area };
   el("btn-play").disabled = !pinned.size;
 
   let pidx = 0;
@@ -575,36 +575,104 @@ function renderStepChart(data) {
   svg.on("mouseleave", clearHover);
 }
 
+function findPathLengthAtX(path, targetX, totalLen) {
+  let lo = 0, hi = totalLen;
+  for (let i = 0; i < 42; i++) {
+    const mid = (lo + hi) / 2;
+    if (path.getPointAtLength(mid).x < targetX) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function sparkle(container, cx, cy, color) {
+  const g = container.append("g").attr("class", "sparkle-group");
+  [0, 80, 160].forEach((delay, i) => {
+    g.append("circle")
+      .attr("cx", cx).attr("cy", cy).attr("r", 12)
+      .attr("fill", "none").attr("stroke", color).attr("stroke-width", 2.5).attr("opacity", 1)
+      .transition().delay(delay).duration(500)
+      .attr("r", 32 + i * 8).attr("opacity", 0)
+      .on("end", function() { if (i === 2) g.remove(); });
+  });
+}
+
 function playAnimation() {
   if (!chartState || !pinned.size) return;
-  const { svg, defs, paths, allSeries, margin } = chartState;
+  const { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area } = chartState;
+  const DURATION = 5000;
 
-  svg.selectAll(".traveler").remove();
+  svg.selectAll(".traveler, .sparkle-group, .anim-start").remove();
+
+  const lastDataFmt = fmt(parseDay(data[data.length - 1].date));
 
   let animIdx = 0;
   paths.each(function(d) {
     if (!pinned.has(d.k)) return;
     const path = this;
-    const len = path.getTotalLength();
+    const totalLen = path.getTotalLength();
     const { color, logo } = pinned.get(d.k);
+    const series = allSeries.find(s => s.k === d.k);
+    if (!series?.points.length) return;
 
+    const firstPt = series.points[0];
+    const lastPt  = series.points[series.points.length - 1];
+    const isInLastDate = fmt(lastPt.date) === lastDataFmt;
+
+    // Clamp journey to last real data point (not the phantom rightEdge extension)
+    const journeyLen = findPathLengthAtX(path, xScale(lastPt.date) + margin.left, totalLen);
+
+    // Ghost avatar at start
+    const startG = svg.append("g").attr("class", "anim-start");
+    drawAvatar(startG, defs, { cx:0, cy:0, r:11, logo, stroke:color+"66", clipId:`av-gs-${animIdx}` });
+    startG.attr("transform",
+      `translate(${xScale(firstPt.date)+margin.left},${yScale(firstPt.rank)+margin.top})`);
+
+    // Animate the path stroke drawing
     d3.select(path)
-      .attr("stroke-dasharray", `${len} ${len}`)
-      .attr("stroke-dashoffset", len)
-      .transition().duration(5000).ease(d3.easeExpOut)
+      .attr("stroke-dasharray", `${journeyLen} ${totalLen + 1}`)
+      .attr("stroke-dashoffset", journeyLen)
+      .transition().duration(DURATION).ease(d3.easeLinear)
       .attr("stroke-dashoffset", 0)
       .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
 
+    // Schedule sparkles at entry dates (newsletter absent previous day)
+    const dateToPoint = new Map(series.points.map(p => [fmt(p.date), p]));
+    data.forEach((day, i) => {
+      if (i === 0) return;
+      const pt = dateToPoint.get(fmt(parseDay(day.date)));
+      if (!pt) return;
+      if (dateToPoint.has(fmt(parseDay(data[i-1].date)))) return; // was already on board
+      const ex = xScale(pt.date) + margin.left;
+      const ey = yScale(pt.rank) + margin.top;
+      const entryLen = findPathLengthAtX(path, ex, totalLen);
+      const delay = (entryLen / journeyLen) * DURATION;
+      setTimeout(() => sparkle(svg, ex, ey, color), delay);
+    });
+
+    // Traveler
+    const sp = path.getPointAtLength(0);
     const traveler = svg.append("g").attr("class", "traveler");
-    drawAvatar(traveler, defs, { cx: 0, cy: 0, r: 12, logo, stroke: color, clipId: `av-travel-${animIdx++}` });
-    const startPt = path.getPointAtLength(0);
-    traveler.attr("transform", `translate(${startPt.x + margin.left},${startPt.y + margin.top})`);
-    traveler.transition().duration(5000).ease(d3.easeExpOut)
+    drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
+    traveler.attr("transform", `translate(${sp.x+margin.left},${sp.y+margin.top})`);
+
+    const ep = path.getPointAtLength(journeyLen);
+    const endX = ep.x + margin.left, endY = ep.y + margin.top;
+
+    traveler.transition().duration(DURATION).ease(d3.easeLinear)
       .attrTween("transform", () => t => {
-        const pt = path.getPointAtLength(t * len);
-        return `translate(${pt.x + margin.left},${pt.y + margin.top})`;
+        const pt = path.getPointAtLength(t * journeyLen);
+        return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
       })
-      .on("end", function() { d3.select(this).remove(); });
+      .on("end", function() {
+        if (!isInLastDate) {
+          d3.select(this).transition().duration(700).ease(d3.easeExpIn)
+            .attr("transform", `translate(${endX},${H + margin.top + 80})`)
+            .style("opacity", 0)
+            .on("end", function() { d3.select(this).remove(); });
+        } else {
+          d3.select(this).remove();
+        }
+      });
   });
 }
 
