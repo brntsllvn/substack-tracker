@@ -618,8 +618,9 @@ function playAnimation() {
     const lastPt  = series.points[series.points.length - 1];
     const isInLastDate = fmt(lastPt.date) === lastDataFmt;
 
-    // Clamp journey to last real data point (not the phantom rightEdge extension)
-    const journeyLen = findPathLengthAtX(path, xScale(lastPt.date) + margin.left, totalLen);
+    // Clamp journey to last real data point (not the phantom rightEdge extension).
+    // getPointAtLength returns coords in the <g> local space (no margin offset).
+    const journeyLen = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
 
     // Ghost avatar at start
     const startG = svg.append("g").attr("class", "anim-start");
@@ -644,7 +645,7 @@ function playAnimation() {
       if (dateToPoint.has(fmt(parseDay(data[i-1].date)))) return; // was already on board
       const ex = xScale(pt.date) + margin.left;
       const ey = yScale(pt.rank) + margin.top;
-      const entryLen = findPathLengthAtX(path, ex, totalLen);
+      const entryLen = findPathLengthAtX(path, xScale(pt.date), totalLen);
       const delay = (entryLen / journeyLen) * DURATION;
       setTimeout(() => sparkle(svg, ex, ey, color), delay);
     });
@@ -664,14 +665,14 @@ function playAnimation() {
         return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
       })
       .on("end", function() {
+        sparkle(svg, endX, endY, color);
         if (!isInLastDate) {
-          d3.select(this).transition().duration(700).ease(d3.easeExpIn)
+          d3.select(this).transition().delay(400).duration(700).ease(d3.easeExpIn)
             .attr("transform", `translate(${endX},${H + margin.top + 80})`)
             .style("opacity", 0)
             .on("end", function() { d3.select(this).remove(); });
-        } else {
-          d3.select(this).remove();
         }
+        // stays visible at landing spot if still on board at last date
       });
   });
 }
