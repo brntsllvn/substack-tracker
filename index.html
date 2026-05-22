@@ -600,15 +600,17 @@ function playAnimation() {
   if (!chartState || !pinned.size) return;
   const { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area } = chartState;
   const DURATION = 5000;
+  const FLY = 400; // ms window at the start so day-0 newsletters have room to fly up
 
   svg.selectAll(".traveler, .sparkle-group, .anim-start").remove();
 
-  // Pre-compute wall-clock time for each date column.
   const x0 = xScale(parseDay(data[0].date));
   const xN = xScale(parseDay(data[data.length - 1].date));
-  const dateTimes = data.map(d => ((xScale(parseDay(d.date)) - x0) / (xN - x0)) * DURATION);
-  // Place transitions at the midpoint of the gap between adjacent dates.
-  // Exit at day j and entry at day j+1 both map to gapMid(j, j+1) — identical timestamps.
+  // Compress the travel phase into [FLY, DURATION] so every newsletter can fly up from below
+  // before its line starts drawing. Nothing is visible at t=0 — no end-state revealed.
+  const dateTimes = data.map(d =>
+    FLY + ((xScale(parseDay(d.date)) - x0) / (xN - x0)) * (DURATION - FLY)
+  );
   const gapMid = (i, j) => 0.5 * (dateTimes[i] + dateTimes[j]);
 
   const lastDataFmt  = fmt(parseDay(data[data.length - 1].date));
@@ -631,18 +633,13 @@ function playAnimation() {
     const firstIdx = data.findIndex(e => fmt(parseDay(e.date)) === fmt(firstPt.date));
     const lastIdx  = data.findIndex(e => fmt(parseDay(e.date)) === fmt(lastPt.date));
 
-    const startTime      = isOnFromStart ? 0 : gapMid(firstIdx - 1, firstIdx);
+    // Day-0 newsletters start at dateTimes[0] (= FLY) so they also get a fly-up.
+    const startTime      = isOnFromStart ? dateTimes[0] : gapMid(firstIdx - 1, firstIdx);
     const exitTime       = isInLastDate  ? DURATION : gapMid(lastIdx, lastIdx + 1);
     const travelDuration = Math.max(exitTime - startTime, 1);
     const journeyLen     = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
 
-    if (isOnFromStart) {
-      const startG = svg.append("g").attr("class", "anim-start");
-      drawAvatar(startG, defs, { cx:0, cy:0, r:11, logo, stroke:color+"66", clipId:`av-gs-${animIdx}` });
-      startG.attr("transform",
-        `translate(${xScale(firstPt.date)+margin.left},${yScale(firstPt.rank)+margin.top})`);
-    }
-
+    // Path stroke reveals in sync with the icon journey.
     d3.select(path)
       .attr("stroke-dasharray", `${journeyLen} ${totalLen + 1}`)
       .attr("stroke-dashoffset", journeyLen)
@@ -650,7 +647,8 @@ function playAnimation() {
       .attr("stroke-dashoffset", 0)
       .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
 
-    const sp    = path.getPointAtLength(0);
+    // All icons fly up from below at startTime — nothing shown before the line reaches them.
+    const sp     = path.getPointAtLength(0);
     const startX = sp.x + margin.left, startY = sp.y + margin.top;
     const traveler = svg.append("g").attr("class", "traveler");
     drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
@@ -658,36 +656,27 @@ function playAnimation() {
     const ep   = path.getPointAtLength(journeyLen);
     const endX = ep.x + margin.left, endY = ep.y + margin.top;
 
-    const onEnd = function() {
-      sparkle(svg, endX, endY, color);
-      if (!isInLastDate) {
-        d3.select(this).transition().duration(600).ease(d3.easeExpIn)
-          .attr("transform", `translate(${endX},${H + margin.top + 80})`)
-          .style("opacity", 0)
-          .on("end", function() { d3.select(this).remove(); });
-      }
-    };
-    const pathTween = () => t => {
-      const pt = path.getPointAtLength(t * journeyLen);
-      return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
-    };
+    const flyStart    = Math.max(0, startTime - FLY);
+    const flyDuration = startTime - flyStart;
 
-    if (isOnFromStart) {
-      traveler.attr("transform", `translate(${startX},${startY})`);
-      traveler.transition().duration(travelDuration).ease(d3.easeLinear)
-        .attrTween("transform", pathTween).on("end", onEnd);
-    } else {
-      // Fly up from below — exact mirror of the downward plummet on exit.
-      const FLY = 500;
-      const flyStart = Math.max(0, startTime - FLY);
-      const flyDuration = startTime - flyStart;
-      traveler
-        .attr("transform", `translate(${startX},${H + margin.top + 80})`).style("opacity", 0)
-        .transition().delay(flyStart).duration(flyDuration).ease(d3.easeExpOut)
-        .attr("transform", `translate(${startX},${startY})`).style("opacity", 1)
-        .transition().duration(travelDuration).ease(d3.easeLinear)
-        .attrTween("transform", pathTween).on("end", onEnd);
-    }
+    traveler
+      .attr("transform", `translate(${startX},${H + margin.top + 80})`).style("opacity", 0)
+      .transition().delay(flyStart).duration(flyDuration).ease(d3.easeExpOut)
+      .attr("transform", `translate(${startX},${startY})`).style("opacity", 1)
+      .transition().duration(travelDuration).ease(d3.easeLinear)
+      .attrTween("transform", () => t => {
+        const pt = path.getPointAtLength(t * journeyLen);
+        return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
+      })
+      .on("end", function() {
+        sparkle(svg, endX, endY, color);
+        if (!isInLastDate) {
+          d3.select(this).transition().duration(600).ease(d3.easeExpIn)
+            .attr("transform", `translate(${endX},${H + margin.top + 80})`)
+            .style("opacity", 0)
+            .on("end", function() { d3.select(this).remove(); });
+        }
+      });
   });
 }
 
