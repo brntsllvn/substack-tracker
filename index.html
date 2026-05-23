@@ -660,10 +660,13 @@ function playAnimation() {
     const firstIdx = data.findIndex(e => fmt(parseDay(e.date)) === fmt(firstPt.date));
     const lastIdx  = data.findIndex(e => fmt(parseDay(e.date)) === fmt(lastPt.date));
 
-    const startTime      = isOnFromStart ? dateTimes[0] : gapMid(firstIdx - 1, firstIdx);
-    const exitTime       = isInLastDate  ? DURATION : gapMid(lastIdx, lastIdx + 1);
+    const exitTime   = isInLastDate ? DURATION : gapMid(lastIdx, lastIdx + 1);
+    const journeyLen = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
+    // Newsletters with negligible path (entered on or near the last date) pop as a surprise
+    // right before the end rather than sitting idle after an early fly-up.
+    const naturalStart   = isOnFromStart ? dateTimes[0] : gapMid(firstIdx - 1, firstIdx);
+    const startTime      = !isOnFromStart && journeyLen < 5 ? Math.max(naturalStart, exitTime - FLY) : naturalStart;
     const travelDuration = Math.max(exitTime - startTime, 1);
-    const journeyLen     = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
 
     // Glowing path stroke — filter fades out after the line finishes drawing
     d3.select(path)
