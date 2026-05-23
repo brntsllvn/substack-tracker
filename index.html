@@ -600,14 +600,16 @@ function playAnimation() {
   if (!chartState || !pinned.size) return;
   const { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area } = chartState;
   const DURATION = 5000;
-  const FLY = 400; // ms window at the start so day-0 newsletters have room to fly up
+  const FLY = 400;
+  const W = area.clientWidth - margin.left - margin.right;
 
-  svg.selectAll(".traveler, .sparkle-group, .anim-start").remove();
+  svg.selectAll(".traveler, .sparkle-group, .anim-start, .date-ticker").remove();
+  paths.each(function() {
+    d3.select(this).interrupt().attr("filter", null).attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+  });
 
   const x0 = xScale(parseDay(data[0].date));
   const xN = xScale(parseDay(data[data.length - 1].date));
-  // Compress the travel phase into [FLY, DURATION] so every newsletter can fly up from below
-  // before its line starts drawing. Nothing is visible at t=0 — no end-state revealed.
   const dateTimes = data.map(d =>
     FLY + ((xScale(parseDay(d.date)) - x0) / (xN - x0)) * (DURATION - FLY)
   );
@@ -615,6 +617,31 @@ function playAnimation() {
 
   const lastDataFmt  = fmt(parseDay(data[data.length - 1].date));
   const firstDataFmt = fmt(parseDay(data[0].date));
+
+  // Glow filter — soft bloom on the drawing path tip
+  if (defs.select("#filter-glow").empty()) {
+    const f = defs.append("filter").attr("id", "filter-glow")
+      .attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+    f.append("feGaussianBlur").attr("stdDeviation", "4").attr("result", "blur");
+    const m = f.append("feMerge");
+    m.append("feMergeNode").attr("in", "blur");
+    m.append("feMergeNode").attr("in", "SourceGraphic");
+  }
+
+  // Date ticker — large watermark label synced to each column
+  const ticker = svg.append("text").attr("class", "date-ticker")
+    .attr("x", margin.left + W / 2).attr("y", margin.top + H * 0.54)
+    .attr("text-anchor", "middle").attr("fill", "rgba(255,255,255,0.055)")
+    .attr("font-size", "88px").attr("font-weight", "800").attr("letter-spacing", "-2")
+    .style("pointer-events", "none").style("user-select", "none")
+    .text(fmt(parseDay(data[0].date)));
+  data.forEach((day, i) =>
+    setTimeout(() => ticker.text(fmt(parseDay(day.date))), dateTimes[i])
+  );
+  setTimeout(() =>
+    ticker.transition().duration(700).style("opacity", 0).on("end", () => ticker.remove()),
+    DURATION
+  );
 
   let animIdx = 0;
   paths.each(function(d) {
@@ -633,25 +660,41 @@ function playAnimation() {
     const firstIdx = data.findIndex(e => fmt(parseDay(e.date)) === fmt(firstPt.date));
     const lastIdx  = data.findIndex(e => fmt(parseDay(e.date)) === fmt(lastPt.date));
 
-    // Day-0 newsletters start at dateTimes[0] (= FLY) so they also get a fly-up.
     const startTime      = isOnFromStart ? dateTimes[0] : gapMid(firstIdx - 1, firstIdx);
     const exitTime       = isInLastDate  ? DURATION : gapMid(lastIdx, lastIdx + 1);
     const travelDuration = Math.max(exitTime - startTime, 1);
     const journeyLen     = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
 
-    // Path stroke reveals in sync with the icon journey.
+    // Glowing path stroke — filter fades out after the line finishes drawing
     d3.select(path)
+      .attr("filter", "url(#filter-glow)")
       .attr("stroke-dasharray", `${journeyLen} ${totalLen + 1}`)
       .attr("stroke-dashoffset", journeyLen)
       .transition().delay(startTime).duration(travelDuration).ease(d3.easeLinear)
       .attr("stroke-dashoffset", 0)
-      .on("end", function() { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); });
+      .on("end", function() {
+        d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null)
+          .transition().duration(800).attr("filter", null);
+      });
 
-    // All icons fly up from below at startTime — nothing shown before the line reaches them.
+    // Icon
     const sp     = path.getPointAtLength(0);
     const startX = sp.x + margin.left, startY = sp.y + margin.top;
     const traveler = svg.append("g").attr("class", "traveler");
     drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
+
+    // Rank badge — steps through rank at each date column
+    const badge = traveler.append("text")
+      .attr("x", 0).attr("y", 23).attr("text-anchor", "middle")
+      .attr("fill", color).attr("font-size", "9px").attr("font-weight", "700")
+      .attr("opacity", 0.9).style("pointer-events", "none")
+      .text(`#${firstPt.rank}`);
+    const dateToPoint = new Map(series.points.map(p => [fmt(p.date), p]));
+    data.forEach((day, i) => {
+      const pt = dateToPoint.get(fmt(parseDay(day.date)));
+      if (pt && dateTimes[i] >= startTime)
+        setTimeout(() => badge.text(`#${pt.rank}`), dateTimes[i]);
+    });
 
     const ep   = path.getPointAtLength(journeyLen);
     const endX = ep.x + margin.left, endY = ep.y + margin.top;
