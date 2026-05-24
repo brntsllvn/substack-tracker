@@ -37,15 +37,12 @@
   .date-range input[type=date]:focus { border-color: #555; }
 
   .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
-  #btn-play, #btn-reset { padding: 4px 14px; border-radius: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.12s, color 0.12s; flex-shrink: 0; border: 1px solid; }
-  #btn-play { border-color: #22c55e; background: transparent; color: #22c55e; }
+  #btn-play, #btn-reset { padding: 4px 14px; border-radius: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.12s, color 0.12s; flex-shrink: 0; border: 1px solid; background: transparent; }
+  #btn-play { border-color: #22c55e; color: #22c55e; }
   #btn-play:hover { background: #22c55e; color: #fff; }
-  #btn-play:disabled { border-color: #333; color: #444; cursor: default; }
-  #btn-play:disabled:hover { background: transparent; color: #444; }
-  #btn-reset { border-color: #ef4444; background: transparent; color: #ef4444; }
+  #btn-reset { border-color: #ef4444; color: #ef4444; }
   #btn-reset:hover { background: #ef4444; color: #fff; }
-  #btn-reset:disabled { border-color: #333; color: #444; cursor: default; }
-  #btn-reset:disabled:hover { background: transparent; color: #444; }
+  #btn-play:disabled, #btn-reset:disabled { border-color: #333; color: #444; cursor: default; background: transparent; }
 
   svg { width: 100%; height: 100%; }
   .axis path { display: none; }
@@ -141,7 +138,7 @@ const el = id => document.getElementById(id);
 
 let allData = [];
 let category = "rising";
-let chartState = null; // set by renderStepChart, used by playAnimation
+let chartState = null;
 const pinned = new Map(); // key -> { name, logo, color }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -202,19 +199,25 @@ function setCategory(c) {
   render();
 }
 
+function syncButtons() {
+  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size || !chartState;
+}
+
+function afterPinChange() {
+  renderChips();
+  render();
+  syncButtons();
+}
+
 function pin(k, name, logo) {
   if (pinned.has(k)) return;
   pinned.set(k, { name, logo, color: PIN_COLORS[pinned.size % PIN_COLORS.length] });
-  renderChips();
-  render();
-  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size || !chartState;
+  afterPinChange();
 }
 
 function unpin(k) {
   pinned.delete(k);
-  renderChips();
-  render();
-  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size || !chartState;
+  afterPinChange();
 }
 
 function renderChips() {
@@ -366,7 +369,7 @@ function drawAvatar(container, defs, { cx, cy, r, logo, stroke, clipId }) {
 
 function renderSlopeGraph(data) {
   chartState = null;
-  el("btn-play").disabled = el("btn-reset").disabled = true;
+  syncButtons();
   const area = el("chart-area");
   const day1 = data[0], dayN = data[data.length - 1];
   const map1 = indexDay(day1), mapN = indexDay(dayN);
@@ -402,6 +405,7 @@ function renderSlopeGraph(data) {
     g.append("text").attr("class","col-label").attr("x",x).attr("y",-24).text(fmt(parseDay(date)));
   });
 
+  const itemMap = new Map(items.map(it => [it.k, it]));
   const lineG = g.append("g"), hitG = g.append("g");
 
   items.forEach(item => {
@@ -443,7 +447,7 @@ function renderSlopeGraph(data) {
         .on("mouseleave", () => {
           lineG.selectAll(".slope-line").each(function() {
             const k = this.getAttribute("data-key");
-            const it = items.find(i => i.k === k);
+            const it = itemMap.get(k);
             if (!it?.e1 || !it?.eN) return;
             const d = it.eN.rank - it.e1.rank, ip = pinned.has(k);
             d3.select(this)
@@ -538,7 +542,7 @@ function renderStepChart(data) {
     .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
 
   chartState = { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area };
-  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size;
+  syncButtons();
 
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
@@ -622,11 +626,9 @@ function playAnimation() {
   const FLY = 400;
   const W = area.clientWidth - margin.left - margin.right;
 
-  svg.selectAll(".traveler, .sparkle-group, .anim-start, .date-ticker").remove();
-  paths.each(function() {
-    d3.select(this).interrupt().attr("filter", null).attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
-  });
+  resetAnimation();
 
+  const dateFmts = data.map(d => fmt(parseDay(d.date)));
   const x0 = xScale(parseDay(data[0].date));
   const xN = xScale(parseDay(data[data.length - 1].date));
   const dateTimes = data.map(d =>
@@ -634,10 +636,9 @@ function playAnimation() {
   );
   const gapMid = (i, j) => 0.5 * (dateTimes[i] + dateTimes[j]);
 
-  const lastDataFmt  = fmt(parseDay(data[data.length - 1].date));
-  const firstDataFmt = fmt(parseDay(data[0].date));
+  const lastDataFmt  = dateFmts[dateFmts.length - 1];
+  const firstDataFmt = dateFmts[0];
 
-  // Glow filter — soft bloom on the drawing path tip
   if (defs.select("#filter-glow").empty()) {
     const f = defs.append("filter").attr("id", "filter-glow")
       .attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
@@ -647,15 +648,14 @@ function playAnimation() {
     m.append("feMergeNode").attr("in", "SourceGraphic");
   }
 
-  // Date ticker — large watermark label synced to each column
   const ticker = svg.append("text").attr("class", "date-ticker")
     .attr("x", margin.left + W / 2).attr("y", margin.top + H * 0.54)
     .attr("text-anchor", "middle").attr("fill", "rgba(255,255,255,0.055)")
     .attr("font-size", "88px").attr("font-weight", "800").attr("letter-spacing", "-2")
     .style("pointer-events", "none").style("user-select", "none")
-    .text(fmt(parseDay(data[0].date)));
-  data.forEach((day, i) =>
-    setTimeout(() => ticker.text(fmt(parseDay(day.date))), dateTimes[i])
+    .text(dateFmts[0]);
+  dateFmts.forEach((f, i) =>
+    setTimeout(() => ticker.text(f), dateTimes[i])
   );
   setTimeout(() =>
     ticker.transition().duration(700).style("opacity", 0).on("end", () => ticker.remove()),
@@ -676,8 +676,8 @@ function playAnimation() {
     const isOnFromStart = fmt(firstPt.date) === firstDataFmt;
     const isInLastDate  = fmt(lastPt.date)  === lastDataFmt;
 
-    const firstIdx = data.findIndex(e => fmt(parseDay(e.date)) === fmt(firstPt.date));
-    const lastIdx  = data.findIndex(e => fmt(parseDay(e.date)) === fmt(lastPt.date));
+    const firstIdx = dateFmts.indexOf(fmt(firstPt.date));
+    const lastIdx  = dateFmts.indexOf(fmt(lastPt.date));
 
     const exitTime   = isInLastDate ? DURATION : gapMid(lastIdx, lastIdx + 1);
     const journeyLen = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
@@ -687,7 +687,6 @@ function playAnimation() {
     const startTime      = !isOnFromStart && journeyLen < 5 ? Math.max(naturalStart, exitTime - FLY) : naturalStart;
     const travelDuration = Math.max(exitTime - startTime, 1);
 
-    // Glowing path stroke — filter fades out after the line finishes drawing
     d3.select(path)
       .attr("filter", "url(#filter-glow)")
       .attr("stroke-dasharray", `${journeyLen} ${totalLen + 1}`)
@@ -699,21 +698,19 @@ function playAnimation() {
           .transition().duration(800).attr("filter", null);
       });
 
-    // Icon
     const sp     = path.getPointAtLength(0);
     const startX = sp.x + margin.left, startY = sp.y + margin.top;
     const traveler = svg.append("g").attr("class", "traveler");
     drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
 
-    // Rank badge — steps through rank at each date column
     const badge = traveler.append("text")
       .attr("x", 0).attr("y", 23).attr("text-anchor", "middle")
       .attr("fill", color).attr("font-size", "9px").attr("font-weight", "700")
       .attr("opacity", 0.9).style("pointer-events", "none")
       .text(`#${firstPt.rank}`);
     const dateToPoint = new Map(series.points.map(p => [fmt(p.date), p]));
-    data.forEach((day, i) => {
-      const pt = dateToPoint.get(fmt(parseDay(day.date)));
+    dateFmts.forEach((f, i) => {
+      const pt = dateToPoint.get(f);
       if (pt && dateTimes[i] >= startTime)
         setTimeout(() => badge.text(`#${pt.rank}`), dateTimes[i]);
     });
