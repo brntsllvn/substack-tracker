@@ -544,16 +544,17 @@ function renderStepChart(data) {
   chartState = { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area };
   syncButtons();
 
+  const anchors = svg.append("g").attr("class", "pin-anchors");
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
     const ps = allSeries.find(s => s.k === pk);
     if (!ps) { pidx++; continue; }
     const last = ps.points[ps.points.length-1];
     const cx = xScale(last.date)+margin.left, cy = yScale(last.rank)+margin.top;
-    drawAvatar(svg, defs, { cx, cy, r:12, logo:ps.logo, stroke:color, clipId:`av-step-pin${pidx}` });
+    drawAvatar(anchors, defs, { cx, cy, r:12, logo:ps.logo, stroke:color, clipId:`av-step-pin${pidx}` });
     const label = ps.name.length > 22 ? ps.name.slice(0,20)+"…" : ps.name;
     const flipLeft = cx + 18 + label.length * 7 > area.clientWidth - 20;
-    svg.append("text").attr("x", flipLeft ? cx-18 : cx+18).attr("y", cy+4)
+    anchors.append("text").attr("x", flipLeft ? cx-18 : cx+18).attr("y", cy+4)
       .attr("text-anchor", flipLeft ? "end" : "start")
       .attr("font-size","11px").attr("font-weight","600").attr("fill",color)
       .attr("font-family","system-ui,-apple-system,sans-serif")
@@ -613,6 +614,7 @@ function resetAnimation() {
   if (!chartState) return;
   const { svg, paths } = chartState;
   svg.selectAll(".traveler, .sparkle-group, .anim-start, .date-ticker").remove();
+  svg.selectAll(".pin-anchors").style("display", null);
   paths.each(function() {
     d3.select(this).interrupt()
       .attr("stroke-dasharray", null).attr("stroke-dashoffset", null).attr("filter", null);
@@ -623,20 +625,20 @@ function playAnimation() {
   if (!chartState || !pinned.size) return;
   const { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area } = chartState;
   const DURATION = 5000;
-  const FLY = 400;
   const W = area.clientWidth - margin.left - margin.right;
 
   resetAnimation();
+  svg.selectAll(".pin-anchors").style("display", "none");
 
   const dateFmts = data.map(d => fmt(parseDay(d.date)));
   const x0 = xScale(parseDay(data[0].date));
   const xN = xScale(parseDay(data[data.length - 1].date));
   const dateTimes = data.map(d =>
-    FLY + ((xScale(parseDay(d.date)) - x0) / (xN - x0)) * (DURATION - FLY)
+    ((xScale(parseDay(d.date)) - x0) / (xN - x0)) * DURATION
   );
   const gapMid = (i, j) => 0.5 * (dateTimes[i] + dateTimes[j]);
 
-  const lastDataFmt  = dateFmts[dateFmts.length - 1];
+  const lastDataFmt = dateFmts[dateFmts.length - 1];
   const firstDataFmt = dateFmts[0];
 
   if (defs.select("#filter-glow").empty()) {
@@ -681,10 +683,9 @@ function playAnimation() {
 
     const exitTime   = isInLastDate ? DURATION : gapMid(lastIdx, lastIdx + 1);
     const journeyLen = findPathLengthAtX(path, xScale(lastPt.date), totalLen);
-    // Newsletters with negligible path (entered on or near the last date) pop as a surprise
-    // right before the end rather than sitting idle after an early fly-up.
-    const naturalStart   = isOnFromStart ? dateTimes[0] : gapMid(firstIdx - 1, firstIdx);
-    const startTime      = !isOnFromStart && journeyLen < 5 ? Math.max(naturalStart, exitTime - FLY) : naturalStart;
+    const naturalStart = isOnFromStart ? 0 : gapMid(firstIdx - 1, firstIdx);
+    // Late entrants with negligible path pop near the end as a surprise.
+    const startTime    = !isOnFromStart && journeyLen < 5 ? Math.max(naturalStart, exitTime - 300) : naturalStart;
     const travelDuration = Math.max(exitTime - startTime, 1);
 
     d3.select(path)
@@ -700,7 +701,11 @@ function playAnimation() {
 
     const sp     = path.getPointAtLength(0);
     const startX = sp.x + margin.left, startY = sp.y + margin.top;
-    const traveler = svg.append("g").attr("class", "traveler");
+    const ep     = path.getPointAtLength(journeyLen);
+    const endX   = ep.x + margin.left, endY = ep.y + margin.top;
+
+    const traveler = svg.append("g").attr("class", "traveler")
+      .attr("transform", `translate(${startX},${startY})`).style("opacity", 0);
     drawAvatar(traveler, defs, { cx:0, cy:0, r:12, logo, stroke:color, clipId:`av-tr-${animIdx++}` });
 
     const badge = traveler.append("text")
@@ -715,31 +720,25 @@ function playAnimation() {
         setTimeout(() => badge.text(`#${pt.rank}`), dateTimes[i]);
     });
 
-    const ep   = path.getPointAtLength(journeyLen);
-    const endX = ep.x + margin.left, endY = ep.y + margin.top;
-
-    const flyStart    = Math.max(0, startTime - FLY);
-    const flyDuration = startTime - flyStart;
-
-    traveler
-      .attr("transform", `translate(${startX},${H + margin.top + 80})`).style("opacity", 0)
-      .transition().delay(flyStart).duration(flyDuration).ease(d3.easeExpOut)
-      .attr("transform", `translate(${startX},${startY})`).style("opacity", 1)
-      .transition().duration(travelDuration).ease(d3.easeLinear)
+    // Travel and fade-in run in parallel via named transitions.
+    traveler.transition("travel")
+      .delay(startTime).duration(travelDuration).ease(d3.easeLinear)
       .attrTween("transform", () => t => {
         const pt = path.getPointAtLength(t * journeyLen);
         return `translate(${pt.x+margin.left},${pt.y+margin.top})`;
       })
       .on("end", function() {
         sparkle(svg, endX, endY, color);
-        if (!isInLastDate) {
-          d3.select(this).transition().duration(600).ease(d3.easeExpIn)
-            .attr("transform", `translate(${endX},${H + margin.top + 80})`)
-            .style("opacity", 0)
+        if (!isInLastDate)
+          d3.select(this).transition().duration(400).style("opacity", 0)
             .on("end", function() { d3.select(this).remove(); });
-        }
       });
+
+    traveler.transition("fade")
+      .delay(startTime).duration(180).style("opacity", 1);
   });
+
+  setTimeout(() => svg.selectAll(".pin-anchors").style("display", null), DURATION + 600);
 }
 
 window.addEventListener("resize", render);
