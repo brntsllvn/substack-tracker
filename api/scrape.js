@@ -27,7 +27,7 @@ async function retry(label, fn, attempts = 3, delayMs = 1000) {
         throw e;
       }
       const wait = delayMs * (i + 1);
-      warn(`${label} attempt ${i + 1} failed (${elapsed}ms): ${e.message} — retrying in ${wait}ms`);
+      warn(`${label} attempt ${i + 1} failed (${elapsed}ms): ${e.message}, retrying in ${wait}ms`);
       await sleep(wait);
     }
   }
@@ -138,7 +138,7 @@ module.exports = async function handler(req, res) {
 
     const pat = process.env.GITHUB_PAT;
     if (!pat) {
-      err("GITHUB_PAT is not set — cannot commit to GitHub");
+      err("GITHUB_PAT is not set, cannot commit to GitHub");
       return res.status(500).json({ error: "GITHUB_PAT not set" });
     }
 
@@ -168,8 +168,8 @@ module.exports = async function handler(req, res) {
     }
 
     if (errors.length === 2) {
-      err("Both rising and paid fetches failed — aborting without commit");
-      await sendAlert(`Scrape FAILED — no data for ${today}`, [
+      err("Both rising and paid fetches failed, aborting without commit");
+      await sendAlert(`Scrape FAILED: no data for ${today}`, [
         "Both rising and paid list fetches failed after 3 attempts each.",
         "",
         ...errors.map(e => `  • ${e}`),
@@ -208,7 +208,7 @@ module.exports = async function handler(req, res) {
     const total = Date.now() - t0;
     err(`--- scrape UNHANDLED ERROR after ${total}ms: ${e.message}`);
     err(e.stack);
-    await sendAlert(`Scrape FAILED — unhandled error for ${new Date().toISOString().split("T")[0]}`, [
+    await sendAlert(`Scrape FAILED: unhandled error for ${new Date().toISOString().split("T")[0]}`, [
       `Error: ${e.message}`,
       "",
       e.stack || "(no stack)",

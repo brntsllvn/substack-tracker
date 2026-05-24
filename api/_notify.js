@@ -7,7 +7,7 @@ async function sendAlert(subject, lines) {
   const to     = process.env.ALERT_EMAIL;
 
   if (!apiKey || !to) {
-    log("notify: RESEND_API_KEY or ALERT_EMAIL not set — skipping email alert");
+    log("notify: RESEND_API_KEY or ALERT_EMAIL not set, skipping email alert");
     return;
   }
 

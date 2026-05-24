@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
 
   const pat = process.env.GITHUB_PAT;
   if (!pat) {
-    err("GITHUB_PAT not set — cannot check GitHub");
+    err("GITHUB_PAT not set, cannot check GitHub");
     return res.status(500).json({ error: "GITHUB_PAT not set" });
   }
 
@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
     log(`GitHub check -> HTTP ${r.status}`);
 
     if (r.status === 200) {
-      log(`${dataPath} EXISTS — data is current, no action needed (${Date.now() - t0}ms)`);
+      log(`${dataPath} EXISTS: data is current, no action needed (${Date.now() - t0}ms)`);
       return res.status(200).json({ ok: true, date: today, status: "data_present" });
     }
 
@@ -46,7 +46,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: `GitHub check failed: ${e.message}`, date: today });
   }
 
-  warn(`${dataPath} is MISSING — triggering emergency scrape`);
+  warn(`${dataPath} is MISSING, triggering emergency scrape`);
 
   // VERCEL_URL is set automatically to the current deployment's host (no protocol).
   // Fall back to the stable production alias if missing.
@@ -54,12 +54,15 @@ module.exports = async function handler(req, res) {
   const scrapeUrl = `https://${host}/api/scrape`;
   log(`Calling scrape endpoint: ${scrapeUrl}`);
 
+  const cronSecret = process.env.CRON_SECRET;
+  const scrapeHeaders = cronSecret ? { Authorization: `Bearer ${cronSecret}` } : {};
+
   let scrapeResult, scrapeStatus;
   try {
-    const sr = await fetch(scrapeUrl, { method: "GET" });
+    const sr = await fetch(scrapeUrl, { headers: scrapeHeaders });
     scrapeStatus = sr.status;
     scrapeResult = await sr.json();
-    log(`Scrape response: HTTP ${scrapeStatus} — ${JSON.stringify(scrapeResult)}`);
+    log(`Scrape response: HTTP ${scrapeStatus}: ${JSON.stringify(scrapeResult)}`);
   } catch (e) {
     err(`Scrape call failed: ${e.message}`);
     return res.status(500).json({
@@ -76,7 +79,7 @@ module.exports = async function handler(req, res) {
   }
 
   err(`--- check DONE: emergency scrape FAILED after ${elapsed}ms: ${JSON.stringify(scrapeResult)}`);
-  await sendAlert(`Checker FAILED — no data for ${today} after emergency scrape`, [
+  await sendAlert(`Checker FAILED: no data for ${today} after emergency scrape`, [
     "The 06:00 UTC scrape missed AND the 14:00 UTC emergency scrape also failed.",
     `Data for ${today} is missing.`,
     "",

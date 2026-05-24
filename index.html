@@ -139,6 +139,7 @@ const el = id => document.getElementById(id);
 let allData = [];
 let category = "rising";
 let chartState = null;
+let animTimers = [];
 const pinned = new Map(); // key -> { name, logo, color }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -262,7 +263,7 @@ document.addEventListener("click", e => {
 // ── Render dispatch ───────────────────────────────────────────────────────────
 
 function visibleData() {
-  const start = el("date-start")?.value, end = el("date-end")?.value;
+  const start = el("date-start").value, end = el("date-end").value;
   if (!start || !end) return allData;
   return allData.filter(d => d.date >= start && d.date <= end);
 }
@@ -471,7 +472,7 @@ function renderSlopeGraph(data) {
 
   let pinIdx = 0;
   for (const [pk, { color }] of pinned) {
-    const it = items.find(i => i.k === pk);
+    const it = itemMap.get(pk);
     if (!it?.e1 || !it?.eN) { pinIdx++; continue; }
     const R = 12;
     [[x1+margin.left, yScale(it.e1.rank)+margin.top, it.e1.rank],
@@ -545,9 +546,10 @@ function renderStepChart(data) {
   syncButtons();
 
   const anchors = svg.append("g").attr("class", "pin-anchors");
+  const stepSeriesMap = new Map(allSeries.map(s => [s.k, s]));
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
-    const ps = allSeries.find(s => s.k === pk);
+    const ps = stepSeriesMap.get(pk);
     if (!ps) { pidx++; continue; }
     const last = ps.points[ps.points.length-1];
     const cx = xScale(last.date)+margin.left, cy = yScale(last.rank)+margin.top;
@@ -612,6 +614,8 @@ function sparkle(container, cx, cy, color) {
 
 function resetAnimation() {
   if (!chartState) return;
+  animTimers.forEach(clearTimeout);
+  animTimers = [];
   const { svg, paths } = chartState;
   svg.selectAll(".traveler, .sparkle-group, .anim-start, .date-ticker").remove();
   svg.selectAll(".pin-anchors").style("display", null);
@@ -626,6 +630,8 @@ function playAnimation() {
   const { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area } = chartState;
   const DURATION = 5000;
   const W = area.clientWidth - margin.left - margin.right;
+  const after = (fn, ms) => { const id = setTimeout(fn, ms); animTimers.push(id); };
+  const seriesMap = new Map(allSeries.map(s => [s.k, s]));
 
   resetAnimation();
   svg.selectAll(".pin-anchors").style("display", "none");
@@ -656,13 +662,8 @@ function playAnimation() {
     .attr("font-size", "88px").attr("font-weight", "800").attr("letter-spacing", "-2")
     .style("pointer-events", "none").style("user-select", "none")
     .text(dateFmts[0]);
-  dateFmts.forEach((f, i) =>
-    setTimeout(() => ticker.text(f), dateTimes[i])
-  );
-  setTimeout(() =>
-    ticker.transition().duration(700).style("opacity", 0).on("end", () => ticker.remove()),
-    DURATION
-  );
+  dateFmts.forEach((f, i) => after(() => ticker.text(f), dateTimes[i]));
+  after(() => ticker.transition().duration(700).style("opacity", 0).on("end", () => ticker.remove()), DURATION);
 
   let animIdx = 0;
   paths.each(function(d) {
@@ -670,7 +671,7 @@ function playAnimation() {
     const path = this;
     const totalLen = path.getTotalLength();
     const { color, logo } = pinned.get(d.k);
-    const series = allSeries.find(s => s.k === d.k);
+    const series = seriesMap.get(d.k);
     if (!series?.points.length) return;
 
     const firstPt = series.points[0];
@@ -717,7 +718,7 @@ function playAnimation() {
     dateFmts.forEach((f, i) => {
       const pt = dateToPoint.get(f);
       if (pt && dateTimes[i] >= startTime)
-        setTimeout(() => badge.text(`#${pt.rank}`), dateTimes[i]);
+        after(() => badge.text(`#${pt.rank}`), dateTimes[i]);
     });
 
     // Travel and fade-in run in parallel via named transitions.
@@ -738,7 +739,7 @@ function playAnimation() {
       .delay(startTime).duration(180).style("opacity", 1);
   });
 
-  setTimeout(() => svg.selectAll(".pin-anchors").style("display", null), DURATION + 600);
+  after(() => svg.selectAll(".pin-anchors").style("display", null), DURATION + 600);
 }
 
 window.addEventListener("resize", render);
