@@ -4,43 +4,62 @@ const OWNER = "brntsllvn";
 const REPO = "substack-tracker";
 const GH = "https://api.github.com";
 
+async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function retry(fn, attempts = 3, delayMs = 1000) {
+  for (let i = 0; i < attempts; i++) {
+    try { return await fn(); }
+    catch (e) {
+      if (i === attempts - 1) throw e;
+      console.error(`Attempt ${i + 1} failed: ${e.message}. Retrying in ${delayMs}ms...`);
+      await sleep(delayMs * (i + 1));
+    }
+  }
+}
+
 async function ghGet(path, pat) {
-  const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${path}`, {
-    headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github.v3+json" },
+  return retry(async () => {
+    const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${path}`, {
+      headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github.v3+json" },
+    });
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error(`GitHub GET ${path}: ${r.status}`);
+    return r.json();
   });
-  if (r.status === 404) return null;
-  if (!r.ok) throw new Error(`GitHub GET ${path}: ${r.status}`);
-  return r.json();
 }
 
 async function ghPut(path, content, message, sha, pat) {
-  const body = { message, content: Buffer.from(content).toString("base64") };
-  if (sha) body.sha = sha;
-  const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${path}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `token ${pat}`,
-      Accept: "application/vnd.github.v3+json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
+  return retry(async () => {
+    const body = { message, content: Buffer.from(content).toString("base64") };
+    if (sha) body.sha = sha;
+    const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${path}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${pat}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error(`GitHub PUT ${path}: ${r.status} ${await r.text()}`);
   });
-  if (!r.ok) throw new Error(`GitHub PUT ${path}: ${r.status} ${await r.text()}`);
 }
 
 async function fetchPage(apiType, page) {
-  const r = await fetch(
-    `https://substack.com/api/v1/category/leaderboard/${FINANCE_ID}/${apiType}?page=${page}`,
-    {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        Accept: "application/json",
-        Referer: "https://substack.com/",
-      },
-    }
-  );
-  if (!r.ok) throw new Error(`${r.status} from Substack (${apiType} page ${page})`);
-  return r.json();
+  return retry(async () => {
+    const r = await fetch(
+      `https://substack.com/api/v1/category/leaderboard/${FINANCE_ID}/${apiType}?page=${page}`,
+      {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+          Accept: "application/json",
+          Referer: "https://substack.com/",
+        },
+      }
+    );
+    if (!r.ok) throw new Error(`${r.status} from Substack (${apiType} page ${page})`);
+    return r.json();
+  });
 }
 
 async function fetchTop100(listKey) {
@@ -86,13 +105,16 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ message: "Already scraped today", date: today });
     }
 
+    console.log(`Scraping ${today}...`);
     const data = { date: today, rising: [], paid: [] };
     const errors = [];
 
     for (const listKey of ["rising", "paid"]) {
       try {
         data[listKey] = await fetchTop100(listKey);
+        console.log(`${listKey}: ${data[listKey].length} items`);
       } catch (e) {
+        console.error(`${listKey} fetch failed: ${e.message}`);
         errors.push(`${listKey}: ${e.message}`);
       }
     }
@@ -103,6 +125,7 @@ module.exports = async function handler(req, res) {
 
     const json = JSON.stringify(data, null, 2);
     await ghPut(dataPath, json, `data: ${today}`, null, pat);
+    console.log(`Committed ${dataPath}`);
 
     const indexFile = await ghGet("data/index.json", pat);
     const idx = indexFile
@@ -113,9 +136,7 @@ module.exports = async function handler(req, res) {
       idx.dates.sort();
     }
     await ghPut("data/index.json", JSON.stringify(idx, null, 2), `index: ${today}`, indexFile?.sha || null, pat);
-
-    const deployHook = process.env.VERCEL_DEPLOY_HOOK;
-    if (deployHook) await fetch(deployHook, { method: "POST" }).catch(() => {});
+    console.log(`Updated index.json`);
 
     return res.status(200).json({
       success: true,
@@ -125,6 +146,7 @@ module.exports = async function handler(req, res) {
       ...(errors.length && { errors }),
     });
   } catch (e) {
+    console.error(`Scrape failed: ${e.message}`);
     return res.status(500).json({ error: e.message });
   }
 };
