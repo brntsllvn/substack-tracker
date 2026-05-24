@@ -26,19 +26,26 @@
   .dropdown-item:hover { background: #252525; }
   .dropdown-item img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 
-  .pin-chip { display: flex; align-items: center; gap: 6px; padding: 3px 8px 3px 6px; background: rgba(255,103,25,0.15); border: 1px solid rgba(255,103,25,0.4); border-radius: 100px; font-size: 0.75rem; color: #ff6719; white-space: nowrap; cursor: pointer; flex-shrink: 0; }
-  .pin-chip img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
-  .pin-chip:hover { background: rgba(255,103,25,0.25); }
+  #pin-chip-wrap { display: flex; gap: 4px; align-items: center; }
+  .pin-chip { position: relative; width: 26px; height: 26px; border-radius: 50%; border: 2px solid; cursor: pointer; flex-shrink: 0; overflow: hidden; }
+  .pin-chip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pin-chip::after { content: '×'; position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.72); color: #fff; font-size: 15px; font-weight: 700; text-align: center; line-height: 22px; opacity: 0; transition: opacity 0.15s; }
+  .pin-chip:hover::after { opacity: 1; }
 
   .date-range { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
   .date-range input[type=date] { background: #252525; border: 1px solid #333; border-radius: 5px; color: #aaa; font-size: 0.72rem; padding: 3px 6px; outline: none; color-scheme: dark; }
   .date-range input[type=date]:focus { border-color: #555; }
 
   .topbar-right { margin-left: auto; font-size: 0.72rem; color: #666; white-space: nowrap; }
-  #btn-play { padding: 4px 14px; border: 1px solid #ff6719; border-radius: 5px; background: transparent; color: #ff6719; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.12s, color 0.12s; flex-shrink: 0; }
-  #btn-play:hover { background: #ff6719; color: #fff; }
+  #btn-play, #btn-reset { padding: 4px 14px; border-radius: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.12s, color 0.12s; flex-shrink: 0; border: 1px solid; }
+  #btn-play { border-color: #22c55e; background: transparent; color: #22c55e; }
+  #btn-play:hover { background: #22c55e; color: #fff; }
   #btn-play:disabled { border-color: #333; color: #444; cursor: default; }
   #btn-play:disabled:hover { background: transparent; color: #444; }
+  #btn-reset { border-color: #ef4444; background: transparent; color: #ef4444; }
+  #btn-reset:hover { background: #ef4444; color: #fff; }
+  #btn-reset:disabled { border-color: #333; color: #444; cursor: default; }
+  #btn-reset:disabled:hover { background: transparent; color: #444; }
 
   svg { width: 100%; height: 100%; }
   .axis path { display: none; }
@@ -101,6 +108,7 @@
     <input type="date" id="date-end" title="End date">
   </div>
   <button id="btn-play" onclick="playAnimation()" disabled>Play</button>
+  <button id="btn-reset" onclick="resetAnimation()" disabled>Reset</button>
   <div class="topbar-right" id="subtitle">Top 100 · updated daily</div>
 </div>
 
@@ -199,14 +207,14 @@ function pin(k, name, logo) {
   pinned.set(k, { name, logo, color: PIN_COLORS[pinned.size % PIN_COLORS.length] });
   renderChips();
   render();
-  el("btn-play").disabled = !pinned.size || !chartState;
+  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size || !chartState;
 }
 
 function unpin(k) {
   pinned.delete(k);
   renderChips();
   render();
-  el("btn-play").disabled = !pinned.size || !chartState;
+  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size || !chartState;
 }
 
 function renderChips() {
@@ -215,8 +223,9 @@ function renderChips() {
   for (const [k, { name, logo, color }] of pinned) {
     const chip = document.createElement("div");
     chip.className = "pin-chip";
-    chip.style.cssText = `border-color:${color}66;background:${color}22;color:${color}`;
-    chip.innerHTML = `<img src="${logo||""}" onerror="this.style.display='none'"><span>${name}</span><span style="opacity:.5;margin-left:2px">×</span>`;
+    chip.style.borderColor = color;
+    chip.title = name;
+    chip.innerHTML = `<img src="${logo||""}" onerror="this.style.display='none'">`;
     chip.onclick = () => unpin(k);
     wrap.appendChild(chip);
   }
@@ -357,7 +366,7 @@ function drawAvatar(container, defs, { cx, cy, r, logo, stroke, clipId }) {
 
 function renderSlopeGraph(data) {
   chartState = null;
-  el("btn-play").disabled = true;
+  el("btn-play").disabled = el("btn-reset").disabled = true;
   const area = el("chart-area");
   const day1 = data[0], dayN = data[data.length - 1];
   const map1 = indexDay(day1), mapN = indexDay(dayN);
@@ -529,7 +538,7 @@ function renderStepChart(data) {
     .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
 
   chartState = { svg, defs, paths, allSeries, margin, xScale, yScale, data, H, area };
-  el("btn-play").disabled = !pinned.size;
+  el("btn-play").disabled = el("btn-reset").disabled = !pinned.size;
 
   let pidx = 0;
   for (const [pk, { color }] of pinned) {
@@ -593,6 +602,16 @@ function sparkle(container, cx, cy, color) {
       .transition().delay(delay).duration(500)
       .attr("r", 32 + i * 8).attr("opacity", 0)
       .on("end", function() { if (i === 2) g.remove(); });
+  });
+}
+
+function resetAnimation() {
+  if (!chartState) return;
+  const { svg, paths } = chartState;
+  svg.selectAll(".traveler, .sparkle-group, .anim-start, .date-ticker").remove();
+  paths.each(function() {
+    d3.select(this).interrupt()
+      .attr("stroke-dasharray", null).attr("stroke-dashoffset", null).attr("filter", null);
   });
 }
 
