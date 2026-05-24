@@ -6,6 +6,10 @@
     {
       "path": "/api/scrape",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/check",
+      "schedule": "0 14 * * *"
     }
   ]
 }
