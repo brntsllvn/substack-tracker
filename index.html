@@ -131,6 +131,9 @@ const RANK_OFF = 101; // proxy rank for "not on the board"
 const ORANGE = "#ff6719";
 const SLOPE_OPACITY = { climb: 0.75, drop: 0.22, flat: 0.12 };
 const PIN_COLORS = ["#ff6719","#38bdf8","#a78bfa","#34d399","#f472b6","#fbbf24","#f87171","#818cf8"];
+const RANK_TICKS = [10,20,30,40,50,60,70,80,90,100];
+const SVG_FONT = "system-ui,-apple-system,sans-serif";
+const BISECT_ITERS = 42; // 2^42 divisions of ~1500px gives sub-nanometer precision
 
 const fmt = d3.timeFormat("%b %-d");
 const parseDay = s => new Date(s + "T12:00:00");
@@ -394,7 +397,7 @@ function renderSlopeGraph(data) {
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
   const defs = svg.append("defs");
 
-  [10,20,30,40,50,60,70,80,90,100].forEach(t => {
+  RANK_TICKS.forEach(t => {
     g.append("line").attr("x1",x1).attr("y1",yScale(t)).attr("x2",x2).attr("y2",yScale(t))
       .attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",1);
     g.append("text").attr("class","stub-label").attr("x",x1-6).attr("y",yScale(t)+3.5).attr("text-anchor","end").text(`#${t}`);
@@ -436,7 +439,7 @@ function renderSlopeGraph(data) {
               drawAvatar(hg, defs, { cx, cy, r:R, logo:item.logo, clipId:`av-s${i}` });
               hg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
                 .attr("text-anchor", i===0?"end":"start").attr("font-size","11px")
-                .attr("fill","#e5e0d8").attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
+                .attr("fill","#e5e0d8").attr("font-family",SVG_FONT).text(`#${rank}`);
             });
         })
         .on("mousemove", event => {
@@ -481,7 +484,7 @@ function renderSlopeGraph(data) {
         drawAvatar(svg, defs, { cx, cy, r:R, logo:it.logo, stroke:color, clipId:`av-pin${pinIdx}-${i}` });
         svg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
           .attr("text-anchor", i===0?"end":"start").attr("font-size","12px").attr("font-weight","600")
-          .attr("fill",color).attr("font-family","system-ui,-apple-system,sans-serif").text(`#${rank}`);
+          .attr("fill",color).attr("font-family",SVG_FONT).text(`#${rank}`);
       });
     pinIdx++;
   }
@@ -492,9 +495,9 @@ function renderSlopeGraph(data) {
 function buildStepSeries(data) {
   const dayMaps = data.map(indexDay);
   const keys = new Map();
-  for (const day of data)
-    for (const e of (day[category]||[]))
-      if (!keys.has(key(e))) keys.set(key(e), { name:e.name, logo:e.logo_url });
+  for (const dm of dayMaps)
+    for (const [k, e] of dm)
+      if (!keys.has(k)) keys.set(k, { name: e.name, logo: e.logo_url });
   return Array.from(keys.entries()).map(([k, meta]) => ({
     k, name: meta.name, logo: meta.logo,
     points: dayMaps.map((m, i) => {
@@ -525,14 +528,14 @@ function renderStepChart(data) {
   const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
   const defs = svg.append("defs");
 
-  [10,20,30,40,50,60,70,80,90,100].forEach(t => {
+  RANK_TICKS.forEach(t => {
     g.append("line").attr("x1",0).attr("y1",yScale(t)).attr("x2",W).attr("y2",yScale(t))
       .attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",1);
   });
   g.append("g").attr("class","axis").attr("transform",`translate(0,${H})`)
     .call(d3.axisBottom(xScale).ticks(Math.min(data.length,10)).tickFormat(d=>fmt(d)));
   g.append("g").attr("class","axis")
-    .call(d3.axisLeft(yScale).tickValues([10,20,30,40,50,60,70,80,90,100]).tickFormat(d=>`#${d}`));
+    .call(d3.axisLeft(yScale).tickValues(RANK_TICKS).tickFormat(d=>`#${d}`));
 
   const stepLine = d3.line().x(d=>xScale(d.date)).y(d=>yScale(d.rank)).curve(d3.curveStepAfter);
   const rightEdge = xScale.domain()[1];
@@ -559,7 +562,7 @@ function renderStepChart(data) {
     anchors.append("text").attr("x", flipLeft ? cx-18 : cx+18).attr("y", cy+4)
       .attr("text-anchor", flipLeft ? "end" : "start")
       .attr("font-size","11px").attr("font-weight","600").attr("fill",color)
-      .attr("font-family","system-ui,-apple-system,sans-serif")
+      .attr("font-family",SVG_FONT)
       .text(label);
     pidx++;
   }
@@ -593,7 +596,7 @@ function renderStepChart(data) {
 
 function findPathLengthAtX(path, targetX, totalLen) {
   let lo = 0, hi = totalLen;
-  for (let i = 0; i < 42; i++) {
+  for (let i = 0; i < BISECT_ITERS; i++) {
     const mid = (lo + hi) / 2;
     if (path.getPointAtLength(mid).x < targetX) lo = mid; else hi = mid;
   }

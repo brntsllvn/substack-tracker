@@ -24,12 +24,10 @@ module.exports = async function handler(req, res) {
   const dataPath = `data/${today}.json`;
   log(`today=${today}, checking ${dataPath} in GitHub`);
 
-  let checkStatus;
   try {
     const r = await fetch(`${GH}/repos/${OWNER}/${REPO}/contents/${dataPath}`, {
       headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github.v3+json" },
     });
-    checkStatus = r.status;
     log(`GitHub check -> HTTP ${r.status}`);
 
     if (r.status === 200) {
