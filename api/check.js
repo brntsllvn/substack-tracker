@@ -1,3 +1,5 @@
+const { sendAlert } = require("./_notify");
+
 const OWNER = "brntsllvn";
 const REPO = "substack-tracker";
 const GH = "https://api.github.com";
@@ -74,5 +76,12 @@ module.exports = async function handler(req, res) {
   }
 
   err(`--- check DONE: emergency scrape FAILED after ${elapsed}ms: ${JSON.stringify(scrapeResult)}`);
+  await sendAlert(`Checker FAILED — no data for ${today} after emergency scrape`, [
+    "The 06:00 UTC scrape missed AND the 14:00 UTC emergency scrape also failed.",
+    `Data for ${today} is missing.`,
+    "",
+    `Scrape response (HTTP ${scrapeStatus}):`,
+    JSON.stringify(scrapeResult, null, 2),
+  ]);
   return res.status(500).json({ ok: false, date: today, status: "scrape_failed", scrape: scrapeResult, elapsed_ms: elapsed });
 };

@@ -1,3 +1,5 @@
+const { sendAlert } = require("./_notify");
+
 const FINANCE_ID = 153;
 const LIST_TYPES = { rising: "trending", paid: "paid" };
 const OWNER = "brntsllvn";
@@ -167,6 +169,11 @@ module.exports = async function handler(req, res) {
 
     if (errors.length === 2) {
       err("Both rising and paid fetches failed — aborting without commit");
+      await sendAlert(`Scrape FAILED — no data for ${today}`, [
+        "Both rising and paid list fetches failed after 3 attempts each.",
+        "",
+        ...errors.map(e => `  • ${e}`),
+      ]);
       return res.status(500).json({ error: "All fetches failed", errors });
     }
 
@@ -201,6 +208,11 @@ module.exports = async function handler(req, res) {
     const total = Date.now() - t0;
     err(`--- scrape UNHANDLED ERROR after ${total}ms: ${e.message}`);
     err(e.stack);
+    await sendAlert(`Scrape FAILED — unhandled error for ${new Date().toISOString().split("T")[0]}`, [
+      `Error: ${e.message}`,
+      "",
+      e.stack || "(no stack)",
+    ]);
     return res.status(500).json({ error: e.message, elapsed_ms: total });
   }
 };
