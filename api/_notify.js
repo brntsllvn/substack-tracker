@@ -32,7 +32,7 @@ async function sendAlert(subject, lines) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Substack Tracker <alerts@taxalphainsider.com>",
+        from: "Substack Tracker <substack+status@taxalphainsider.com>",
         to: [to],
         subject: `[substack-tracker] ${subject}`,
         text: body,
