@@ -156,7 +156,7 @@
       <input type="date" id="date-end" title="End date">
     </div>
     <button id="btn-play" onclick="playAnimation()" disabled>Play</button>
-    <button id="btn-reset" onclick="resetAnimation()" disabled>Reset</button>
+    <button id="btn-reset" onclick="clearPins()" disabled>Reset</button>
     <a href="https://github.com/brntsllvn/substack-tracker/issues/new?template=feature_request.md" target="_blank" rel="noopener" class="feature-req">Request a feature</a>
   </div>
 </div>
@@ -274,6 +274,11 @@ function toggleMovers() {
   const open = panel.classList.toggle("open");
   backdrop.classList.toggle("open", open);
   fab.textContent = open ? "✕  Close" : "Movers  ↑";
+}
+
+function clearPins() {
+  pinned.clear();
+  afterPinChange();
 }
 
 function syncButtons() {
