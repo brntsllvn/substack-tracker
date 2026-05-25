@@ -156,7 +156,7 @@
       <span class="sep">·</span>
       <input type="date" id="date-end" title="End date">
     </div>
-    <button id="btn-play" onclick="playAnimation()" disabled>Play [space]</button>
+    <button id="btn-play" onclick="playAnimation()" disabled>Play [⌘↵]</button>
     <button id="btn-reset" onclick="clearPins()" disabled>Reset [esc]</button>
     <a href="https://github.com/brntsllvn/substack-tracker/issues/new?template=feature_request.md" target="_blank" rel="noopener" class="feature-req">Request a feature</a>
   </div>
@@ -922,7 +922,7 @@ window.addEventListener("resize", debounce(render, 150));
 
 document.addEventListener("keydown", e => {
   const inInput = e.target.tagName === "INPUT";
-  if (e.key === " " && !inInput) { e.preventDefault(); if (!el("btn-play").disabled) playAnimation(); }
+  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (!el("btn-play").disabled) playAnimation(); }
   if (e.key === "Escape" && !inInput) { if (!el("btn-reset").disabled) clearPins(); }
 });
 
