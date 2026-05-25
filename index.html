@@ -143,6 +143,7 @@ let allData = [];
 let category = "rising";
 let chartState = null;
 let animTimers = [];
+let newsletterCache = null;
 const pinned = new Map(); // key -> { name, logo, color }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -170,6 +171,7 @@ async function loadData() {
     idx.dates.map(d => fetch(`data/${d}.json`).then(r => r.json()).catch(() => null))
   );
   allData = days.filter(Boolean);
+  newsletterCache = null;
   if (allData.length) {
     const dates = allData.map(d => d.date);
     const startEl = el("date-start"), endEl = el("date-end");
@@ -187,17 +189,20 @@ function showMsg(m) {
 }
 
 function allNewsletters() {
+  if (newsletterCache) return newsletterCache;
   const map = new Map();
   for (const day of allData)
     for (const e of (day[category] || []))
       if (!map.has(key(e))) map.set(key(e), { name: e.name, logo: e.logo_url });
-  return Array.from(map.entries()).map(([k, v]) => ({ k, ...v })).sort((a, b) => a.name.localeCompare(b.name));
+  newsletterCache = Array.from(map.entries()).map(([k, v]) => ({ k, ...v })).sort((a, b) => a.name.localeCompare(b.name));
+  return newsletterCache;
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────
 
 function setCategory(c) {
   category = c;
+  newsletterCache = null;
   el("btn-rising").className = c === "rising" ? "active" : "";
   el("btn-paid").className = c === "paid" ? "active" : "";
   render();
@@ -208,6 +213,8 @@ function syncButtons() {
 }
 
 function afterPinChange() {
+  let i = 0;
+  for (const v of pinned.values()) v.color = PIN_COLORS[i++ % PIN_COLORS.length];
   renderChips();
   render();
   syncButtons();
@@ -215,7 +222,7 @@ function afterPinChange() {
 
 function pin(k, name, logo) {
   if (pinned.has(k)) return;
-  pinned.set(k, { name, logo, color: PIN_COLORS[pinned.size % PIN_COLORS.length] });
+  pinned.set(k, { name, logo, color: "" });
   afterPinChange();
 }
 
@@ -272,6 +279,7 @@ function visibleData() {
 }
 
 function render() {
+  resetAnimation();
   if (!allData.length) return;
   const data = visibleData();
   if (!data.length) return;
@@ -616,9 +624,9 @@ function sparkle(container, cx, cy, color) {
 }
 
 function resetAnimation() {
-  if (!chartState) return;
   animTimers.forEach(clearTimeout);
   animTimers = [];
+  if (!chartState) return;
   const { svg, paths } = chartState;
   svg.selectAll(".traveler, .sparkle-group, .anim-start, .date-ticker").remove();
   svg.selectAll(".pin-anchors").style("display", null);
@@ -745,7 +753,8 @@ function playAnimation() {
   after(() => svg.selectAll(".pin-anchors").style("display", null), DURATION + 600);
 }
 
-window.addEventListener("resize", render);
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+window.addEventListener("resize", debounce(render, 150));
 loadData();
 </script>
 </body>
