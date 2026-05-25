@@ -662,7 +662,7 @@ function renderStepChart(data) {
   const allSeries = buildStepSeries(data);
   if (!allSeries.length) { showMsg("No data."); return; }
 
-  const margin = { top: 14, right: 16, bottom: 28, left: 40 };
+  const margin = { top: 22, right: 16, bottom: 28, left: 40 };
   const W = area.clientWidth - margin.left - margin.right;
   const H = area.clientHeight - margin.top - margin.bottom;
 
@@ -681,6 +681,14 @@ function renderStepChart(data) {
   RANK_TICKS.forEach(t => {
     g.append("line").attr("x1",0).attr("y1",yScale(t)).attr("x2",W).attr("y2",yScale(t))
       .attr("stroke","rgba(255,255,255,0.04)").attr("stroke-width",1);
+  });
+  data.forEach(d => {
+    const x = xScale(parseDay(d.date));
+    g.append("line").attr("x1",x).attr("y1",0).attr("x2",x).attr("y2",H)
+      .attr("stroke","rgba(255,255,255,0.09)").attr("stroke-width",1).attr("stroke-dasharray","3,5");
+    g.append("text").attr("x",x).attr("y",-5).attr("text-anchor","middle")
+      .attr("font-size","10px").attr("fill","#555").attr("font-family",SVG_FONT)
+      .text(fmt(parseDay(d.date)));
   });
   g.append("g").attr("class","axis").attr("transform",`translate(0,${H})`)
     .call(d3.axisBottom(xScale).ticks(Math.min(data.length,10)).tickFormat(d=>fmt(d)));
@@ -831,9 +839,9 @@ function playAnimation() {
   }
 
   const ticker = svg.append("text").attr("class", "date-ticker")
-    .attr("x", margin.left + W / 2).attr("y", margin.top + H * 0.54)
-    .attr("text-anchor", "middle").attr("fill", "rgba(255,255,255,0.055)")
-    .attr("font-size", "88px").attr("font-weight", "800").attr("letter-spacing", "-2")
+    .attr("x", margin.left + W / 2).attr("y", margin.top + H * 0.58)
+    .attr("text-anchor", "middle").attr("fill", "rgba(255,103,25,0.22)")
+    .attr("font-size", "130px").attr("font-weight", "900").attr("letter-spacing", "-4")
     .style("pointer-events", "none").style("user-select", "none")
     .text(dateFmts[0]);
   dateFmts.forEach((f, i) => after(() => ticker.text(f), dateTimes[i]));
