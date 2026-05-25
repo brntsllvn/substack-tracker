@@ -11,21 +11,23 @@
   body { font-family: system-ui, -apple-system, sans-serif; background: #0d0d0d; color: #e5e0d8; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
   .app { width: 80vw; height: 80vh; background: #141414; border-radius: 10px; border: 1px solid #222; box-shadow: 0 8px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; }
 
-  .topbar { display: flex; align-items: center; gap: 12px; padding: 8px 20px; background: #1c1c1c; border-bottom: 1px solid #2a2a2a; flex-shrink: 0; }
+  .topbar { display: flex; flex-direction: column; gap: 6px; padding: 8px 20px; background: #1c1c1c; border-bottom: 1px solid #2a2a2a; flex-shrink: 0; }
+  .topbar-r1 { display: flex; align-items: center; gap: 10px; }
+  .topbar-r2 { display: flex; align-items: center; gap: 8px; }
   .topbar h1 { font-size: 0.9rem; font-weight: 600; color: #e5e0d8; white-space: nowrap; letter-spacing: -0.01em; }
   .sep { color: #555; }
   .category-toggle { display: flex; border: 1px solid #333; border-radius: 5px; overflow: hidden; flex-shrink: 0; }
   .category-toggle button { padding: 4px 12px; border: none; background: transparent; cursor: pointer; font-size: 0.78rem; color: #777; transition: background 0.12s, color 0.12s; }
   .category-toggle button.active { background: #ff6719; color: #fff; }
 
-  .search-wrap { position: relative; flex: 1; max-width: 280px; }
-  .search-wrap input { width: 100%; padding: 4px 10px; background: #252525; border: 1px solid #333; border-radius: 5px; font-size: 0.78rem; color: #e5e0d8; outline: none; }
+  .search-wrap { position: relative; flex: 1; }
+  .search-wrap input { width: 100%; padding: 5px 12px; background: #252525; border: 1px solid #333; border-radius: 5px; font-size: 0.82rem; color: #e5e0d8; outline: none; }
   .search-wrap input::placeholder { color: #555; }
   .search-wrap input:focus { border-color: #555; }
-  .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #1c1c1c; border: 1px solid #333; border-radius: 5px; max-height: 260px; overflow-y: auto; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
-  .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; font-size: 0.78rem; cursor: pointer; color: #ccc; }
+  .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #1c1c1c; border: 1px solid #333; border-radius: 5px; max-height: 320px; overflow-y: auto; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
+  .dropdown-item { display: flex; align-items: center; gap: 9px; padding: 7px 12px; font-size: 0.8rem; cursor: pointer; color: #ccc; }
   .dropdown-item:hover { background: #252525; }
-  .dropdown-item img { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .dropdown-item img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 
   #pin-chip-wrap { display: flex; gap: 4px; align-items: center; }
   .pin-chip { position: relative; width: 26px; height: 26px; border-radius: 50%; border: 2px solid; cursor: pointer; flex-shrink: 0; overflow: hidden; }
@@ -41,9 +43,8 @@
   .preset-btns button { padding: 4px 9px; border: none; background: transparent; cursor: pointer; font-size: 0.72rem; color: #666; transition: background 0.12s, color 0.12s; }
   .preset-btns button:hover { background: #252525; color: #aaa; }
 
-  .topbar-end { display: flex; align-items: center; flex-shrink: 0; }
-  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #999; white-space: nowrap; }
-  .feature-req { font-size: 0.68rem; color: #555; text-decoration: none; white-space: nowrap; border: 1px solid #333; border-radius: 4px; padding: 3px 8px; transition: color 0.12s, border-color 0.12s; }
+  .topbar-right { margin-left: auto; font-size: 0.72rem; color: #999; white-space: nowrap; flex-shrink: 0; }
+  .feature-req { margin-left: auto; font-size: 0.72rem; color: #555; text-decoration: none; white-space: nowrap; border: 1px solid #333; border-radius: 4px; padding: 4px 12px; transition: color 0.12s, border-color 0.12s; flex-shrink: 0; }
   .feature-req:hover { color: #aaa; border-color: #555; }
   #btn-play, #btn-reset { padding: 4px 14px; border-radius: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.12s, color 0.12s; flex-shrink: 0; border: 1px solid; background: transparent; }
   #btn-play { border-color: #22c55e; color: #22c55e; }
@@ -85,11 +86,15 @@
   @media (max-width: 700px) {
     body { align-items: stretch; justify-content: stretch; height: 100dvh; overflow: hidden; }
     .app { width: 100%; height: calc(100dvh - 48px); border-radius: 0; border: none; box-shadow: none; }
-    .topbar { flex-wrap: nowrap; gap: 8px; padding: 8px 14px; }
-    .topbar h1, .sep, .search-wrap, #pin-chip-wrap, .date-range, #btn-play, #btn-reset, .topbar-end { display: none; }
+    .topbar { padding: 8px 14px; gap: 4px; }
+    .topbar h1, .topbar-r1 .sep { display: none; }
+    .topbar-r2 > *:not(.preset-btns) { display: none; }
+    .dropdown { max-height: 45vh; }
+    .dropdown-item { padding: 10px 14px; font-size: 0.85rem; }
+    .dropdown-item img { width: 26px; height: 26px; }
     #side-panel {
       position: fixed; bottom: 48px; left: 0; right: 0;
-      height: 65vh; width: 100%;
+      height: 80vh; width: 100%;
       border-left: none; border-top: 1px solid #2a2a2a;
       border-radius: 16px 16px 0 0;
       transform: translateY(calc(100% + 48px));
@@ -124,32 +129,34 @@
 <div class="app">
 
 <div class="topbar">
-  <h1>Substack Finance Leaderboard</h1>
-  <span class="sep">·</span>
-  <div class="category-toggle">
-    <button id="btn-rising" class="active" onclick="setCategory('rising')">Rising</button>
-    <button id="btn-paid" onclick="setCategory('paid')">Paid</button>
-  </div>
-  <span class="sep">·</span>
-  <div class="search-wrap">
-    <input id="search" type="text" placeholder="Search newsletters..." autocomplete="off">
-    <div class="dropdown" id="dropdown" style="display:none"></div>
-  </div>
-  <div id="pin-chip-wrap"></div>
-  <div class="preset-btns">
-    <button onclick="setPreset(7)">7D</button>
-    <button onclick="setPreset(30)">30D</button>
-    <button onclick="setPreset(0)">All</button>
-  </div>
-  <div class="date-range">
-    <input type="date" id="date-start" title="Start date">
+  <div class="topbar-r1">
+    <h1>Substack Finance Leaderboard</h1>
     <span class="sep">·</span>
-    <input type="date" id="date-end" title="End date">
+    <div class="category-toggle">
+      <button id="btn-rising" class="active" onclick="setCategory('rising')">Rising</button>
+      <button id="btn-paid" onclick="setCategory('paid')">Paid</button>
+    </div>
+    <span class="sep">·</span>
+    <div class="search-wrap">
+      <input id="search" type="text" placeholder="Search to pin a newsletter..." autocomplete="off">
+      <div class="dropdown" id="dropdown" style="display:none"></div>
+    </div>
+    <span class="topbar-right" id="subtitle">Top 100 · updated daily</span>
   </div>
-  <button id="btn-play" onclick="playAnimation()" disabled>Play</button>
-  <button id="btn-reset" onclick="resetAnimation()" disabled>Reset</button>
-  <span class="topbar-right" id="subtitle">Top 100 · updated daily</span>
-  <div class="topbar-end">
+  <div class="topbar-r2">
+    <div id="pin-chip-wrap"></div>
+    <div class="preset-btns">
+      <button onclick="setPreset(7)">7D</button>
+      <button onclick="setPreset(30)">30D</button>
+      <button onclick="setPreset(0)">All</button>
+    </div>
+    <div class="date-range">
+      <input type="date" id="date-start" title="Start date">
+      <span class="sep">·</span>
+      <input type="date" id="date-end" title="End date">
+    </div>
+    <button id="btn-play" onclick="playAnimation()" disabled>Play</button>
+    <button id="btn-reset" onclick="resetAnimation()" disabled>Reset</button>
     <a href="https://github.com/brntsllvn/substack-tracker/issues/new?template=feature_request.md" target="_blank" rel="noopener" class="feature-req">Request a feature</a>
   </div>
 </div>
