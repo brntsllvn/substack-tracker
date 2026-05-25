@@ -26,7 +26,8 @@
   .search-wrap input:focus { border-color: #555; }
   .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #1c1c1c; border: 1px solid #333; border-radius: 5px; max-height: 320px; overflow-y: auto; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
   .dropdown-item { display: flex; align-items: center; gap: 9px; padding: 7px 12px; font-size: 0.8rem; cursor: pointer; color: #ccc; }
-  .dropdown-item:hover { background: #252525; }
+  .dropdown-item:hover, .dropdown-item.active { background: #252525; }
+  .dropdown-item.active { border-left: 2px solid #ff6719; padding-left: 10px; }
   .dropdown-item img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 
   #pin-chip-wrap { display: flex; gap: 4px; align-items: center; }
@@ -322,25 +323,63 @@ function renderChips() {
 
 const searchInput = el("search");
 const dropdown = el("dropdown");
+let dropdownItems = [];
+let selectedIdx = -1;
+
+function highlightItem(idx) {
+  selectedIdx = idx;
+  dropdown.querySelectorAll(".dropdown-item").forEach((row, i) => {
+    row.classList.toggle("active", i === idx);
+    if (i === idx) row.scrollIntoView({ block: "nearest" });
+  });
+}
+
+function selectItem(idx) {
+  const item = dropdownItems[idx];
+  if (!item) return;
+  pin(item.k, item.name, item.logo);
+  searchInput.value = "";
+  dropdown.style.display = "none";
+  selectedIdx = -1;
+  dropdownItems = [];
+}
+
+function closeDropdown() {
+  dropdown.style.display = "none";
+  selectedIdx = -1;
+}
 
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.toLowerCase().trim();
-  if (!q || !allData.length) { dropdown.style.display = "none"; return; }
+  selectedIdx = -1;
+  if (!q || !allData.length) { closeDropdown(); dropdownItems = []; return; }
   const matches = allNewsletters().filter(({ name }) => name.toLowerCase().includes(q)).slice(0, 20);
-  if (!matches.length) { dropdown.style.display = "none"; return; }
+  if (!matches.length) { closeDropdown(); dropdownItems = []; return; }
+  dropdownItems = matches;
   dropdown.innerHTML = "";
-  for (const { k, name, logo } of matches) {
+  for (let i = 0; i < matches.length; i++) {
+    const { k, name, logo } = matches[i];
     const div = document.createElement("div");
     div.className = "dropdown-item";
     div.innerHTML = `<img src="${logo||""}" onerror="this.style.display='none'"><span>${name}</span>`;
-    div.onclick = () => { pin(k, name, logo); searchInput.value = ""; dropdown.style.display = "none"; };
+    const idx = i;
+    div.onclick = () => selectItem(idx);
     dropdown.appendChild(div);
   }
   dropdown.style.display = "block";
 });
 
+searchInput.addEventListener("keydown", e => {
+  if (dropdown.style.display === "none") return;
+  const n = dropdownItems.length;
+  if (e.key === "ArrowDown") { e.preventDefault(); highlightItem(selectedIdx < n - 1 ? selectedIdx + 1 : 0); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); highlightItem(selectedIdx > 0 ? selectedIdx - 1 : n - 1); }
+  else if (e.key === "Enter") { e.preventDefault(); if (selectedIdx >= 0) selectItem(selectedIdx); }
+  else if (e.key === "Escape") { closeDropdown(); }
+});
+
 document.addEventListener("click", e => {
-  if (!e.target.closest(".search-wrap")) dropdown.style.display = "none";
+  if (!e.target.closest(".search-wrap")) closeDropdown();
 });
 
 // ── Render dispatch ───────────────────────────────────────────────────────────
@@ -881,6 +920,7 @@ function playAnimation() {
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 window.addEventListener("resize", debounce(render, 150));
 loadData();
+searchInput.focus();
 </script>
 </body>
 </html>
