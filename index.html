@@ -375,7 +375,6 @@ searchInput.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") { e.preventDefault(); highlightItem(selectedIdx < n - 1 ? selectedIdx + 1 : 0); }
   else if (e.key === "ArrowUp") { e.preventDefault(); highlightItem(selectedIdx > 0 ? selectedIdx - 1 : n - 1); }
   else if (e.key === "Enter") { e.preventDefault(); if (selectedIdx >= 0) selectItem(selectedIdx); }
-  else if (e.key === "Escape") { closeDropdown(); }
 });
 
 document.addEventListener("click", e => {
@@ -921,9 +920,11 @@ function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTi
 window.addEventListener("resize", debounce(render, 150));
 
 document.addEventListener("keydown", e => {
-  const inInput = e.target.tagName === "INPUT";
   if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (!el("btn-play").disabled) playAnimation(); }
-  if (e.key === "Escape" && !inInput) { if (!el("btn-reset").disabled) clearPins(); }
+  if (e.key === "Escape") {
+    if (dropdown.style.display !== "none") closeDropdown();
+    else if (!el("btn-reset").disabled) clearPins();
+  }
 });
 
 loadData();
