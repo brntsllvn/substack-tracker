@@ -700,13 +700,12 @@ function renderStepChart(data) {
   g.append("g").attr("class","axis")
     .call(d3.axisLeft(yScale).tickValues(RANK_TICKS).tickFormat(d=>`#${d}`));
 
-  const stepLine = d3.line().x(d=>xScale(d.date)).y(d=>yScale(d.rank)).curve(d3.curveStepAfter);
-  const rightEdge = xScale.domain()[1];
+  const stepLine = d3.line().x(d=>xScale(d.date)).y(d=>yScale(d.rank)).curve(d3.curveMonotoneX);
 
   const paths = g.selectAll(".track").data(allSeries, d=>d.k).join("path")
     .attr("class", d => pinned.has(d.k) ? "track pinned" : pinned.size ? "track dimmed" : "track")
     .attr("stroke", d => pinned.has(d.k) ? pinned.get(d.k).color : null)
-    .attr("d", d => stepLine([...d.points, { date: rightEdge, rank: d.points[d.points.length-1].rank }]));
+    .attr("d", d => stepLine(d.points));
 
   const firstMs = +parseDay(data[0].date);
   const lastMs  = +parseDay(data[data.length - 1].date);
@@ -714,7 +713,7 @@ function renderStepChart(data) {
   for (const s of allSeries) {
     const isPinned = pinned.has(s.k);
     const color   = isPinned ? pinned.get(s.k).color : ORANGE;
-    const r       = isPinned ? 4 : 2.5;
+    const r       = 2.5;
     const opacity = isPinned ? 0.85 : (pinned.size ? 0.04 : 0.18);
     const first = s.points[0];
     if (+first.date !== firstMs)
