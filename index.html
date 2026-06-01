@@ -226,11 +226,12 @@ function slopeOpacity(delta) {
 
 async function loadData() {
   let idx;
-  try { idx = await fetch("data/index.json").then(r => r.json()); }
+  const cb = `?v=${Date.now()}`;
+  try { idx = await fetch(`data/index.json${cb}`).then(r => r.json()); }
   catch { showMsg("No data yet. Scraper runs at 06:00 UTC."); return; }
   if (!idx.dates?.length) { showMsg("No data yet."); return; }
   const days = await Promise.all(
-    idx.dates.map(d => fetch(`data/${d}.json`).then(r => r.json()).catch(() => null))
+    idx.dates.map(d => fetch(`data/${d}.json${cb}`).then(r => r.json()).catch(() => null))
   );
   allData = days.filter(Boolean);
   newsletterCache = null;
