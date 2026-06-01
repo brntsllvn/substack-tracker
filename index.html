@@ -3,14 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Substack Finance Leaderboard</title>
+<title>Subrank</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, -apple-system, sans-serif; background: #0d0d0d; color: #e5e0d8; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
   .app { width: 80vw; height: 80vh; background: #141414; border-radius: 10px; border: 1px solid #222; box-shadow: 0 8px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; }
 
+  .disclaimer { text-align: center; font-size: 0.65rem; color: #444; padding: 4px; flex-shrink: 0; }
   .topbar { display: flex; flex-direction: column; gap: 6px; padding: 8px 20px; background: #1c1c1c; border-bottom: 1px solid #2a2a2a; flex-shrink: 0; }
   .topbar-r1 { display: flex; align-items: center; gap: 10px; }
   .topbar-r2 { display: flex; align-items: center; gap: 8px; }
@@ -65,7 +67,7 @@
   .stub-label { font-size: 9px; fill: #555; }
 
   .track { fill: none; stroke: rgba(255,103,25,0.2); stroke-width: 1.5; }
-  .track.hovered, .track.pinned { stroke-width: 3; }
+  .track.hovered, .track.pinned { stroke-width: 1.5; }
   .track.dimmed { stroke: rgba(255,103,25,0.05); }
 
   .tooltip-box { position: fixed; pointer-events: none; z-index: 200; display: flex; align-items: center; gap: 8px; background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: #e5e0d8; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
@@ -131,7 +133,7 @@
 
 <div class="topbar">
   <div class="topbar-r1">
-    <h1>Substack Finance Leaderboard</h1>
+    <h1>Subrank</h1>
     <span class="sep">·</span>
     <div class="category-toggle">
       <button id="btn-rising" class="active" onclick="setCategory('rising')">Rising</button>
@@ -171,6 +173,7 @@
   </div>
 </div>
 
+  <div class="disclaimer">Not affiliated with Substack</div>
 </div><!-- .app -->
 
 <div class="movers-backdrop" onclick="toggleMovers()"></div>
@@ -572,7 +575,7 @@ function renderSlopeGraph(data) {
 
       lineG.append("line").attr("class","slope-line").attr("data-key", item.k)
         .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
-        .attr("stroke", pinColor).attr("stroke-width", isPinned ? 2.5 : 1).attr("opacity", opacity);
+        .attr("stroke", pinColor).attr("stroke-width", 1.5).attr("opacity", opacity);
 
       hitG.append("line")
         .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
@@ -580,13 +583,14 @@ function renderSlopeGraph(data) {
         .on("mouseenter", () => {
           lineG.selectAll(".slope-line")
             .attr("opacity", function() { return this.getAttribute("data-key") === item.k ? 1 : 0.03; })
-            .attr("stroke-width", function() { return this.getAttribute("data-key") === item.k ? 2.5 : 1; });
+            .attr("stroke-width", 1.5);
           svg.select("#slope-hover").remove();
           const hg = svg.append("g").attr("id","slope-hover");
           const R = 11;
+          const isPinnedHover = pinned.has(item.k);
           [[x1+margin.left, y1+margin.top, item.e1.rank], [x2+margin.left, y2+margin.top, item.eN.rank]]
             .forEach(([cx,cy,rank], i) => {
-              drawAvatar(hg, defs, { cx, cy, r:R, logo:item.logo, clipId:`av-s${i}` });
+              if (!isPinnedHover) drawAvatar(hg, defs, { cx, cy, r:R, logo:item.logo, clipId:`av-s${i}` });
               hg.append("text").attr("x", i===0 ? cx-(R+5) : cx+(R+5)).attr("y", cy+4)
                 .attr("text-anchor", i===0?"end":"start").attr("font-size","11px")
                 .attr("fill","#e5e0d8").attr("font-family",SVG_FONT).text(`#${rank}`);
@@ -607,7 +611,7 @@ function renderSlopeGraph(data) {
             d3.select(this)
               .attr("stroke", ip ? pinned.get(k).color : ORANGE)
               .attr("opacity", pinned.size ? (ip ? 1 : 0.03) : slopeOpacity(d))
-              .attr("stroke-width", ip ? 2.5 : 1);
+              .attr("stroke-width", 1.5);
           });
           svg.select("#slope-hover").remove();
           hideTooltip();
@@ -912,9 +916,8 @@ function playAnimation() {
       })
       .on("end", function() {
         sparkle(svg, endX, endY, color);
-        if (!isInLastDate)
-          d3.select(this).transition().duration(400).style("opacity", 0)
-            .on("end", function() { d3.select(this).remove(); });
+        d3.select(this).transition().delay(isInLastDate ? 500 : 0).duration(400).style("opacity", 0)
+          .on("end", function() { d3.select(this).remove(); });
       });
 
     traveler.transition("fade")
