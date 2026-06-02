@@ -136,8 +136,8 @@
     <h1>Subrank</h1>
     <span class="sep">·</span>
     <div class="category-toggle">
-      <button id="btn-rising" class="active" onclick="setCategory('rising')">Rising</button>
-      <button id="btn-paid" onclick="setCategory('paid')">Paid</button>
+      <button id="btn-rising" class="active" onclick="setCategory('rising')" title="Rising [ctrl ←]">Rising</button>
+      <button id="btn-paid" onclick="setCategory('paid')" title="Paid [ctrl →]">Paid</button>
     </div>
     <span class="sep">·</span>
     <div class="search-wrap">
@@ -931,6 +931,8 @@ function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTi
 window.addEventListener("resize", debounce(render, 150));
 
 document.addEventListener("keydown", e => {
+  if (e.ctrlKey && e.key === "ArrowLeft") { e.preventDefault(); setCategory("rising"); return; }
+  if (e.ctrlKey && e.key === "ArrowRight") { e.preventDefault(); setCategory("paid"); return; }
   if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (!el("btn-play").disabled) playAnimation(); }
   if (e.key === "Escape") {
     if (dropdown.style.display !== "none") closeDropdown();
