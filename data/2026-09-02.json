@@ -1,0 +1,1807 @@
+{
+  "date": "2026-09-02",
+  "rising": [
+    {
+      "rank": 1,
+      "name": "Gregory’s Newsletter",
+      "subdomain": "gregorymannarino",
+      "url": "https://gregorymannarino.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!nKG1!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9dcc8145-a54d-484e-b854-622b43646228_144x144.png",
+      "author": "Gregory Mannarino",
+      "pub_id": 35435
+    },
+    {
+      "rank": 2,
+      "name": "The Value Road",
+      "subdomain": "thevalueroad",
+      "url": "https://thevalueroad.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!E4FJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0c8edd82-52fe-4244-9495-2c753819c02b_144x144.png",
+      "author": "The Value Road",
+      "pub_id": 3235635
+    },
+    {
+      "rank": 3,
+      "name": "TradingWarz: CPA & Investor",
+      "subdomain": "tradingwarzcpa",
+      "url": "https://tradingwarzcpa.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!QBnb!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5c4b7900-c8c6-4ff7-b763-cc052f7f76ae_1024x1024.png",
+      "author": "TradingWarz: CPA & Investor",
+      "pub_id": 9323881
+    },
+    {
+      "rank": 4,
+      "name": "Kirk's Opportunities",
+      "subdomain": "kirkopportunities",
+      "url": "https://kirksopportunities.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!j8_i!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F28c973a8-b15b-4019-9ea2-3fd75d62871f_1010x1010.png",
+      "author": "Kirk's Opportunities",
+      "pub_id": 3284424
+    },
+    {
+      "rank": 5,
+      "name": "Timothy’s StockTok",
+      "subdomain": "tjstocks",
+      "url": "https://tjstocks.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!mLq1!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F96c222d2-04e7-4e47-9e11-4b10f4cee9c4_854x854.png",
+      "author": "StockTok 📈",
+      "pub_id": 3537822
+    },
+    {
+      "rank": 6,
+      "name": "Pobre Millennial",
+      "subdomain": "pobremillenial",
+      "url": "https://pobremillenial.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!1_kJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb704727b-9b1d-4ab0-bc2c-c8806ad2e425_336x336.jpeg",
+      "author": "Pobre Millenial",
+      "pub_id": 1426978
+    },
+    {
+      "rank": 7,
+      "name": "The MarketFighter Strategy",
+      "subdomain": "marketfighter",
+      "url": "https://www.marketfighter.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!6VZ9!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F993c4d55-1cfb-4acb-8342-2d19b735c1f5_1280x1280.png",
+      "author": "MarketFighter",
+      "pub_id": 8177444
+    },
+    {
+      "rank": 8,
+      "name": "Yes, I give a fig... thoughts on markets from Michael Green",
+      "subdomain": "michaelwgreen",
+      "url": "https://www.yesigiveafig.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!0tkM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F7eef165c-d741-477a-a7f6-9c9996dd4a4a_310x356.jpeg",
+      "author": "Michael W. Green",
+      "pub_id": 1272022
+    },
+    {
+      "rank": 9,
+      "name": "The Pareto Investor",
+      "subdomain": "paretoinvestor",
+      "url": "https://paretoinvestor.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Nw6Z!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F363cfafb-16c6-4609-8227-2b19b784a421_1005x1005.png",
+      "author": "The Pareto Investor",
+      "pub_id": 1212796
+    },
+    {
+      "rank": 10,
+      "name": "Månad för månad",
+      "subdomain": "sparmakarna",
+      "url": "https://sparmakarna.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ydqu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F598ba8a8-b316-459d-9d98-a4793f9fe7c6_150x150.png",
+      "author": "Sparmakarna | Karin och Johan",
+      "pub_id": 8417025
+    },
+    {
+      "rank": 11,
+      "name": "TMT Breakout",
+      "subdomain": "tmtbreakout",
+      "url": "https://www.tmtbreakout.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!_Wr5!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fcb0c4c0a-ec9c-40a4-8a89-327874e13c5e_617x617.png",
+      "author": "TMT Breakout",
+      "pub_id": 1899793
+    },
+    {
+      "rank": 12,
+      "name": "SNAFU Investing with Lau Vegys",
+      "subdomain": "lauvegys",
+      "url": "https://www.snafuinvesting.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!NgM-!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7d177f60-4275-4886-ba31-a09d628bbc7c_1280x1280.png",
+      "author": "Lau Vegys",
+      "pub_id": 2878858
+    },
+    {
+      "rank": 13,
+      "name": "Dirt Cheap Banks",
+      "subdomain": "dirtcheapbanks",
+      "url": "https://dirtcheapbanks.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!nYU8!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe79c3cea-8ac9-4a2e-93cc-2e743ed7dfe1_1024x1024.png",
+      "author": "Dirt Cheap Banks",
+      "pub_id": 7824217
+    },
+    {
+      "rank": 14,
+      "name": "Momentum Trading Strategy",
+      "subdomain": "tradingmomentum",
+      "url": "https://tradingmomentum.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!pgQV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fccf80827-3ce6-4b90-bf50-300b5ee43d75_300x300.png",
+      "author": "Momentum Trading Strategy",
+      "pub_id": 4400299
+    },
+    {
+      "rank": 15,
+      "name": "Ed Dowd: Beyond the Narrative",
+      "subdomain": "eddowdbeyondthenarrative",
+      "url": "https://eddowdbeyondthenarrative.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!5qdv!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4239a1ed-5598-4427-b1bf-42cd47c01134_1167x1097.png",
+      "author": "Ed Dowd: Beyond the Narrative",
+      "pub_id": 2865384
+    },
+    {
+      "rank": 16,
+      "name": "Polymath Investor",
+      "subdomain": "polymathinvestor",
+      "url": "https://www.polymathinvestor.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!bS8c!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc87d8325-ca5f-4821-b59f-9369a5d1ac6e_653x653.png",
+      "author": "Polymath Investor",
+      "pub_id": 2536533
+    },
+    {
+      "rank": 17,
+      "name": "Capitalist Letters",
+      "subdomain": "capitalistletters",
+      "url": "https://www.capitalist-letters.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!WM1t!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fff57602d-b9df-4892-9564-37e5d98f2054_1280x1280.png",
+      "author": "Oguz Erkan",
+      "pub_id": 1731008
+    },
+    {
+      "rank": 18,
+      "name": "CRE Analyst",
+      "subdomain": "creanalyst",
+      "url": "https://creanalyst.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Oc1J!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb61bc2c0-64de-4673-bbf9-ec76be41cd65_257x257.jpeg",
+      "author": "CRE Analyst",
+      "pub_id": 8401481
+    },
+    {
+      "rank": 19,
+      "name": "MaxDividends",
+      "subdomain": "maxdividends",
+      "url": "https://www.maxdividends.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!dYKa!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7b0997d7-ad85-4bf5-86b0-07bea78d6001_640x640.png",
+      "author": "MaxDividends",
+      "pub_id": 2775551
+    },
+    {
+      "rank": 20,
+      "name": "Dividendology",
+      "subdomain": "dividendology",
+      "url": "https://www.dividendology.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Zmve!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F24d67fab-471d-444b-8bb2-692676d3bdd3_256x256.png",
+      "author": "Dividendology",
+      "pub_id": 1386120
+    },
+    {
+      "rank": 21,
+      "name": "Don’s Newsletter",
+      "subdomain": "dondurrett",
+      "url": "https://dondurrett.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!wfHd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe47bb245-4d4b-4e36-a4fa-f6025c90e4e1_980x980.png",
+      "author": "Don Durrett",
+      "pub_id": 1095937
+    },
+    {
+      "rank": 22,
+      "name": "Your Brain on Money",
+      "subdomain": "yourbrainonmoney",
+      "url": "https://yourbrainonmoney.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!eSCV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffa81de7d-bee7-4f8d-877f-4d3e1df7fe67_500x500.png",
+      "author": "Hanna Horvath",
+      "pub_id": 1911298
+    },
+    {
+      "rank": 23,
+      "name": "Outperforming the Market ",
+      "subdomain": "outperformingthemarket",
+      "url": "https://outperformingthemarket.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!gYwv!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F509dbfe4-adce-4143-b420-4d1f2360a993_1280x1280.png",
+      "author": "Simple Investing",
+      "pub_id": 1356464
+    },
+    {
+      "rank": 24,
+      "name": "Burak Finance",
+      "subdomain": "burakfinance",
+      "url": "https://burakfinance.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!m6j3!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F431d4240-4dd4-4e64-b30a-3646f8f153f2_400x400.jpeg",
+      "author": "Burak Finance",
+      "pub_id": 9195935
+    },
+    {
+      "rank": 25,
+      "name": "Project Sabrina",
+      "subdomain": "projectsabrinahq",
+      "url": "https://www.projectsabrina.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!AnHO!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0f4c5f45-e7e9-4231-a5a8-7020a44a9119_306x306.png",
+      "author": "Project Sabrina",
+      "pub_id": 9091168
+    },
+    {
+      "rank": 26,
+      "name": "In it to Win it",
+      "subdomain": "stevebarton",
+      "url": "https://stevebarton.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!fPIJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5a8dfa73-d7af-497b-ad48-2d438fbdd4c6_500x500.png",
+      "author": "Steve Barton",
+      "pub_id": 5720672
+    },
+    {
+      "rank": 27,
+      "name": "Macro Charts",
+      "subdomain": "macrocharts",
+      "url": "https://www.macrocharts.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!uoAV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F023e929b-4491-4b82-bfea-654cbea48d4a_454x454.png",
+      "author": "Macro Charts",
+      "pub_id": 2363013
+    },
+    {
+      "rank": 28,
+      "name": "El Yonki de los mercados",
+      "subdomain": "elyonkidelosmercados",
+      "url": "https://elyonkidelosmercados.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!njvv!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F873141b6-8cad-4f72-b20d-217705c6ab85_600x600.png",
+      "author": "El Yonki de los mercados",
+      "pub_id": 4725016
+    },
+    {
+      "rank": 29,
+      "name": "Waves and Positions",
+      "subdomain": "wavesandpositions",
+      "url": "https://wavesandpositions.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!BIyi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F756a05a0-3d0d-4e49-a9db-9665b66eff97_1280x1280.png",
+      "author": "Rolf Kvalvik",
+      "pub_id": 5069769
+    },
+    {
+      "rank": 30,
+      "name": "Cubic Analytics",
+      "subdomain": "cubicanalytics",
+      "url": "https://cubicanalytics.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!AuA_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F3671f21c-2351-469e-8b7a-3a85084f47da_1280x1280.png",
+      "author": "Caleb Franzen",
+      "pub_id": 361882
+    },
+    {
+      "rank": 31,
+      "name": "Freight & Barrels",
+      "subdomain": "freightandbarrels",
+      "url": "https://freightandbarrels.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!5rJP!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5cccfe29-ac77-482e-8d25-e4c9acf008fa_1280x1280.png",
+      "author": "Freight & Barrels",
+      "pub_id": 9988120
+    },
+    {
+      "rank": 32,
+      "name": "UncoverAlpha",
+      "subdomain": "uncoveralpha",
+      "url": "https://www.uncoveralpha.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!YsyF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F28f3c972-e191-4eec-857d-3ccfda10a107_227x227.png",
+      "author": "UncoverAlpha",
+      "pub_id": 237593
+    },
+    {
+      "rank": 33,
+      "name": "Dhruva’s Newsletter",
+      "subdomain": "dhruva",
+      "url": "https://dhruva.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!NOXJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Ffd44a8b6-45c4-4f61-a573-14082fe2ac24_400x400.png",
+      "author": "Dhruva Pandey",
+      "pub_id": 87929
+    },
+    {
+      "rank": 34,
+      "name": "The Collateral Age - Miles Harris",
+      "subdomain": "milesharris",
+      "url": "https://milesharris.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!QZIt!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F28b4af7e-c1e1-4618-83d4-efad3016ea8f_1254x1254.png",
+      "author": "Miles Harris",
+      "pub_id": 5714111
+    },
+    {
+      "rank": 35,
+      "name": "MacleodFinance Substack",
+      "subdomain": "alasdairmacleod",
+      "url": "https://www.macleodfinance.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!4lFE!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F802123f3-40e0-459d-81ba-a739e110daaf_512x512.png",
+      "author": "Alasdair Macleod",
+      "pub_id": 2144370
+    },
+    {
+      "rank": 36,
+      "name": "Babylon Burns",
+      "subdomain": "babylonburns",
+      "url": "https://babylonburns.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!YzKV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbf00fdf9-0b84-45fa-bd23-a36b624fb017_500x500.png",
+      "author": "",
+      "pub_id": 9348245
+    },
+    {
+      "rank": 37,
+      "name": "美股送分題",
+      "subdomain": "openbookandeasypoint",
+      "url": "https://openbookandeasypoint.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!NvqG!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F759cf69b-48f9-4972-9227-71450ef32133_2000x2000.jpeg",
+      "author": "美股送分題",
+      "pub_id": 7980035
+    },
+    {
+      "rank": 38,
+      "name": "InvestAnswers Newsletter",
+      "subdomain": "investanswers",
+      "url": "https://investanswers.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!5Bh0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb113eda4-af60-4bcc-b38d-d3b3d5c1b519_600x600.png",
+      "author": "InvestAnswers",
+      "pub_id": 1218155
+    },
+    {
+      "rank": 39,
+      "name": "Dick Capital ",
+      "subdomain": "dickcapital",
+      "url": "https://dickcapital.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!eBVx!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F75ceb85e-67cf-4a30-b6bf-49c918f6a756_910x910.png",
+      "author": "Dick Capital",
+      "pub_id": 6321441
+    },
+    {
+      "rank": 40,
+      "name": "Felipe Miranda",
+      "subdomain": "felipemiranda1985",
+      "url": "https://felipemiranda1985.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!0jHZ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7233e6e2-22d4-4a58-b82d-879bfb2db26f_559x559.jpeg",
+      "author": "Felipe Miranda",
+      "pub_id": 8759953
+    },
+    {
+      "rank": 41,
+      "name": "Eliant’s Exploits",
+      "subdomain": "eliantcap",
+      "url": "https://www.eliantcapital.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Dj-0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F07d1266c-6c5e-46a2-9264-995cc27878e5_990x990.png",
+      "author": "Eliant",
+      "pub_id": 1485523
+    },
+    {
+      "rank": 42,
+      "name": "Thierry from arvy",
+      "subdomain": "thierryvonarvy",
+      "url": "https://thierryvonarvy.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!jBSe!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6d18e9b9-409d-4f9f-a98e-8b595bfc78b4_274x300.webp",
+      "author": "Thierry from arvy",
+      "pub_id": 1749746
+    },
+    {
+      "rank": 43,
+      "name": "Kerry Lutz's Financial Survival Network Substack",
+      "subdomain": "khlfsn",
+      "url": "https://khlfsn.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!nQsU!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F647a73d7-c388-48f1-bcf3-3dbcde760a87_585x585.png",
+      "author": "",
+      "pub_id": 1657905
+    },
+    {
+      "rank": 44,
+      "name": "CARNET D'ALLOCATION",
+      "subdomain": "alainpitous61",
+      "url": "https://alainpitous61.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!1oEU!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5e29199a-5389-4f5f-ae1f-3f905bfb5818_1080x1080.png",
+      "author": "Alain Pitous",
+      "pub_id": 6618218
+    },
+    {
+      "rank": 45,
+      "name": "The M&A Hunter",
+      "subdomain": "maandhunter",
+      "url": "https://maandhunter.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!g6-d!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3d2b5dd2-4465-4814-a645-8b461e1f8d2e_174x174.png",
+      "author": "The M&A Hunter",
+      "pub_id": 6799489
+    },
+    {
+      "rank": 46,
+      "name": "ArchaiQ (AiQ)",
+      "subdomain": "nicoaiq",
+      "url": "https://nicoaiq.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3NhN!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9a209ce0-55e3-412b-8ed7-ef8a594ec075_1180x1180.png",
+      "author": "Nico",
+      "pub_id": 4865367
+    },
+    {
+      "rank": 47,
+      "name": "Capital Misallocation",
+      "subdomain": "capitalmisallocation",
+      "url": "https://www.capitalmisallocation.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Z-by!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4dd7227c-b2f5-4334-b498-ce1e80d112df_1000x1000.png",
+      "author": "Capital Misallocation",
+      "pub_id": 284796
+    },
+    {
+      "rank": 48,
+      "name": "Duality Research",
+      "subdomain": "dualityresearch",
+      "url": "https://dualityresearch.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ApZM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1cc62cc6-8e80-4c0f-aa8c-94998bce16b2_1000x1000.png",
+      "author": "Duality Research",
+      "pub_id": 2980466
+    },
+    {
+      "rank": 49,
+      "name": "Quant Enthusiasts",
+      "subdomain": "youngandcalculated",
+      "url": "https://youngandcalculated.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3_Hh!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F20ce3a3e-2f2f-41d6-960c-e0dfd28e4830_1280x1280.png",
+      "author": "Quant Enthusiasts",
+      "pub_id": 4607221
+    },
+    {
+      "rank": 50,
+      "name": "Beyond the Index",
+      "subdomain": "beyondtheindex",
+      "url": "https://beyondtheindex.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!VD_Q!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5e113c04-1393-4759-8a9b-7cb9aacd2c7f_1280x1280.png",
+      "author": "Beyond the Index",
+      "pub_id": 2319682
+    },
+    {
+      "rank": 51,
+      "name": "Suubee ",
+      "subdomain": "suubee",
+      "url": "https://suubee.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!edBq!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8013c17a-d195-4535-ae55-722426307582_90x90.png",
+      "author": "",
+      "pub_id": 2977808
+    },
+    {
+      "rank": 52,
+      "name": "Guardian Research",
+      "subdomain": "guardianresearch",
+      "url": "https://guardianresearch.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3F7N!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fffe94a89-5436-4ae9-9812-8ca33b9cc686_1024x1024.png",
+      "author": "Guardian Research",
+      "pub_id": 607710
+    },
+    {
+      "rank": 53,
+      "name": "HUGE INSIGHTS: The Big Picture",
+      "subdomain": "hugeinsights",
+      "url": "https://hugeinsights.substack.com",
+      "logo_url": "https://s3.amazonaws.com/revue/profiles/images/000/281/909/thumb/Self_Portrait.png?1624936892",
+      "author": "Jeffrey W. Huge, CMT",
+      "pub_id": 1249797
+    },
+    {
+      "rank": 54,
+      "name": "Pagalvė ateičiai - asmeniniai finansai ir investicijos",
+      "subdomain": "pagalveateiciai",
+      "url": "https://pagalveateiciai.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ezMr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8ee05d46-02ca-4b32-8108-058b2aa0d339_448x448.png",
+      "author": "Pagalvės finansai",
+      "pub_id": 3440502
+    },
+    {
+      "rank": 55,
+      "name": "Rooster Global Portfolio Mastery Club",
+      "subdomain": "roosterportfoliomasteryclub",
+      "url": "https://roosterportfoliomasteryclub.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!TtSk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4caeff0d-2f06-48fc-b650-dbddad557d12_62x62.png",
+      "author": "Rudy & Rooster",
+      "pub_id": 9085287
+    },
+    {
+      "rank": 56,
+      "name": "Fides Capital ",
+      "subdomain": "fidescapital",
+      "url": "https://fidescapital.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Js2c!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F883d137f-a425-481c-be26-d4af4feaf60c_1176x1176.png",
+      "author": "",
+      "pub_id": 10066948
+    },
+    {
+      "rank": 57,
+      "name": "Galno",
+      "subdomain": "galno",
+      "url": "https://www.galno.org",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!XU_8!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8f0ac8a4-f59b-4a71-80bb-6255f34f7650_211x211.png",
+      "author": "Galno",
+      "pub_id": 4221247
+    },
+    {
+      "rank": 58,
+      "name": "The Tucker Letter",
+      "subdomain": "thetuckerletter",
+      "url": "https://thetuckerletter.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ST6f!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Faf6c625b-b3c7-41ad-b92c-2381dc9be506_272x272.png",
+      "author": "E.B. Tucker",
+      "pub_id": 1402115
+    },
+    {
+      "rank": 59,
+      "name": "The Hoot",
+      "subdomain": "thehoot731",
+      "url": "https://thehoot731.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ZLt5!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F07f532d1-461b-4a90-9401-5dcda22185a4_1024x1024.png",
+      "author": "Ocean Wall",
+      "pub_id": 3755348
+    },
+    {
+      "rank": 60,
+      "name": "Dirt Cheap Europe",
+      "subdomain": "dirtcheapeurope",
+      "url": "https://dirtcheapeurope.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!l74t!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5c32b58f-297a-47a5-8f8d-a3bd30ad287f_1024x1024.png",
+      "author": "Dirt Cheap Europe",
+      "pub_id": 9068861
+    },
+    {
+      "rank": 61,
+      "name": "Life and Finance With Neha",
+      "subdomain": "lifeandfinancewithneha",
+      "url": "https://lifeandfinancewithneha.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!soc3!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fcaa8c6f6-242c-4bc4-b085-bac08129b672_1014x1014.png",
+      "author": "Neha Gupta",
+      "pub_id": 9000358
+    },
+    {
+      "rank": 62,
+      "name": "Wiseman Capital",
+      "subdomain": "wisemanc",
+      "url": "https://wisemanc.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!zen7!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffdd08ad0-de65-4d8d-b2be-a977aabce5be_640x640.png",
+      "author": "Kaushik",
+      "pub_id": 8505709
+    },
+    {
+      "rank": 63,
+      "name": "2mileurista",
+      "subdomain": "2mileurista",
+      "url": "https://2mileurista.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!L5G9!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6abba62e-3a32-429f-9617-89b0ad82946a_1024x1024.png",
+      "author": "2mileurista",
+      "pub_id": 6626312
+    },
+    {
+      "rank": 64,
+      "name": "Potential Multibaggers",
+      "subdomain": "multibaggernuggets",
+      "url": "https://www.potentialmultibaggers.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Yf_v!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F14f031b9-d491-4fb6-a425-3181428ff0d0_920x920.png",
+      "author": "Kris",
+      "pub_id": 1216736
+    },
+    {
+      "rank": 65,
+      "name": "Quant4all | Systematic trading",
+      "subdomain": "quant4all",
+      "url": "https://quant4all.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!kFku!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb2e27c80-e3db-4f95-9423-5bcbca9c5c16_1254x1254.png",
+      "author": "Quant4all | Systematic Trading",
+      "pub_id": 3722263
+    },
+    {
+      "rank": 66,
+      "name": "Finneko",
+      "subdomain": "finnekoprgrm",
+      "url": "https://finnekoprgrm.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!WWrJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9ae3f196-f9b7-4571-a824-b2d1747bd8b0_1200x1200.png",
+      "author": "Finneko",
+      "pub_id": 5415816
+    },
+    {
+      "rank": 67,
+      "name": "ETF Yourself ",
+      "subdomain": "etfyourself",
+      "url": "https://www.sungardeninvestment.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!MtKR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8df201e7-f6bc-4d8c-bfef-5bae86b019d1_1024x1024.png",
+      "author": "ETF Yourself",
+      "pub_id": 1933912
+    },
+    {
+      "rank": 68,
+      "name": "FIRE BTC",
+      "subdomain": "firebtc",
+      "url": "https://www.firebtc.io",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!y6M3!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fcb80e163-ff9a-407e-9e2f-2bced8389947_1024x1024.png",
+      "author": "Trey Sellers",
+      "pub_id": 3012470
+    },
+    {
+      "rank": 69,
+      "name": "Climatelligence:   Weather | Climate | Commodities    ",
+      "subdomain": "climatelligence",
+      "url": "https://climatelligence.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!GmX0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc61602f0-458f-42ec-945c-82afe72d2c07_1254x1254.png",
+      "author": "",
+      "pub_id": 532418
+    },
+    {
+      "rank": 70,
+      "name": "Trader Ferg",
+      "subdomain": "traderferg",
+      "url": "https://traderferg.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!u8Sr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F840438b4-ddcf-4937-a54f-9b4582839bf8_547x762.png",
+      "author": "Ferg",
+      "pub_id": 1452597
+    },
+    {
+      "rank": 71,
+      "name": "Freedom Trades",
+      "subdomain": "freedomtrades",
+      "url": "https://www.ft.wtf",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!iXPr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fcf0fc3c1-045c-4d63-b63a-8e8eb404feee_800x800.png",
+      "author": "Freedom Trades",
+      "pub_id": 4137434
+    },
+    {
+      "rank": 72,
+      "name": "硅谷居士",
+      "subdomain": "svscholar",
+      "url": "https://svscholar.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!IlEc!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Facdd123d-678d-4d37-a0f3-0f22fa047744_900x900.jpeg",
+      "author": "硅谷居士",
+      "pub_id": 10773066
+    },
+    {
+      "rank": 73,
+      "name": "The Housing Frame",
+      "subdomain": "conorsen",
+      "url": "https://conorsen.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!UrWd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fcf92652b-694f-4cfb-bf5a-fad272d38ac9_256x256.png",
+      "author": "Conor Sen",
+      "pub_id": 4841652
+    },
+    {
+      "rank": 74,
+      "name": "JP Insights",
+      "subdomain": "jpthoughtsandgrowth",
+      "url": "https://jpthoughtsandgrowth.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!KRQK!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa5ec2eaf-4a56-4cab-854a-b0974df2b8d5_400x400.jpeg",
+      "author": "JP Insights",
+      "pub_id": 6962845
+    },
+    {
+      "rank": 75,
+      "name": "Macro Musings by Danny D",
+      "subdomain": "dannydayan",
+      "url": "https://dannydayan.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!dhOp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe5137ea3-23eb-4297-b3df-7f23de09c647_211x211.png",
+      "author": "Danny Dayan",
+      "pub_id": 2360679
+    },
+    {
+      "rank": 76,
+      "name": "Lekker Insights",
+      "subdomain": "quinnthompson",
+      "url": "https://www.lekkercapital.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!XYFt!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4173b304-3812-4565-a23f-b8b3aa8496fb_1280x1280.png",
+      "author": "Quinn Thompson",
+      "pub_id": 723657
+    },
+    {
+      "rank": 77,
+      "name": "Capitalist Exploits",
+      "subdomain": "capitalistexploits",
+      "url": "https://substack.capitalistexploits.at",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!FMcw!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc76168ac-4f43-4ca0-995a-644497e0ebff_952x952.png",
+      "author": "Capitalist Exploits",
+      "pub_id": 3809890
+    },
+    {
+      "rank": 78,
+      "name": "Defy the Odds",
+      "subdomain": "defytheodds88",
+      "url": "https://defytheodds88.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!wjRd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F829e2018-fe81-4922-a829-35561e787848_1024x1024.png",
+      "author": "Defy the Odds",
+      "pub_id": 6023721
+    },
+    {
+      "rank": 79,
+      "name": "Le carnet des marchés",
+      "subdomain": "nicodebonyfr",
+      "url": "https://nicodebonyfr.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ql8h!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F49b75a92-d57a-42ed-b70d-7377b3176ef0_1280x1280.png",
+      "author": "",
+      "pub_id": 9974221
+    },
+    {
+      "rank": 80,
+      "name": "Alberto Mera de UPSB",
+      "subdomain": "albertomeraupsb",
+      "url": "https://albertomeraupsb.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!GLyv!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff904368b-bb74-4f2a-919f-161dcaa54154_1080x1080.png",
+      "author": "",
+      "pub_id": 3502670
+    },
+    {
+      "rank": 81,
+      "name": "Outlier Capital",
+      "subdomain": "outliercapx",
+      "url": "https://outliercapx.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!0iQs!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F71ef3938-9a4e-44bf-b65d-13b8fb089d68_784x784.png",
+      "author": "Outlier Capital",
+      "pub_id": 8740586
+    },
+    {
+      "rank": 82,
+      "name": "Sung Capital",
+      "subdomain": "oliversung",
+      "url": "https://oliversung.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!hqGF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6d91a620-2fb3-41e9-baeb-f0128cfc9e2b_1240x1240.png",
+      "author": "Oliver Sung",
+      "pub_id": 911091
+    },
+    {
+      "rank": 83,
+      "name": "USELINK Technical Analysis",
+      "subdomain": "uselinkinv",
+      "url": "https://uselinkinv.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!P61V!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F908169cf-7888-4c81-8c26-8b0d1bc24065_326x326.jpeg",
+      "author": "USELINK  - TA #commodities",
+      "pub_id": 2341668
+    },
+    {
+      "rank": 84,
+      "name": "Skillman Grove Research",
+      "subdomain": "jimcolquitt",
+      "url": "https://jimcolquitt.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!k3VG!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3f9d5dd3-22b6-4c6c-aa41-7df198540c72_1023x1023.png",
+      "author": "Jim Colquitt",
+      "pub_id": 1366008
+    },
+    {
+      "rank": 85,
+      "name": "The Capitalist",
+      "subdomain": "thecapitalistmag",
+      "url": "https://www.thecapitalistmag.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!mTjj!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc98fcab9-21c9-4226-a6f1-4cc7b4a17425_1280x1280.png",
+      "author": "",
+      "pub_id": 4720068
+    },
+    {
+      "rank": 86,
+      "name": "Alex’s Newsletter de trading",
+      "subdomain": "alexpwong",
+      "url": "https://alexpwong.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!vdpu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1935ddfd-ad6f-49d2-a401-8c7088e7082f_501x501.png",
+      "author": "Audiomercados & Trading",
+      "pub_id": 1072305
+    },
+    {
+      "rank": 87,
+      "name": "StreetSignal",
+      "subdomain": "streetsignal",
+      "url": "https://streetsignal.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!mgla!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff8904d1c-dacf-4e64-a386-0882b0098e6b_1254x1254.png",
+      "author": "StreetSignal",
+      "pub_id": 246366
+    },
+    {
+      "rank": 88,
+      "name": "aaywhoosh",
+      "subdomain": "aaywhoosh",
+      "url": "https://aaywhoosh.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!a-7E!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F18690b99-3ae6-46b3-af7d-d36b28a91f75_741x741.jpeg",
+      "author": "Aayush Sharma",
+      "pub_id": 7417445
+    },
+    {
+      "rank": 89,
+      "name": "Multibagger Ideas",
+      "subdomain": "multibaggerideas",
+      "url": "https://multibaggerideas.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!sWJN!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4c00358b-5357-42d7-bd20-cd45e5a26249_1000x1000.png",
+      "author": "Multibagger Ideas",
+      "pub_id": 3579397
+    },
+    {
+      "rank": 90,
+      "name": "Inversor Inteligente",
+      "subdomain": "inversorinteligente",
+      "url": "https://inversorinteligente.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!hlCY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fce66655d-cc3d-4fc1-a2f5-4f22e9adae1f_600x600.png",
+      "author": "Inversor Inteligente",
+      "pub_id": 2220439
+    },
+    {
+      "rank": 91,
+      "name": "Buyback Capital",
+      "subdomain": "buybackcapital",
+      "url": "https://buybackcapital.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!6uqj!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8d6ef3de-27f9-41b1-905e-c559c8dceacc_400x400.png",
+      "author": "Forbes Jamieson",
+      "pub_id": 1315477
+    },
+    {
+      "rank": 92,
+      "name": "Darren聊美股",
+      "subdomain": "darrencr2024",
+      "url": "https://darrencr2024.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!M9kj!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5e3fe813-66a6-4de2-9761-da2d2eb3566c_1633x1633.png",
+      "author": "Darren聊美股",
+      "pub_id": 9994479
+    },
+    {
+      "rank": 93,
+      "name": "麦田美股 MaiTian Stock",
+      "subdomain": "maitian99",
+      "url": "https://www.maitianstock.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!oIwe!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8655c8f7-4962-403e-b3bd-bdea2bbfdb52_400x400.jpeg",
+      "author": "麦田Rye",
+      "pub_id": 3580233
+    },
+    {
+      "rank": 94,
+      "name": "Aerospace Stocks",
+      "subdomain": "aerospacestocks",
+      "url": "https://aerospacestocks.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!p1Vi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffb4c3454-de34-445d-8806-e15f83f59b5c_1024x1024.png",
+      "author": "Aerospace Stocks",
+      "pub_id": 10543608
+    },
+    {
+      "rank": 95,
+      "name": "Ashna Dhuper",
+      "subdomain": "ashnawrites",
+      "url": "https://ashnawrites.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Kv6u!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7ffa1694-838f-44d8-aef8-d777fd0f8979_800x800.png",
+      "author": "Ashna Dhuper",
+      "pub_id": 7121452
+    },
+    {
+      "rank": 96,
+      "name": "InvirtiendoME Roberto Chamorro",
+      "subdomain": "robertochamorrogilaberte",
+      "url": "https://robertochamorrogilaberte.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ZzBE!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3c8b2fb8-3350-4b29-ae82-3ab1c2722e58_1280x1280.png",
+      "author": "Roberto Chamorro",
+      "pub_id": 4203149
+    },
+    {
+      "rank": 97,
+      "name": "Alphanume Research",
+      "subdomain": "alphanume",
+      "url": "https://www.alphanume-research.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!1raW!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0e2b1384-ec7f-42c4-a316-9f46d3fab216_500x500.png",
+      "author": "Alphanume Research",
+      "pub_id": 8501216
+    },
+    {
+      "rank": 98,
+      "name": "JNap’s Biotech Thoughts",
+      "subdomain": "bio5c",
+      "url": "https://bio5c.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!eoyd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe9ee035c-347e-4c8e-8c95-87c253d7748b_434x434.png",
+      "author": "JNap",
+      "pub_id": 2725854
+    },
+    {
+      "rank": 99,
+      "name": "The Australian Weekly ETF Review by etfadviser",
+      "subdomain": "etfadviser",
+      "url": "https://etfadviser.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!nvrf!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb257492f-a002-4acb-acb5-27800f1c34fc_800x800.png",
+      "author": "etfadviser.com.au",
+      "pub_id": 3171025
+    },
+    {
+      "rank": 100,
+      "name": "Stay-At-Home Macro (SAHM)",
+      "subdomain": "stayathomemacro",
+      "url": "https://stayathomemacro.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!qaf_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fa0593a51-c407-42bc-91ba-bbfec8310c64_278x278.png",
+      "author": "Claudia Sahm",
+      "pub_id": 280281
+    }
+  ],
+  "paid": [
+    {
+      "rank": 1,
+      "name": "Citrini Research",
+      "subdomain": "citrini",
+      "url": "https://www.citriniresearch.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!fNVi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe98eec22-b2ef-40af-a4f4-ace1f627fad5_1280x1280.png",
+      "author": "Citrini",
+      "pub_id": 836125
+    },
+    {
+      "rank": 2,
+      "name": "Cassandra Unchained",
+      "subdomain": "michaeljburry",
+      "url": "https://michaeljburry.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!hC-Y!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0beaefd5-8b46-429b-abff-62473603a0c9_770x770.png",
+      "author": "Michael Burry",
+      "pub_id": 6819723
+    },
+    {
+      "rank": 3,
+      "name": "Doomberg",
+      "subdomain": "doomberg",
+      "url": "https://newsletter.doomberg.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!j4YL!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F3b872b29-0394-495a-b836-ea86ed8a958e_400x400.png",
+      "author": "Doomberg",
+      "pub_id": 343139
+    },
+    {
+      "rank": 4,
+      "name": "The Running Of The Bulltards",
+      "subdomain": "jamesbulltard",
+      "url": "https://www.jamesbulltard.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!L29b!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6b1e772e-81b4-45df-9499-354db4d0bcc5_1024x1024.png",
+      "author": "James Bulltard",
+      "pub_id": 927800
+    },
+    {
+      "rank": 5,
+      "name": "Capital Wars",
+      "subdomain": "capitalwars",
+      "url": "https://capitalwars.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!CA3T!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff3076431-47b0-4ab0-bb9f-46ddd48286ba_278x278.png",
+      "author": "Michael Howell",
+      "pub_id": 1632065
+    },
+    {
+      "rank": 6,
+      "name": "TMT Breakout",
+      "subdomain": "tmtbreakout",
+      "url": "https://www.tmtbreakout.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!_Wr5!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fcb0c4c0a-ec9c-40a4-8a89-327874e13c5e_617x617.png",
+      "author": "TMT Breakout",
+      "pub_id": 1899793
+    },
+    {
+      "rank": 7,
+      "name": "Compounding Quality ",
+      "subdomain": "qualitycompounding",
+      "url": "https://www.compoundingquality.net",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!tnxd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3c351970-8f9e-4a94-bba3-3da852c72bd7_1280x1280.png",
+      "author": "Compounding Quality",
+      "pub_id": 944416
+    },
+    {
+      "rank": 8,
+      "name": "Adam Mancini's S&P 500 (SPX/ES Futures) Trade Companion",
+      "subdomain": "tradecompanion",
+      "url": "https://tradecompanion.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!CQcs!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F8b003827-c0d7-41e5-9f3c-34abd02bf083_198x198.png",
+      "author": "Adam Mancini",
+      "pub_id": 492935
+    },
+    {
+      "rank": 9,
+      "name": "Reminiscences of a Shrub Operator",
+      "subdomain": "shrubbery",
+      "url": "https://www.shrubstack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!9Tpa!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1ed31810-4eae-42d4-bee0-92fc59ef1116_1280x1280.png",
+      "author": "Le Shrub",
+      "pub_id": 1476543
+    },
+    {
+      "rank": 10,
+      "name": "Tic Toc's OrderFlow Newsletter",
+      "subdomain": "tictoctrading",
+      "url": "https://tictoctrading.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!rcmD!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fd65d985d-b0d1-4d27-98a3-525d8fb5c3f5_1136x852.webp",
+      "author": "Tic Toc Trading",
+      "pub_id": 531461
+    },
+    {
+      "rank": 11,
+      "name": "Capital Mischief",
+      "subdomain": "charliepgarcia",
+      "url": "https://charliepgarcia.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!503W!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F32e28606-1dbb-4439-8e3c-61205758398f_512x512.png",
+      "author": "Charlie Garcia",
+      "pub_id": 6474466
+    },
+    {
+      "rank": 12,
+      "name": "FUNDA",
+      "subdomain": "fundaai",
+      "url": "https://fundaai.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Io5O!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6aff5125-5b71-482d-85cc-36cf88128a1b_500x500.png",
+      "author": "FUNDA",
+      "pub_id": 3281011
+    },
+    {
+      "rank": 13,
+      "name": "Brinker Advisor",
+      "subdomain": "brinker",
+      "url": "https://www.brinkeradvisor.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!_h54!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F658123ea-744c-49d9-b1a1-8682c161538b_256x256.png",
+      "author": "Bob Brinker",
+      "pub_id": 25992
+    },
+    {
+      "rank": 14,
+      "name": "Bonner Private Research",
+      "subdomain": "bonnerprivateresearch",
+      "url": "https://www.bonnerprivateresearch.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!KvtN!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3fe44b36-32be-4b64-aa94-86cb2fa55841_225x225.png",
+      "author": "Bonner Private Research",
+      "pub_id": 573157
+    },
+    {
+      "rank": 15,
+      "name": "Capital Flows",
+      "subdomain": "capitalflows",
+      "url": "https://www.capitalflowsresearch.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!vifO!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffeddfb10-4e40-4262-a13b-55403e558f18_1024x1024.png",
+      "author": "Capital Flows",
+      "pub_id": 1323978
+    },
+    {
+      "rank": 16,
+      "name": "Lord Fed's Gazette",
+      "subdomain": "lordfed",
+      "url": "https://www.lordfed.co.uk",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Mf_h!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Ff5d03f21-e983-4365-a4a6-897c1db1a044_339x339.png",
+      "author": "Lord Fed",
+      "pub_id": 630791
+    },
+    {
+      "rank": 17,
+      "name": "MimiVsJames美股即時策略分享 ",
+      "subdomain": "mimivsjames2",
+      "url": "https://mimivsjames2.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3mAR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa26ff6cd-7b08-406c-8239-d17a0e8dc8be_1125x1125.png",
+      "author": "MimiVsJames",
+      "pub_id": 2679459
+    },
+    {
+      "rank": 18,
+      "name": "HFI Research",
+      "subdomain": "hfir",
+      "url": "https://www.hfir.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Ucpd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F12fbcf47-fcef-46ba-b6de-b827d1d73499_771x771.png",
+      "author": "HFI Research",
+      "pub_id": 249102
+    },
+    {
+      "rank": 19,
+      "name": "PETITION",
+      "subdomain": "petition",
+      "url": "https://www.petition11.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ABON!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F9194a1f1-a58a-410e-adda-f651e8e3c538_826x826.png",
+      "author": "PETITION LLC",
+      "pub_id": 4
+    },
+    {
+      "rank": 20,
+      "name": "Doug Casey's Crisis Investing",
+      "subdomain": "dougcasey",
+      "url": "https://www.crisisinvesting.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!cGx5!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fda7678cc-d40a-46af-bf4b-307e173f5f63_1280x1280.png",
+      "author": "Matt Smith @ Crisis Investing",
+      "pub_id": 87095
+    },
+    {
+      "rank": 21,
+      "name": "PauloMacro’s Substack",
+      "subdomain": "paulomacro",
+      "url": "https://paulomacro.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!JBP0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4d846149-3d10-4151-8e40-6f50c055f7b5_400x400.jpeg",
+      "author": "PauloMacro",
+      "pub_id": 2195305
+    },
+    {
+      "rank": 22,
+      "name": "Farm CPA Report",
+      "subdomain": "farmcpareport",
+      "url": "https://www.farmcpareport.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!FID8!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6c477e26-6270-4f8a-8ef4-16d92d9af535_500x500.png",
+      "author": "Paul Neiffer",
+      "pub_id": 1306105
+    },
+    {
+      "rank": 23,
+      "name": "FOMO研究院電子報",
+      "subdomain": "fomosoc",
+      "url": "https://www.fomosoc.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!JSpF!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fff13fa71-fd4f-4451-9c2a-54b4fb881555_768x768.png",
+      "author": "KP@FOMOSoc",
+      "pub_id": 5208588
+    },
+    {
+      "rank": 24,
+      "name": "Za's Market Terminal",
+      "subdomain": "zastocks",
+      "url": "https://zastocks.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!QXHl!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5c7014aa-34ac-4ffa-9930-19047a126e2a_640x640.png",
+      "author": "Za",
+      "pub_id": 6459287
+    },
+    {
+      "rank": 25,
+      "name": "QTR’s Fringe Finance",
+      "subdomain": "quoththeraven",
+      "url": "https://quoththeraven.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!TMEq!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fbaaf451a-c7e9-4e2b-9de6-e99917bcfdf2_330x330.png",
+      "author": "Quoth the Raven",
+      "pub_id": 411546
+    },
+    {
+      "rank": 26,
+      "name": "Macro Charts",
+      "subdomain": "macrocharts",
+      "url": "https://www.macrocharts.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!uoAV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F023e929b-4491-4b82-bfea-654cbea48d4a_454x454.png",
+      "author": "Macro Charts",
+      "pub_id": 2363013
+    },
+    {
+      "rank": 27,
+      "name": "Bison Insights",
+      "subdomain": "bisoninvest",
+      "url": "https://www.bisoninsights.info",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!GAfZ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd155fe79-c1b3-40fa-9ee5-76af5e08fcd7_332x332.png",
+      "author": "Josh Young",
+      "pub_id": 1245982
+    },
+    {
+      "rank": 28,
+      "name": "The MacroTourist",
+      "subdomain": "themacrotourist",
+      "url": "https://posts.themacrotourist.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!yx6t!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fc0b7f4f1-4ece-44fb-9134-52d615cb647f_1280x1280.png",
+      "author": "Kevin Muir",
+      "pub_id": 20439
+    },
+    {
+      "rank": 29,
+      "name": "WHAT ARE WE DOING?  “Contrarians At The Gate”",
+      "subdomain": "whatarewedoingonthedesk",
+      "url": "https://whatarewedoingonthedesk.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!o11l!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F212ecdb5-ba42-4d52-affd-f21fc32fcd7d_985x985.png",
+      "author": "Danny, Vinnie and Porter",
+      "pub_id": 5454862
+    },
+    {
+      "rank": 30,
+      "name": "Eliant’s Exploits",
+      "subdomain": "eliantcap",
+      "url": "https://www.eliantcapital.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Dj-0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F07d1266c-6c5e-46a2-9264-995cc27878e5_990x990.png",
+      "author": "Eliant",
+      "pub_id": 1485523
+    },
+    {
+      "rank": 31,
+      "name": "大叔美股筆記 Uncle Stock Notes",
+      "subdomain": "unclestocknotes",
+      "url": "https://unclestocknotes.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3j9e!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fad7802ad-523b-4ed2-8f0d-0f19df0b9e05_533x533.png",
+      "author": "大叔美股筆記 Uncle Stock Notes",
+      "pub_id": 3501502
+    },
+    {
+      "rank": 32,
+      "name": "GoldFix",
+      "subdomain": "vblgoldfix",
+      "url": "https://vblgoldfix.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!9xt1!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fe4f0405b-1858-408b-a4ed-724ef17c39b5_470x470.png",
+      "author": "VBL",
+      "pub_id": 456345
+    },
+    {
+      "rank": 33,
+      "name": "Edelbridge Alpha",
+      "subdomain": "edelbridge",
+      "url": "https://edelbridge.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!FD6z!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe1a56ab1-de66-4644-a457-eaffcf84cf55_1096x1096.png",
+      "author": "Edelbridge Alpha",
+      "pub_id": 8415872
+    },
+    {
+      "rank": 34,
+      "name": "Tavi Costa",
+      "subdomain": "tavicosta",
+      "url": "https://tavicosta.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!wKGJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff2de26d0-1d1d-46de-bb8a-ec479129201f_352x352.png",
+      "author": "Tavi Costa",
+      "pub_id": 7636229
+    },
+    {
+      "rank": 35,
+      "name": "Dick Capital ",
+      "subdomain": "dickcapital",
+      "url": "https://dickcapital.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!eBVx!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F75ceb85e-67cf-4a30-b6bf-49c918f6a756_910x910.png",
+      "author": "Dick Capital",
+      "pub_id": 6321441
+    },
+    {
+      "rank": 36,
+      "name": "JunkBondInvestor",
+      "subdomain": "junkbondinvestor",
+      "url": "https://www.junkbondinvestor.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!8fHR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa128f96b-df31-4fdc-8814-1aecfe180f17_1280x1280.png",
+      "author": "junkbondinvestor",
+      "pub_id": 79892
+    },
+    {
+      "rank": 37,
+      "name": "M. V. Cunha's Substack",
+      "subdomain": "mvcinvesting",
+      "url": "https://mvcinvesting.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3NTg!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbfc288ca-6199-4228-b269-0ef1fba70f52_383x383.png",
+      "author": "M. V. Cunha",
+      "pub_id": 2098460
+    },
+    {
+      "rank": 38,
+      "name": "Pippa's Pen & Podcast",
+      "subdomain": "drpippa",
+      "url": "https://drpippa.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!8Vt5!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbd211f2b-f8dd-4e3d-aac1-89b6575ee727_256x256.png",
+      "author": "Dr Pippa",
+      "pub_id": 438189
+    },
+    {
+      "rank": 39,
+      "name": "The Bubble Bubble Report",
+      "subdomain": "thebubblebubble",
+      "url": "https://thebubblebubble.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!arJ-!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd6c99093-d6b9-4d4b-9ef8-eeefd79314cc_400x400.png",
+      "author": "Jesse Colombo",
+      "pub_id": 2979465
+    },
+    {
+      "rank": 40,
+      "name": "Asymmetrical Bets",
+      "subdomain": "asymmetricalbets",
+      "url": "https://asymmetricalbets.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!shkI!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb4282a4b-8c87-4e1c-ac6d-8be6c9d18805_1280x1280.png",
+      "author": "Asymmetrical Bets",
+      "pub_id": 8066950
+    },
+    {
+      "rank": 41,
+      "name": "Mispriced Assets",
+      "subdomain": "mispricedassets",
+      "url": "https://mispricedassets.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!16uA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa8c0bcf1-b292-43f4-9b39-c927f250081a_1280x1280.png",
+      "author": "Nick Nemeth",
+      "pub_id": 1611532
+    },
+    {
+      "rank": 42,
+      "name": "Yes, I give a fig... thoughts on markets from Michael Green",
+      "subdomain": "michaelwgreen",
+      "url": "https://www.yesigiveafig.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!0tkM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F7eef165c-d741-477a-a7f6-9c9996dd4a4a_310x356.jpeg",
+      "author": "Michael W. Green",
+      "pub_id": 1272022
+    },
+    {
+      "rank": 43,
+      "name": "Rebound Capital",
+      "subdomain": "reboundcapital",
+      "url": "https://reboundcapital.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!qVrL!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1417c530-ef64-4609-a383-d017c5182f2b_1024x1024.png",
+      "author": "Rebound Capital",
+      "pub_id": 5244950
+    },
+    {
+      "rank": 44,
+      "name": "Trader Ferg",
+      "subdomain": "traderferg",
+      "url": "https://traderferg.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!u8Sr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F840438b4-ddcf-4937-a54f-9b4582839bf8_547x762.png",
+      "author": "Ferg",
+      "pub_id": 1452597
+    },
+    {
+      "rank": 45,
+      "name": "Gaetano",
+      "subdomain": "cruxcapitalgroup",
+      "url": "https://cruxcapitalgroup.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!JySr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7c1e8867-a385-4eeb-b13b-47781495fd93_1254x1254.png",
+      "author": "Gaetano",
+      "pub_id": 6805058
+    },
+    {
+      "rank": 46,
+      "name": "Capitol Account",
+      "subdomain": "capitolaccount",
+      "url": "https://www.capitolaccountdc.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!awnX!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F8f1f51b5-ec4c-4c90-a1ae-12740e0d6f9f_256x256.png",
+      "author": "Robert Schmidt",
+      "pub_id": 854774
+    },
+    {
+      "rank": 47,
+      "name": "David Cervantes | Pinebrook Capital",
+      "subdomain": "pinebrookcap",
+      "url": "https://www.pinebrookcap.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!GPts!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F16b3ed12-8622-4461-a52e-f0b0e6e6ab39_400x400.png",
+      "author": "David Cervantes",
+      "pub_id": 1982668
+    },
+    {
+      "rank": 48,
+      "name": "Norseman Market Timing",
+      "subdomain": "norsemanmarkettiming",
+      "url": "https://norsemanmarkettiming.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!FTKu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F802f38a8-3b6b-47e8-ba71-7effe3b204a3_2167x2167.png",
+      "author": "Norseman Market Timing",
+      "pub_id": 5455933
+    },
+    {
+      "rank": 49,
+      "name": "How They Make Money",
+      "subdomain": "appeconomyinsights",
+      "url": "https://www.appeconomyinsights.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!fwLj!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fa3820405-fa5c-4ac4-883c-cdbfcccad4f9_1280x1280.png",
+      "author": "App Economy Insights",
+      "pub_id": 1147403
+    },
+    {
+      "rank": 50,
+      "name": "Misadventures in Shipping",
+      "subdomain": "edfin",
+      "url": "https://edfin.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!gW0D!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Faebaf69a-e451-48dc-bc31-6e314b797d62_325x325.png",
+      "author": "Edward Finley—Richardson",
+      "pub_id": 947755
+    },
+    {
+      "rank": 51,
+      "name": "Frank's Substack",
+      "subdomain": "franktrading",
+      "url": "https://franktrading.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!x73d!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb3bd6bd5-0af3-47ae-aa89-b8166ce7640f_1024x1024.png",
+      "author": "Frank Trading",
+      "pub_id": 6503722
+    },
+    {
+      "rank": 52,
+      "name": "Key Context by Tae Kim",
+      "subdomain": "taekim",
+      "url": "https://taekim.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!SsoR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa389eb9a-18bd-4fd1-bf65-7b7fca061c42_671x671.png",
+      "author": "Tae Kim",
+      "pub_id": 12889
+    },
+    {
+      "rank": 53,
+      "name": "MacleodFinance Substack",
+      "subdomain": "alasdairmacleod",
+      "url": "https://www.macleodfinance.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!4lFE!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F802123f3-40e0-459d-81ba-a739e110daaf_512x512.png",
+      "author": "Alasdair Macleod",
+      "pub_id": 2144370
+    },
+    {
+      "rank": 54,
+      "name": "Commodity Context",
+      "subdomain": "commoditycontext",
+      "url": "https://www.commoditycontext.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!AvKG!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Ff73d6079-65c3-4f7b-a8d5-cb2c62cf0bed_1261x1261.png",
+      "author": "Rory Johnston",
+      "pub_id": 387838
+    },
+    {
+      "rank": 55,
+      "name": "Haymaker",
+      "subdomain": "haymaker",
+      "url": "https://haymaker.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!4x4z!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F88a9cc15-a8b8-4a2a-adb7-283ae9d082d3_400x400.png",
+      "author": "Haymaker",
+      "pub_id": 846890
+    },
+    {
+      "rank": 56,
+      "name": "The Signal Investor",
+      "subdomain": "thesignalinvestor",
+      "url": "https://thesignalinvestor.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!4gQ_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb60afdc7-577d-4ab3-adda-29226e72d9f4_1024x1024.png",
+      "author": "The Signal Investor",
+      "pub_id": 2311407
+    },
+    {
+      "rank": 57,
+      "name": "Higher Yield",
+      "subdomain": "higheryield",
+      "url": "https://higheryield.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ENmZ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F518df356-706c-4912-ae39-ee58318e7968_1280x1280.png",
+      "author": "J-Griff",
+      "pub_id": 7283025
+    },
+    {
+      "rank": 58,
+      "name": "Back of the Napkin Bios",
+      "subdomain": "backofthenapkinbios",
+      "url": "https://www.botn.bio",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!lrQe!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F81d8644e-e758-47e8-98dd-61cf41a2cb7c_1024x1024.png",
+      "author": "Back of the Napkin Bios",
+      "pub_id": 5136380
+    },
+    {
+      "rank": 59,
+      "name": "TSOH Investment Research",
+      "subdomain": "thescienceofhitting",
+      "url": "https://thescienceofhitting.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!PB6s!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F90c5aebb-7cc1-403c-8f08-caa718cf3c58_559x559.png",
+      "author": "TSOH Investment Research",
+      "pub_id": 297813
+    },
+    {
+      "rank": 60,
+      "name": "Kakashii's Materials",
+      "subdomain": "kakashiii111",
+      "url": "https://kakashiii111.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!3sm4!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd605229b-eb64-4c61-b0a1-f1f0a13c9f8b_400x400.png",
+      "author": "Kakashii",
+      "pub_id": 7844339
+    },
+    {
+      "rank": 61,
+      "name": "SetStack",
+      "subdomain": "adamset",
+      "url": "https://adamset.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!7riu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F70f4753b-bdb7-4391-a037-9835ec525f5e_144x144.png",
+      "author": "Set",
+      "pub_id": 2085877
+    },
+    {
+      "rank": 62,
+      "name": "market vibes",
+      "subdomain": "jj745",
+      "url": "https://jj745.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Jfes!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd9b765cc-4246-4cc3-b920-4bab698e4463_337x337.png",
+      "author": "Alyosha",
+      "pub_id": 592901
+    },
+    {
+      "rank": 63,
+      "name": "Henrik Zeberg",
+      "subdomain": "henrikzeberg",
+      "url": "https://henrikzeberg.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!hCYe!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F683e2c13-f71d-4996-89d1-bd1847524536_1224x1224.jpeg",
+      "author": "Henrik Zeberg",
+      "pub_id": 3884317
+    },
+    {
+      "rank": 64,
+      "name": "Metals and Miners ",
+      "subdomain": "metalsandminers",
+      "url": "https://metalsandminers.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!eSr_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2ee4c3d8-317c-4460-92b1-94dc32ee644d_282x282.png",
+      "author": "Metals and Miners",
+      "pub_id": 2175284
+    },
+    {
+      "rank": 65,
+      "name": "Adam Taggart's Thoughtful Money®",
+      "subdomain": "adamtaggart",
+      "url": "https://adamtaggart.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!HrbY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7095578d-3832-4765-b502-fa927ad31f00_898x898.png",
+      "author": "Adam Taggart",
+      "pub_id": 1585747
+    },
+    {
+      "rank": 66,
+      "name": "The Tucker Letter",
+      "subdomain": "thetuckerletter",
+      "url": "https://thetuckerletter.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ST6f!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Faf6c625b-b3c7-41ad-b92c-2381dc9be506_272x272.png",
+      "author": "E.B. Tucker",
+      "pub_id": 1402115
+    },
+    {
+      "rank": 67,
+      "name": "The Overshoot",
+      "subdomain": "matthewcklein",
+      "url": "https://theovershoot.co",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!5l9_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F9cde521c-3077-4af0-8eaa-0550645e0843_1280x1280.png",
+      "author": "Matthew C. Klein",
+      "pub_id": 384640
+    },
+    {
+      "rank": 68,
+      "name": "The Informationist",
+      "subdomain": "jameslavish",
+      "url": "https://www.jameslavish.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!9Hnv!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F72028ce7-8fbb-4da5-b9dc-a9325cbe1490_500x500.png",
+      "author": "James Lavish, CFA",
+      "pub_id": 437157
+    },
+    {
+      "rank": 69,
+      "name": "Prinsights with Nomi Prins",
+      "subdomain": "prinsights",
+      "url": "https://prinsights.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!h4OY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8a586390-8999-4a48-a2f3-4843a1d37ac2_512x512.png",
+      "author": "Nomi",
+      "pub_id": 2695827
+    },
+    {
+      "rank": 70,
+      "name": "Dirtcheapstocks Substack",
+      "subdomain": "dirtcheapstocks",
+      "url": "https://dirtcheapstocks.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!YWDJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2a1df6fb-4cea-4438-9455-d7591049aac6_454x454.png",
+      "author": "Dirtcheapstocks",
+      "pub_id": 2329765
+    },
+    {
+      "rank": 71,
+      "name": "Base Hit Investing",
+      "subdomain": "basehitinvesting",
+      "url": "https://basehitinvesting.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!BTmn!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F32e384d1-f461-46a9-bc6c-384dcca1cdda_3461x3461.jpeg",
+      "author": "John Huber",
+      "pub_id": 949147
+    },
+    {
+      "rank": 72,
+      "name": "PharmD Capital Trading with PharmD_KS",
+      "subdomain": "pharmdks",
+      "url": "https://www.pharmdks.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!sQfc!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc1dd3ba6-08b4-4f37-8075-9001be465028_1170x1170.png",
+      "author": "PharmD_KS",
+      "pub_id": 1983975
+    },
+    {
+      "rank": 73,
+      "name": "The Noble Update",
+      "subdomain": "georgenoble",
+      "url": "https://georgenoble.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!f7Xb!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc0c7b1b3-6034-4f5f-8ef5-eeaf9bbfbe2a_55x55.png",
+      "author": "George Noble",
+      "pub_id": 2899640
+    },
+    {
+      "rank": 74,
+      "name": "MasalladelPER",
+      "subdomain": "masalladelper",
+      "url": "https://masalladelper.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!9xKu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2678cb45-e7be-4a56-9b47-cb432adb3fca_1280x1280.png",
+      "author": "MasalladelPER",
+      "pub_id": 5695082
+    },
+    {
+      "rank": 75,
+      "name": "Geiger's Capital Gains",
+      "subdomain": "geigercapital",
+      "url": "https://www.geigercap.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!4WZz!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fde455891-83db-477c-a5e9-94f2cc9f9930_549x549.png",
+      "author": "Geiger Capital",
+      "pub_id": 2620038
+    },
+    {
+      "rank": 76,
+      "name": "Multibagger Ideas",
+      "subdomain": "multibaggerideas",
+      "url": "https://multibaggerideas.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!sWJN!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4c00358b-5357-42d7-bd20-cd45e5a26249_1000x1000.png",
+      "author": "Multibagger Ideas",
+      "pub_id": 3579397
+    },
+    {
+      "rank": 77,
+      "name": "Daniel Romero",
+      "subdomain": "hypertechinvest",
+      "url": "https://hypertechinvest.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!ZZBm!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F758ee1c9-5e51-42ad-8df2-572906b5ebcf_400x400.png",
+      "author": "Daniel Romero",
+      "pub_id": 4633849
+    },
+    {
+      "rank": 78,
+      "name": "In it to Win it",
+      "subdomain": "stevebarton",
+      "url": "https://stevebarton.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!fPIJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5a8dfa73-d7af-497b-ad48-2d438fbdd4c6_500x500.png",
+      "author": "Steve Barton",
+      "pub_id": 5720672
+    },
+    {
+      "rank": 79,
+      "name": "Gregory’s Newsletter",
+      "subdomain": "gregorymannarino",
+      "url": "https://gregorymannarino.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!nKG1!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9dcc8145-a54d-484e-b854-622b43646228_144x144.png",
+      "author": "Gregory Mannarino",
+      "pub_id": 35435
+    },
+    {
+      "rank": 80,
+      "name": "Pobre Millennial",
+      "subdomain": "pobremillenial",
+      "url": "https://pobremillenial.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!1_kJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb704727b-9b1d-4ab0-bc2c-c8806ad2e425_336x336.jpeg",
+      "author": "Pobre Millenial",
+      "pub_id": 1426978
+    },
+    {
+      "rank": 81,
+      "name": "Kova Investment Research动量交易",
+      "subdomain": "kovainvest",
+      "url": "https://kovainvest.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!wDFu!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1a01bb98-3ead-4f03-b11e-ee3e5186ed21_225x225.png",
+      "author": "Kova Investment Research动量交易",
+      "pub_id": 8447675
+    },
+    {
+      "rank": 82,
+      "name": "Aurelion Research",
+      "subdomain": "aurelionresearch",
+      "url": "https://read.aurelionresearch.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!xdCd!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc5d0d8b4-5a0d-4051-89b0-7663afdbfbc5_1024x1024.png",
+      "author": "Aurelion Research",
+      "pub_id": 5655476
+    },
+    {
+      "rank": 83,
+      "name": "The Value Road",
+      "subdomain": "thevalueroad",
+      "url": "https://thevalueroad.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!E4FJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0c8edd82-52fe-4244-9495-2c753819c02b_144x144.png",
+      "author": "The Value Road",
+      "pub_id": 3235635
+    },
+    {
+      "rank": 84,
+      "name": "TSCS",
+      "subdomain": "tscsw",
+      "url": "https://tscsw.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!fuEp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F326fc19a-0644-4d2f-ac0a-b772df8c93e7_958x958.png",
+      "author": "Strategist",
+      "pub_id": 2354244
+    },
+    {
+      "rank": 85,
+      "name": "Ren",
+      "subdomain": "renstocks",
+      "url": "https://renstocks.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!LFM1!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F606745de-e8e1-4a70-8007-ad3782c051cd_400x400.png",
+      "author": "Ren",
+      "pub_id": 9407656
+    },
+    {
+      "rank": 86,
+      "name": "Stochastic Volatility Trader - Quant Insights",
+      "subdomain": "stochvoltrader",
+      "url": "https://stochvoltrader.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Stnc!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F62211ba0-0cc1-4ff3-b0b3-9a0b6a346c2f_897x897.png",
+      "author": "Alma",
+      "pub_id": 2679129
+    },
+    {
+      "rank": 87,
+      "name": "SixSigmaCapital: Navigating the Financial Markets",
+      "subdomain": "sixsigmacapital",
+      "url": "https://sixsigmaresearch.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!K-RX!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F00bb594f-a83b-4225-8f29-96ec7f03e283_213x213.png",
+      "author": "SixSigmaCapital",
+      "pub_id": 5043143
+    },
+    {
+      "rank": 88,
+      "name": "Me and the Money Printer",
+      "subdomain": "themoneyprinter",
+      "url": "https://themoneyprinter.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!8W15!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6f46049d-0561-4491-b90a-16a2c08012c4_1024x1024.png",
+      "author": "Garrett Baldwin",
+      "pub_id": 1634542
+    },
+    {
+      "rank": 89,
+      "name": "Accredited Investor Insights",
+      "subdomain": "accreditedinvestorinsights",
+      "url": "https://www.accreditedinsight.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!HPe9!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5acc4e53-0886-44d5-bb17-e2698a690a73_500x500.png",
+      "author": "Accredited Investor Insights",
+      "pub_id": 2356275
+    },
+    {
+      "rank": 90,
+      "name": "Latticework by MOI Global",
+      "subdomain": "moiglobal",
+      "url": "https://www.latticework.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!TwSt!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F80462468-0c46-435e-a6de-e12d404745f3_1280x1280.png",
+      "author": "John Mihaljevic",
+      "pub_id": 2973862
+    },
+    {
+      "rank": 91,
+      "name": "Capital Flows and Asset Markets",
+      "subdomain": "russellgclark",
+      "url": "https://www.russell-clark.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!EhNR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fdc7243d8-fc93-420b-be6b-9e742487a107_3184x2146.jpeg",
+      "author": "Russell Clark",
+      "pub_id": 553073
+    },
+    {
+      "rank": 92,
+      "name": "Santiago Capital",
+      "subdomain": "santiagocapital",
+      "url": "https://research.santiagocapital.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!mUpD!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Feb48a25d-26b8-4e17-b6a3-57edfc166048_403x403.png",
+      "author": "Santiago Capital",
+      "pub_id": 3583949
+    },
+    {
+      "rank": 93,
+      "name": "The Flying Frisby",
+      "subdomain": "frisby",
+      "url": "https://www.theflyingfrisby.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!D3PY!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbac54bce-7352-4e58-8ed3-5faf39b1110c_1280x1280.png",
+      "author": "Dominic Frisby",
+      "pub_id": 741404
+    },
+    {
+      "rank": 94,
+      "name": "Trading Mindset & Data",
+      "subdomain": "tradingmindsetanddata",
+      "url": "https://www.tmad.news",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!H390!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe9c5bc2e-9c3a-4f03-a00d-ac892d72d802_1024x1024.png",
+      "author": "TMAD",
+      "pub_id": 3663066
+    },
+    {
+      "rank": 95,
+      "name": "Dividendology",
+      "subdomain": "dividendology",
+      "url": "https://www.dividendology.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!Zmve!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F24d67fab-471d-444b-8bb2-692676d3bdd3_256x256.png",
+      "author": "Dividendology",
+      "pub_id": 1386120
+    },
+    {
+      "rank": 96,
+      "name": "The Quant Stack",
+      "subdomain": "quantarb",
+      "url": "https://www.algos.org",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!1nam!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3d11d4ff-8ca9-48a4-b1d4-9d7cd609f7b2_391x391.png",
+      "author": "Quant Arb",
+      "pub_id": 1392884
+    },
+    {
+      "rank": 97,
+      "name": "Cubic Analytics",
+      "subdomain": "cubicanalytics",
+      "url": "https://cubicanalytics.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!AuA_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F3671f21c-2351-469e-8b7a-3a85084f47da_1280x1280.png",
+      "author": "Caleb Franzen",
+      "pub_id": 361882
+    },
+    {
+      "rank": 98,
+      "name": "ShareIdeas.uk",
+      "subdomain": "paulypilot",
+      "url": "https://paulypilot.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!2Wf-!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa38ac5d4-c5c9-46d5-b566-151b7abb8ace_568x568.png",
+      "author": "Small/Mid Caps with Paul Scott",
+      "pub_id": 3010627
+    },
+    {
+      "rank": 99,
+      "name": "Yet Another Value Blog",
+      "subdomain": "yetanothervalueblog",
+      "url": "https://www.yetanothervalueblog.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!35nB!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F1233ffbd-f395-45fa-b7dc-fa3afb7554f9_1280x1280.png",
+      "author": "",
+      "pub_id": 35915
+    },
+    {
+      "rank": 100,
+      "name": "Nonconsensus",
+      "subdomain": "bobeunlimited",
+      "url": "https://bobeunlimited.substack.com",
+      "logo_url": "https://substackcdn.com/image/fetch/$s_!6wWM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6afef9ed-c4bb-46ee-88c1-ccbd550e2143_1024x1024.png",
+      "author": "Bob Elliott",
+      "pub_id": 4487154
+    }
+  ]
+}
